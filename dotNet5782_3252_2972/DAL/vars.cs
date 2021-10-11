@@ -109,9 +109,9 @@ namespace DalObject
             for (int i = 0; i < 5; i++)
             {
                 Drones[i].Id = i + 1;
-                Drones[i].Battery = r.Next(25, 99) + r.NextDouble();
+                Drones[i].Battery = r.Next(25, 100) + r.NextDouble();
 
-                switch (r.Next(1, 3))
+                switch (r.Next(1, 4))
                 {
                     case 1:
                         Drones[i].MaxWeight = IDAL.DO.WeightCategories.Heavy;
@@ -124,7 +124,7 @@ namespace DalObject
                         break;
                 }
 
-                switch (r.Next(1, 3))
+                switch (r.Next(1, 4))
                 {
                     case 1:
                         Drones[i].Model = "Mavic";
@@ -154,13 +154,13 @@ namespace DalObject
             Config.FirstBaseStation = 2;
 
 
-            //Customers
+            //10 Customers
             for (int i = 0; i < 10; i++)
             {
                 Customers[i].Id = i + 1;
                 Customers[i].Latitude = r.Next() + r.NextDouble();
                 Customers[i].Longitude = r.Next() + r.NextDouble();
-                switch (r.Next(1, 4))
+                switch (r.Next(1, 5))
                 {
                     case 1:
                         Customers[i].Phone = "052";

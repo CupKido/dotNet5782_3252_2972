@@ -8,6 +8,7 @@ namespace DalObject
 {
     public class DalObject
     {
+
         #region Customers
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
@@ -94,6 +95,17 @@ namespace DalObject
             DataSource.Drones[DN].Battery = 100;
 
             DataSource.Config.FirstDrone++;
+        }
+        public List<IDAL.DO.Drone> GetAllDrones()
+        {
+            List<IDAL.DO.Drone> list = new List<IDAL.DO.Drone>();
+
+            for(int i =0; i< DataSource.Config.FirstDrone; i++)
+            {
+                list.Add(DataSource.Drones[i]);
+            }
+            return list;
+
         }
         public IDAL.DO.Drone GetDrone(int Id)
         {

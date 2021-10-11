@@ -13,7 +13,12 @@ namespace ConsoleUI
             int MenuChoice;
             do
             {
-                Console.WriteLine("please insert 1 to add an Object");
+                Console.WriteLine("Please Choose:");
+                Console.WriteLine("1 to add an Object");
+                Console.WriteLine("2 to update an Object");
+                Console.WriteLine("3 to view an Object");
+                Console.WriteLine("4 to view a list of Objects");
+                Console.WriteLine("0 to Exit");
                 MenuChoice = int.Parse(Console.ReadLine());
                 switch (MenuChoice)
                 {
@@ -99,14 +104,38 @@ namespace ConsoleUI
                     #region Object View
 
                     case 3:
-                        try
+                    
+
+                        Console.WriteLine("\ninsert 2 to view a Drone");
+                        Console.WriteLine("insert 3 to view a Customer");
+                        MenuChoice = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Enter ID:");
+                        switch (MenuChoice)
                         {
-                            Console.WriteLine(DO.GetCustomer(int.Parse(Console.ReadLine())).ToString());
+                            case 2:
+                                try
+                                {
+                                    Console.WriteLine(DO.GetDrone(int.Parse(Console.ReadLine())).ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                                break;
+
+                            case 3:
+                                try
+                                {
+                                    Console.WriteLine(DO.GetCustomer(int.Parse(Console.ReadLine())).ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                                break;
+                            
                         }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
+                        Console.WriteLine("");
                         break;
 
                     #endregion
@@ -115,11 +144,18 @@ namespace ConsoleUI
 
                     case 4:
 
+                        Console.WriteLine("insert 2 to view Drones");
                         Console.WriteLine("insert 3 to view Customers");
-                        
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
                         {
+
+                            case 2:
+                                foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
+                                {
+                                    Console.WriteLine(drone + "\n");
+                                }
+                                break;
 
                             case 3:
 
