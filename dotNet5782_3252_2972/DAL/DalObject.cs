@@ -9,6 +9,11 @@ namespace DalObject
     public class DalObject
     {
 
+        public DalObject()
+        {
+            DataSource.Initialize();
+        }
+
         #region Customers
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)

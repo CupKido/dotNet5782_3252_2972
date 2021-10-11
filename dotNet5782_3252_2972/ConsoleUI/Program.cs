@@ -6,8 +6,6 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-
-            DalObject.DataSource DS = new DalObject.DataSource();
             DalObject.DalObject DO = new DalObject.DalObject();
             bool flag = true;
             int MenuChoice;

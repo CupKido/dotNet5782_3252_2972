@@ -15,7 +15,48 @@ namespace IDAL
 
             public override string ToString()
             {
-                return "ID: " + Id + "\nName: " + Name + "\nPhone: " + Phone + "\nLongitude: " + Longitude + "\nLatitude: " + Latitude;
+
+                #region Longitude & Latitude Calculations
+
+                char lon = 'N';
+                if (Longitude < 0)
+                {
+                    lon = 'S';
+                    Longitude *= -1;
+                }
+                double lonDegreesWithFraction = Longitude;
+                int londegrees = (int)lonDegreesWithFraction; // = 48
+
+                double lonfractionalDegrees = lonDegreesWithFraction - londegrees; // = .858222
+                double lonminutesWithFraction = 60 * lonfractionalDegrees; // = 51.49332
+                int lonminutes = (int)lonminutesWithFraction; // = 51
+
+                double lonfractionalMinutes = lonminutesWithFraction - lonminutes; // = .49332
+                double lonsecondsWithFraction = 60 * lonfractionalMinutes; // = 29.6
+
+                char lat = 'E';
+                if (Latitude < 0)
+                {
+                    lat = 'W';
+                    Latitude *= -1;
+                }
+
+                double latDegreesWithFraction = Latitude;
+                int latdegrees = (int)latDegreesWithFraction; // = 48
+
+                double latfractionalDegrees = latDegreesWithFraction - latdegrees; // = .858222
+                double latminutesWithFraction = 60 * latfractionalDegrees; // = 51.49332
+                int latminutes = (int)latminutesWithFraction; // = 51
+
+                double latfractionalMinutes = latminutesWithFraction - latminutes; // = .49332
+                double latsecondsWithFraction = 60 * latfractionalMinutes; // = 29.6
+
+                #endregion
+
+                return "ID: " + Id + "\nName: " + Name + "\nPhone: " + Phone +
+                    "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
+                    "\nLatitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat;
+                    
             }
         }
         public struct Parcel
@@ -84,10 +125,6 @@ namespace DalObject
 
     public class DataSource
     {
-        public DataSource()
-        {
-            Initialize();
-        }
 
         internal static IDAL.DO.Drone[] Drones = new IDAL.DO.Drone[10];
         internal static IDAL.DO.Customer[] Customers = new IDAL.DO.Customer[100];
@@ -102,7 +139,7 @@ namespace DalObject
             internal static int FirstParcel = 0;
         }
         private static Random r = new Random();
-        static void Initialize()
+        internal static void Initialize()
         {
 
             //5 Drones initializer
@@ -158,8 +195,8 @@ namespace DalObject
             for (int i = 0; i < 10; i++)
             {
                 Customers[i].Id = i + 1;
-                Customers[i].Latitude = r.Next() + r.NextDouble();
-                Customers[i].Longitude = r.Next() + r.NextDouble();
+                Customers[i].Latitude = r.Next(-100, 100) + r.NextDouble();
+                Customers[i].Longitude = r.Next(-100, 100) + r.NextDouble();
                 switch (r.Next(1, 5))
                 {
                     case 1:
