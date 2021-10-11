@@ -33,5 +33,26 @@ namespace DalObject
 
             DataSource.Config.FirstDrone++;
         }
+        public IDAL.DO.Drone GetDrone(int Id)
+        {
+            foreach(IDAL.DO.Drone DR in DataSource.Drones)
+            {
+                if (DR.Id == Id)
+                    return DR;
+            }
+            throw new Exception("Drone Not Found!");
+        }
+        public IDAL.DO.Drone RemoveDrone(int Id)
+        {
+            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
+            {
+                if (DataSource.Drones[i].Id == Id)
+                {
+                    //Add Func in next targil
+                }
+            }
+            throw new Exception("Drone Not Found!");
+        }
+
     }
 }

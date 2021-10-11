@@ -12,6 +12,11 @@ namespace IDAL
             public String Phone { get; set; }
             public double Longitude { get; set; }
             public double Latitude { get; set; }
+
+            public override string ToString()
+            {
+                return base.ToString();
+            }
         }
         public struct Parcel
         {
@@ -26,6 +31,10 @@ namespace IDAL
             public DateTime PickedUp { get; set; }
             public DateTime Delivered { get; set; }
 
+            public override string ToString()
+            {
+                return base.ToString();
+            }
         }
         public struct Drone
         {
@@ -34,6 +43,11 @@ namespace IDAL
             public IDAL.DO.WeightCategories MaxWeight { get; set; }
             public IDAL.DO.DroneStatuses Status { get; set; }
             public double Battery { get; set; }
+
+            public override string ToString()
+            {
+                return "ID: " + Id + "\nModel: " + Model + "\nMax Weight: " + MaxWeight + "\nStatus: " + Status + "\nBattery: " + Battery;
+            }
         }
         public struct BaseStation
         {
@@ -42,11 +56,21 @@ namespace IDAL
             public double Longitude { get; set; }
             public double Latitude { get; set; }
             public int ChargeSlots { get; set; }
+
+            public override string ToString()
+            {
+                return base.ToString();
+            }
         }
         public struct DroneCharge
         {
             public int DroneId { get; set; }
             public int BaseStationId { get; set; }
+
+            public override string ToString()
+            {
+                return base.ToString();
+            }
         }
 
     }
@@ -81,19 +105,47 @@ namespace DalObject
         static void Initialize()
         {
 
-
+            //5 Drones initializer
             for (int i = 0; i < 5; i++)
             {
-                Drones[i].Id = i;
+                Drones[i].Id = i + 1;
                 Drones[i].Battery = r.Next(25, 99) + r.NextDouble();
+
+                switch (r.Next(1, 3))
+                {
+                    case 1:
+                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Heavy;
+                        break;
+                    case 2:
+                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Intermediate;
+                        break;
+                    case 3:
+                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Light;
+                        break;
+                }
+
+                switch (r.Next(1, 3))
+                {
+                    case 1:
+                        Drones[i].Model = "Mavic";
+                        break;
+                    case 2:
+                        Drones[i].Model = "SkyDrone";
+                        break;
+                    case 3:
+                        Drones[i].Model = "Parrot";
+                        break;
+                }
+
             }
+
             Config.FirstDrone = 5;
 
 
 
             for (int i = 0; i < 2; i++)
             {
-                BaseStations[i].Id = i;
+                BaseStations[i].Id = i + 1;
                 BaseStations[i].Latitude = r.Next() + r.NextDouble();
                 BaseStations[i].Longitude = r.Next() + r.NextDouble();
             }
@@ -105,7 +157,7 @@ namespace DalObject
 
             for (int i = 0; i < 10; i++)
             {
-                Customers[i].Id = i;
+                Customers[i].Id = i + 1;
                 Customers[i].Latitude = r.Next() + r.NextDouble();
                 Customers[i].Longitude = r.Next() + r.NextDouble();
             }
