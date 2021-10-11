@@ -6,7 +6,8 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            IDAL.DalObject.DataSource DS = new IDAL.DalObject.DataSource();
+            DalObject.DataSource DS = new DalObject.DataSource();
+            DalObject.DalObject DO = new DalObject.DalObject();
             bool flag = true;
             int Choice;
             do
@@ -18,7 +19,7 @@ namespace ConsoleUI
                     case 1:
                         try
                         {
-                            DS.AddDrone(1, "blab", IDAL.DO.WeightCategories.Heavy);
+                            DO.AddDrone(11, "blab", IDAL.DO.WeightCategories.Heavy);
                         }
                         catch (Exception ex)
                         {
