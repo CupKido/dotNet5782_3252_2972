@@ -8,6 +8,68 @@ namespace DalObject
 {
     public class DalObject
     {
+        #region Customers
+
+        public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
+        {
+            if (DataSource.Config.FirstDrone == 100)
+            {
+                throw new Exception("Customer Array Full");
+            }
+            int CN = DataSource.Config.FirstCustomer;
+            
+            for (int i = 0; i < CN; i++)
+            {
+                if (DataSource.Drones[i].Id == Id)
+                {
+                    throw new Exception("Id already taken");
+                }
+            }
+
+
+            DataSource.Customers[CN].Id = Id;
+            DataSource.Customers[CN].Name = Name;
+            DataSource.Customers[CN].Phone = Phone;
+            DataSource.Customers[CN].Longitude = Longitude;
+            DataSource.Customers[CN].Latitude = Latitude;
+
+            DataSource.Config.FirstCustomer++;
+        }
+        public IDAL.DO.Customer GetCustomer(int Id)
+        {
+            for (int i = 0; i < DataSource.Config.FirstCustomer; i++)
+            {
+                if (DataSource.Customers[i].Id == Id)
+                    return DataSource.Customers[i];
+            }
+            throw new Exception("Customer Not Found!");
+        }
+
+        public List<IDAL.DO.Customer> GetAllCustomers()
+        {
+            List<IDAL.DO.Customer> list = new List<IDAL.DO.Customer>();
+            for(int i = 0; i < DataSource.Config.FirstCustomer; i++)
+            {
+                list.Add(DataSource.Customers[i]);
+            }
+            return list;
+        }
+
+        public IDAL.DO.Drone RemoveCustomer(int Id)
+        {
+            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
+            {
+                if (DataSource.Drones[i].Id == Id)
+                {
+                    //Add Func in next targil
+                }
+            }
+            throw new Exception("Drone Not Found!");
+        }
+
+        #endregion
+
+        #region Drones
         public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight)
         {
             if (DataSource.Config.FirstDrone == 10)
@@ -53,6 +115,6 @@ namespace DalObject
             }
             throw new Exception("Drone Not Found!");
         }
-
+        #endregion
     }
 }

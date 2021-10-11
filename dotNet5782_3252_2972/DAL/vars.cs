@@ -15,7 +15,7 @@ namespace IDAL
 
             public override string ToString()
             {
-                return base.ToString();
+                return "ID: " + Id + "\nName: " + Name + "\nPhone: " + Phone + "\nLongitude: " + Longitude + "\nLatitude: " + Latitude;
             }
         }
         public struct Parcel
@@ -101,7 +101,7 @@ namespace DalObject
             internal static int FirstBaseStation = 0;
             internal static int FirstParcel = 0;
         }
-        static Random r = new Random();
+        private static Random r = new Random();
         static void Initialize()
         {
 
@@ -154,12 +154,32 @@ namespace DalObject
             Config.FirstBaseStation = 2;
 
 
-
+            //Customers
             for (int i = 0; i < 10; i++)
             {
                 Customers[i].Id = i + 1;
                 Customers[i].Latitude = r.Next() + r.NextDouble();
                 Customers[i].Longitude = r.Next() + r.NextDouble();
+                switch (r.Next(1, 4))
+                {
+                    case 1:
+                        Customers[i].Phone = "052";
+                        break;
+                    case 2:
+                        Customers[i].Phone = "054";
+                        break;
+                    case 3:
+                        Customers[i].Phone = "058";
+                        break;
+                    case 4:
+                        Customers[i].Phone = "055";
+                        break;
+                }
+                for(int j = 0; j < 7; j++)
+                {
+                    Customers[i].Phone += r.Next(0, 9);
+                }
+                
             }
             Customers[0].Name = "Itzhak";
             Customers[1].Name = "Shlomo";
