@@ -95,6 +95,50 @@ namespace ConsoleUI
                     #region Update Object
 
                     case 2:
+                        {
+                            Console.WriteLine("\ninsert 2 to update a Drone");
+                            Console.WriteLine("insert 3 to update a Customer");
+                            MenuChoice = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Enter ID:");
+                            int Id = int.Parse(Console.ReadLine());
+                            switch (MenuChoice)
+                            {
+                                case 2:
+                                    break;
+                                case 3:
+                                    IDAL.DO.Customer customer;
+                                    try
+                                    {
+                                        customer = DO.GetCustomer(Id);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                        break;
+                                    }
+                                    Console.WriteLine(customer);
+
+                                    Console.WriteLine("Please Enter Phone Number: ");
+                                    String Phone = Console.ReadLine();
+                                    if (Phone.Length != 10)
+                                    {
+                                        Console.WriteLine("illigel number!");
+                                        break;
+                                    }
+                                    customer.Phone = Phone;
+
+                                    Console.WriteLine("Please Enter Longitude: ");
+                                    customer.Longitude = double.Parse(Console.ReadLine());
+
+                                    Console.WriteLine("Please Enter Latitude: ");
+                                    customer.Latitude = double.Parse(Console.ReadLine());
+
+                                    DO.SetCustomer(customer);
+
+                                    Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
+                                    break;
+                            }
+                        }
                         break;
 
                     #endregion
@@ -144,26 +188,49 @@ namespace ConsoleUI
 
                         Console.WriteLine("insert 2 to view Drones");
                         Console.WriteLine("insert 3 to view Customers");
+                        Console.WriteLine("insert 6 to view available charging ports");
+
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
                         {
 
                             case 2:
-                                foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
                                 {
-                                    Console.WriteLine(drone + "\n");
+                                    foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
+                                    {
+                                        Console.WriteLine(drone + "\n");
+                                    }
                                 }
                                 break;
 
                             case 3:
-
-                                foreach(IDAL.DO.Customer customer in DO.GetAllCustomers())
                                 {
-                                    Console.WriteLine(customer + "\n");
+                                    foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
+                                    {
+                                        Console.WriteLine(customer + "\n");
+                                    }
                                 }
-
                                 break;
 
+                            case 6:
+                                {
+                                    int a;
+                                    foreach(IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+                                    {
+                                        a = baseStation.ChargeSlots;
+                                        foreach(IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                                        {
+                                            if (droneCharge.BaseStationId == baseStation.Id)
+                                                a -= 1;
+                                        }
+
+                                        if(a != 0)
+                                        {
+                                            Console.WriteLine(baseStation);
+                                        }
+                                    }
+                                }
+                                break;
                         }
                         break;
 
