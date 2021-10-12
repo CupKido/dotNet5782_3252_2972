@@ -179,12 +179,13 @@ namespace DalObject
             Config.FirstDrone = 5;
 
 
-
+            //2 Base Stations initializer
             for (int i = 0; i < 2; i++)
             {
                 BaseStations[i].Id = i + 1;
-                BaseStations[i].Latitude = r.Next() + r.NextDouble();
-                BaseStations[i].Longitude = r.Next() + r.NextDouble();
+                BaseStations[i].Latitude = r.Next(-100, 100) + r.NextDouble();
+                BaseStations[i].Longitude = r.Next(-100, 100) + r.NextDouble();
+                BaseStations[i].ChargeSlots = r.Next(5, 11);
             }
             BaseStations[0].Name = "Jerusalem";
             BaseStations[1].Name = "Haifa";

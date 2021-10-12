@@ -126,10 +126,10 @@ namespace DalObject
         }
         public IDAL.DO.Drone GetDrone(int Id)
         {
-            foreach(IDAL.DO.Drone DR in DataSource.Drones)
+            for(int i = 0; i < DataSource.Config.FirstDrone; i++)
             {
-                if (DR.Id == Id)
-                    return DR;
+                if (DataSource.Drones[i].Id == Id)
+                    return DataSource.Drones[i];
             }
             throw new Exception("Drone Not Found!");
         }
@@ -224,6 +224,40 @@ namespace DalObject
 
 
             DataSource.Config.FirstBaseStation++;
+        }
+
+        public List<IDAL.DO.BaseStation> GetAllBaseStations()
+        {
+            List<IDAL.DO.BaseStation> list = new List<IDAL.DO.BaseStation>();
+
+            for (int i = 0; i < DataSource.Config.FirstBaseStation; i++)
+            {
+                list.Add(DataSource.BaseStations[i]);
+            }
+            return list;
+
+        }
+
+        public IDAL.DO.BaseStation GetBaseStation(int Id)
+        {
+            for (int i = 0; i < DataSource.Config.FirstBaseStation; i++)
+            {
+                if (DataSource.BaseStations[i].Id == Id)
+                    return DataSource.BaseStations[i];
+            }
+            throw new Exception("Base Station Not Found!");
+        }
+
+
+        #endregion
+
+        #region Drone Charges
+
+        public List<IDAL.DO.DroneCharge> GetAllDroneCharges()
+        {
+            List<IDAL.DO.DroneCharge> list = new List<IDAL.DO.DroneCharge>();
+
+
         }
 
         #endregion

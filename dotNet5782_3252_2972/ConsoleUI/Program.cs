@@ -188,26 +188,49 @@ namespace ConsoleUI
 
                         Console.WriteLine("insert 2 to view Drones");
                         Console.WriteLine("insert 3 to view Customers");
+                        Console.WriteLine("insert 6 to view available charging ports");
+
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
                         {
 
                             case 2:
-                                foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
                                 {
-                                    Console.WriteLine(drone + "\n");
+                                    foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
+                                    {
+                                        Console.WriteLine(drone + "\n");
+                                    }
                                 }
                                 break;
 
                             case 3:
-
-                                foreach(IDAL.DO.Customer customer in DO.GetAllCustomers())
                                 {
-                                    Console.WriteLine(customer + "\n");
+                                    foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
+                                    {
+                                        Console.WriteLine(customer + "\n");
+                                    }
                                 }
-
                                 break;
 
+                            case 6:
+                                {
+                                    int a;
+                                    foreach(IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+                                    {
+                                        a = baseStation.ChargeSlots;
+                                        foreach(IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                                        {
+                                            if (droneCharge.BaseStationId == baseStation.Id)
+                                                a -= 1;
+                                        }
+
+                                        if(a != 0)
+                                        {
+                                            Console.WriteLine(baseStation);
+                                        }
+                                    }
+                                }
+                                break;
                         }
                         break;
 
