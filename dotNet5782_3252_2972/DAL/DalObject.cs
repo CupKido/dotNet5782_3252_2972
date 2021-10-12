@@ -145,5 +145,87 @@ namespace DalObject
             throw new Exception("Drone Not Found!");
         }
         #endregion
+
+        #region Parcels
+
+        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        {
+            if (DataSource.Config.FirstParcel == 10)
+            {
+                throw new Exception("Parcel Array Full");
+            }
+            int PN = DataSource.Config.FirstParcel;
+
+            for (int i = 0; i < PN; i++)
+            {
+                if (DataSource.Parcels[i].Id == Id)
+                {
+                    throw new Exception("Id already taken");
+                }
+            }
+
+            if (SenderId == TargetId)
+                throw new Exception("Can't send a Package to yourself!");
+
+            try
+            {
+                GetCustomer(SenderId);
+            }
+            catch
+            {
+                throw new Exception("The Sender is not signed in the system");
+            }
+            try
+            {
+                GetCustomer(TargetId);
+            }
+            catch
+            {
+                throw new Exception("Target customer is not signed in the system");
+            }
+
+            DataSource.Parcels[PN].Id = Id;
+            DataSource.Parcels[PN].SenderId = SenderId;
+            DataSource.Parcels[PN].TargetId =TargetId;
+            DataSource.Parcels[PN].Weight = PackageWight;
+            DataSource.Parcels[PN].Priority = priority;
+            DataSource.Parcels[PN].Requested = DateTime.Now;
+
+
+            DataSource.Config.FirstParcel++;
+        }
+
+        #endregion
+
+        #region Base Stations
+
+        public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots)
+        {
+            if (DataSource.Config.FirstBaseStation == 5)
+            {
+                throw new Exception("Base Stations Array Full");
+            }
+            int BSN = DataSource.Config.FirstBaseStation;
+
+            for (int i = 0; i < BSN; i++)
+            {
+                if (DataSource.BaseStations[i].Id == Id)
+                {
+                    throw new Exception("Id already taken");
+                }
+            }
+
+
+            DataSource.BaseStations[BSN].Id = Id;
+            DataSource.BaseStations[BSN].Name = Name;
+            DataSource.BaseStations[BSN].Longitude = Longitude;
+            DataSource.BaseStations[BSN].Latitude = Latitude;
+            DataSource.BaseStations[BSN].ChargeSlots = ChargeSlots;
+
+
+            DataSource.Config.FirstBaseStation++;
+        }
+
+        #endregion
     }
 }
