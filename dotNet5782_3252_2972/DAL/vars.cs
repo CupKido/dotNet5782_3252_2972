@@ -148,18 +148,9 @@ namespace DalObject
                 Drones[i].Id = i + 1;
                 Drones[i].Battery = r.Next(25, 100) + r.NextDouble();
 
-                switch (r.Next(1, 4))
-                {
-                    case 1:
-                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Heavy;
-                        break;
-                    case 2:
-                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Intermediate;
-                        break;
-                    case 3:
-                        Drones[i].MaxWeight = IDAL.DO.WeightCategories.Light;
-                        break;
-                }
+                
+                Drones[i].MaxWeight = (IDAL.DO.WeightCategories)r.Next(0,3); //IDAL.DO.WeightCategories.Heavy;
+                        
 
                 switch (r.Next(1, 4))
                 {
