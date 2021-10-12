@@ -41,6 +41,18 @@ namespace DalObject
 
             DataSource.Config.FirstCustomer++;
         }
+
+        public void SetCustomer(IDAL.DO.Customer customer)
+        {
+            for(int i = 0; i < DataSource.Config.FirstCustomer; i++)
+            {
+                if(DataSource.Customers[i].Id == customer.Id)
+                {
+                    DataSource.Customers[i] = customer;
+                }
+            }
+        }
+
         public IDAL.DO.Customer GetCustomer(int Id)
         {
             for (int i = 0; i < DataSource.Config.FirstCustomer; i++)

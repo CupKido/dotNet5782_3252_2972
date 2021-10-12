@@ -95,6 +95,44 @@ namespace ConsoleUI
                     #region Update Object
 
                     case 2:
+                        Console.WriteLine("\ninsert 2 to update a Drone");
+                        Console.WriteLine("insert 3 to update a Customer");
+                        MenuChoice = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Enter ID:");
+                        int Id = int.Parse(Console.ReadLine());
+                        switch (MenuChoice)
+                        {
+                            case 2:
+                                break;
+                            case 3:
+                                IDAL.DO.Customer customer;
+                                try
+                                {
+                                    customer = DO.GetCustomer(Id);
+                                }
+                                catch(Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                    break;
+                                }
+                                Console.WriteLine(customer);
+
+                                Console.WriteLine("Please Enter Phone Number: ");
+                                String Phone = Console.ReadLine();
+                                if (Phone.Length != 10)
+                                {
+                                    Console.WriteLine("illigel number!");
+                                    break;
+                                }
+
+                                Console.WriteLine("Please Enter Longitude: ");
+                                double Longitude = double.Parse(Console.ReadLine());
+
+                                Console.WriteLine("Please Enter Latitude: ");
+                                double Latitude = double.Parse(Console.ReadLine());
+
+                                break;
+                        }
                         break;
 
                     #endregion
