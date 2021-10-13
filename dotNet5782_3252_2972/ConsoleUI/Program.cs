@@ -96,16 +96,62 @@ namespace ConsoleUI
 
                     case 2:
                         {
-                            Console.WriteLine("\ninsert 2 to update a Drone");
+                            Console.WriteLine("\ninsert 1 to decide a drone for a package");
+                            Console.WriteLine("insert 2 to update a Drone");
                             Console.WriteLine("insert 3 to update a Customer");
                             MenuChoice = int.Parse(Console.ReadLine());
-                            Console.WriteLine("Enter ID:");
-                            int Id = int.Parse(Console.ReadLine());
+                            
 
                             switch (MenuChoice)
                             {
+                                case 1:
+                                    {
+                                        Console.WriteLine("Enter Package ID:");
+                                        int Id = int.Parse(Console.ReadLine());
+
+                                        IDAL.DO.Parcel parcel;
+                                        try
+                                        {
+                                            parcel = DO.GetParcel(Id);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+                                        Console.WriteLine(parcel);
+
+                                        Console.WriteLine("Enter Drone's ID:");
+                                        Id = int.Parse(Console.ReadLine());
+                                        IDAL.DO.Drone drone;
+                                        try
+                                        {
+                                            drone = DO.GetDrone(Id);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+                                        if(drone.MaxWeight < parcel.Weight)
+                                        {
+                                            Console.WriteLine("the Drone Can't Carry the Package!");
+                                            break;
+                                        }
+                                        Console.WriteLine(drone);
+
+                                        parcel.DroneId = Id;
+                                        parcel.scheduled = DateTime.Now;
+                                        DO.SetParcel(parcel);
+
+                                        Console.WriteLine("Update Complete!");
+                                    }
+                                    break;
                                 case 2:
                                     {
+                                        Console.WriteLine("Enter ID:");
+                                        int Id = int.Parse(Console.ReadLine());
+
                                         IDAL.DO.Drone drone;
                                         try
                                         {
@@ -122,36 +168,41 @@ namespace ConsoleUI
                                     break;
 
                                 case 3:
-                                    IDAL.DO.Customer customer;
-                                    try
                                     {
-                                        customer = DO.GetCustomer(Id);
+                                        Console.WriteLine("Enter ID:");
+                                        int Id = int.Parse(Console.ReadLine());
+
+                                        IDAL.DO.Customer customer;
+                                        try
+                                        {
+                                            customer = DO.GetCustomer(Id);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+                                        Console.WriteLine(customer);
+
+                                        Console.WriteLine("Please Enter Phone Number: ");
+                                        String Phone = Console.ReadLine();
+                                        if (Phone.Length != 10)
+                                        {
+                                            Console.WriteLine("illigel number!");
+                                            break;
+                                        }
+                                        customer.Phone = Phone;
+
+                                        Console.WriteLine("Please Enter Longitude: ");
+                                        customer.Longitude = double.Parse(Console.ReadLine());
+
+                                        Console.WriteLine("Please Enter Latitude: ");
+                                        customer.Latitude = double.Parse(Console.ReadLine());
+
+                                        DO.SetCustomer(customer);
+
+                                        Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.Message);
-                                        break;
-                                    }
-                                    Console.WriteLine(customer);
-
-                                    Console.WriteLine("Please Enter Phone Number: ");
-                                    String Phone = Console.ReadLine();
-                                    if (Phone.Length != 10)
-                                    {
-                                        Console.WriteLine("illigel number!");
-                                        break;
-                                    }
-                                    customer.Phone = Phone;
-
-                                    Console.WriteLine("Please Enter Longitude: ");
-                                    customer.Longitude = double.Parse(Console.ReadLine());
-
-                                    Console.WriteLine("Please Enter Latitude: ");
-                                    customer.Latitude = double.Parse(Console.ReadLine());
-
-                                    DO.SetCustomer(customer);
-
-                                    Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
                                     break;
                             }
                         }

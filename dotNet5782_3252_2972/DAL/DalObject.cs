@@ -195,6 +195,27 @@ namespace DalObject
             DataSource.Config.FirstParcel++;
         }
 
+        public IDAL.DO.Parcel GetParcel(int Id)
+        {
+            for (int i = 0; i < DataSource.Config.FirstParcel; i++)
+            {
+                if (DataSource.Parcels[i].Id == Id)
+                    return DataSource.Parcels[i];
+            }
+            throw new Exception("Package Not Found!");
+        }
+
+        public void SetParcel(IDAL.DO.Parcel parcel)
+        {
+            for (int i = 0; i < DataSource.Config.FirstParcel; i++)
+            {
+                if (DataSource.Parcels[i].Id == parcel.Id)
+                {
+                    DataSource.Parcels[i] = parcel;
+                }
+            }
+        }
+
         #endregion
 
         #region Base Stations

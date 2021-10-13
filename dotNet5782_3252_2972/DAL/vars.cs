@@ -5,6 +5,7 @@ namespace IDAL
 {
     namespace DO
     {
+
         public struct Customer
         {
             public int Id { get; set; }
@@ -59,6 +60,7 @@ namespace IDAL
                     
             }
         }
+
         public struct Parcel
         {
             public int Id { get; set; }
@@ -74,9 +76,16 @@ namespace IDAL
 
             public override string ToString()
             {
-                return base.ToString();
+                String res = "ID: " + Id + "\nSender ID: " + SenderId + "   Target ID: " + TargetId +
+                    "\nWeight: " + Weight + "   Priority: " + Priority + "\nRequested: " + Requested;
+                if(DroneId != 0)
+                {
+                    res += "\nScheduled: " + scheduled + "  Drone's ID: " + DroneId;
+                }
+                return res;
             }
         }
+
         public struct Drone
         {
             public int Id { get; set; }
@@ -90,6 +99,7 @@ namespace IDAL
                 return "ID: " + Id + "\nModel: " + Model + "\nMax Weight: " + MaxWeight + "\nStatus: " + Status + "\nBattery: " + Battery;
             }
         }
+
         public struct BaseStation
         {
             public int Id { get; set; }
@@ -103,6 +113,7 @@ namespace IDAL
                 return base.ToString();
             }
         }
+
         public struct DroneCharge
         {
             public int DroneId { get; set; }
@@ -148,9 +159,9 @@ namespace DalObject
                 Drones[i].Id = i + 1;
                 Drones[i].Battery = r.Next(25, 100) + r.NextDouble();
 
-                
-                Drones[i].MaxWeight = (IDAL.DO.WeightCategories)r.Next(0,3); //IDAL.DO.WeightCategories.Heavy;
-                        
+
+                Drones[i].MaxWeight = (IDAL.DO.WeightCategories)r.Next(0, 3); //IDAL.DO.WeightCategories.Heavy;
+
 
                 switch (r.Next(1, 4))
                 {
@@ -204,11 +215,11 @@ namespace DalObject
                         Customers[i].Phone = "055";
                         break;
                 }
-                for(int j = 0; j < 7; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     Customers[i].Phone += r.Next(0, 9);
                 }
-                
+
             }
             Customers[0].Name = "Itzhak";
             Customers[1].Name = "Shlomo";
@@ -222,8 +233,33 @@ namespace DalObject
             Customers[9].Name = "Avi";
             Config.FirstCustomer = 10;
 
-        }
 
-        
+            DateTime start = new DateTime(1995, 1, 1);
+            int range = (DateTime.Today - start).Days;
+
+            for (int i = 0; i < 10; i++)
+            {
+                Parcels[i].Id = i + 1;
+                bool flag = true;
+                while (flag)
+                {
+                    Parcels[i].SenderId = r.Next(1, 11);
+                    Parcels[i].TargetId = r.Next(1, 11);
+                    if (Parcels[i].SenderId != Parcels[i].TargetId)
+                    {
+                        flag = false;
+                    }
+                }
+                Parcels[i].Priority = (IDAL.DO.Priorities)r.Next(0, 3);
+                Parcels[i].Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
+                Parcels[i].DroneId = 0;
+                Parcels[i].Requested = start.AddDays(r.Next(range));
+
+            }
+            Config.FirstParcel = 10;
+
+
+
+        }
     }
 }
