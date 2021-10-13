@@ -257,7 +257,7 @@ namespace DalObject
         {
             List<IDAL.DO.DroneCharge> list = new List<IDAL.DO.DroneCharge>();
 
-
+            return list;
         }
 
         #endregion
