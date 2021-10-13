@@ -99,6 +99,8 @@ namespace ConsoleUI
                             Console.WriteLine("\ninsert 1 to decide a drone for a package");
                             Console.WriteLine("insert 2 to update a Drone");
                             Console.WriteLine("insert 3 to update a Customer");
+                            Console.WriteLine("insert 4 to charge a drone");
+                            Console.WriteLine("insert 5 to decharge a drone");
                             MenuChoice = int.Parse(Console.ReadLine());
                             
 
@@ -106,7 +108,7 @@ namespace ConsoleUI
                             {
                                 case 1:
                                     {
-                                        Console.WriteLine("Enter Package ID:");
+                                        Console.WriteLine("\nEnter Package ID:");
                                         int Id = int.Parse(Console.ReadLine());
 
                                         IDAL.DO.Parcel parcel;
@@ -135,7 +137,7 @@ namespace ConsoleUI
                                         }
                                         if(drone.MaxWeight < parcel.Weight)
                                         {
-                                            Console.WriteLine("the Drone Can't Carry the Package!");
+                                            Console.WriteLine("The Drone Can't Carry the Package!\n");
                                             break;
                                         }
                                         Console.WriteLine(drone);
@@ -144,12 +146,12 @@ namespace ConsoleUI
                                         parcel.scheduled = DateTime.Now;
                                         DO.SetParcel(parcel);
 
-                                        Console.WriteLine("Update Complete!");
+                                        Console.WriteLine("Update Complete!\n");
                                     }
                                     break;
                                 case 2:
                                     {
-                                        Console.WriteLine("Enter ID:");
+                                        Console.WriteLine("\nEnter ID:");
                                         int Id = int.Parse(Console.ReadLine());
 
                                         IDAL.DO.Drone drone;
@@ -169,7 +171,7 @@ namespace ConsoleUI
 
                                 case 3:
                                     {
-                                        Console.WriteLine("Enter ID:");
+                                        Console.WriteLine("\nEnter ID:");
                                         int Id = int.Parse(Console.ReadLine());
 
                                         IDAL.DO.Customer customer;
@@ -188,7 +190,7 @@ namespace ConsoleUI
                                         String Phone = Console.ReadLine();
                                         if (Phone.Length != 10)
                                         {
-                                            Console.WriteLine("illigel number!");
+                                            Console.WriteLine("illigel number!\n");
                                             break;
                                         }
                                         customer.Phone = Phone;
@@ -204,6 +206,64 @@ namespace ConsoleUI
                                         Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
                                     }
                                     break;
+
+                                case 4:
+                                    {
+                                        Console.WriteLine("\nPlease Enter the Drone's ID: ");
+                                        IDAL.DO.Drone drone;
+                                        try
+                                        {
+                                            drone = DO.GetDrone(int.Parse(Console.ReadLine()));
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("Drone was not found!");
+                                            break;
+                                        }
+                                        Console.WriteLine(drone + "\n");
+                                        Console.WriteLine("Please select a Base Station: ");
+                                        PrintAvailibleStations(DO);
+
+                                        Console.WriteLine("Please Enter the selected Base Station's ID: ");
+                                        IDAL.DO.BaseStation baseStation;
+                                        try
+                                        {
+                                            baseStation = DO.GetBaseStation(int.Parse(Console.ReadLine()));
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("Base Station was not found!");
+                                            break;
+                                        }
+
+                                        Console.WriteLine(baseStation);
+
+                                        DO.AddDroneCharge(drone.Id, baseStation.Id);
+                                        drone.Status = IDAL.DO.DroneStatuses.Maintenance;
+                                        DO.SetDrone(drone);
+                                        Console.WriteLine("Drone {0} is Being Charged at Base Station {1}!\n", drone.Id, baseStation.Id);
+                                    }
+                                    break;
+
+                                case 5:
+                                    {
+                                        Console.WriteLine("\nPlease Enter the Drone's ID: ");
+                                        IDAL.DO.Drone drone;
+                                        try
+                                        {
+                                            drone = DO.GetDrone(int.Parse(Console.ReadLine()));
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("Drone was not found!\n");
+                                            break;
+                                        }
+                                        DO.RemoveDroneCharge(drone.Id);
+                                        drone.Status = IDAL.DO.DroneStatuses.Availible;
+                                        DO.SetDrone(drone);
+                                        Console.WriteLine(drone + "\n");
+                                    }
+                                    break;
                             }
                         }
                         break;
@@ -217,6 +277,7 @@ namespace ConsoleUI
 
                             Console.WriteLine("\ninsert 2 to view a Drone");
                             Console.WriteLine("insert 3 to view a Customer");
+                            Console.WriteLine("insert 4 to view a Package");
                             MenuChoice = int.Parse(Console.ReadLine());
                             Console.WriteLine("Enter ID:");
                             switch (MenuChoice)
@@ -224,7 +285,7 @@ namespace ConsoleUI
                                 case 2:
                                     try
                                     {
-                                        Console.WriteLine(DO.GetDrone(int.Parse(Console.ReadLine())).ToString());
+                                        Console.WriteLine(DO.GetDrone(int.Parse(Console.ReadLine())));
                                     }
                                     catch (Exception ex)
                                     {
@@ -235,7 +296,18 @@ namespace ConsoleUI
                                 case 3:
                                     try
                                     {
-                                        Console.WriteLine(DO.GetCustomer(int.Parse(Console.ReadLine())).ToString());
+                                        Console.WriteLine(DO.GetCustomer(int.Parse(Console.ReadLine())));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                    }
+                                    break;
+
+                                case 4:
+                                    try
+                                    {
+                                        Console.WriteLine(DO.GetParcel(int.Parse(Console.ReadLine())));
                                     }
                                     catch (Exception ex)
                                     {
@@ -244,7 +316,7 @@ namespace ConsoleUI
                                     break;
 
                             }
-                            Console.WriteLine("");
+                            Console.WriteLine("\n");
                         }
                         break;
 
@@ -254,14 +326,24 @@ namespace ConsoleUI
 
                     case 4:
                         {
+                            Console.WriteLine("\ninsert 1 to view Base Stations");
                             Console.WriteLine("insert 2 to view Drones");
                             Console.WriteLine("insert 3 to view Customers");
+                            Console.WriteLine("insert 4 to view Packages");
                             Console.WriteLine("insert 6 to view available charging ports");
 
                             MenuChoice = int.Parse(Console.ReadLine());
+                           
                             switch (MenuChoice)
                             {
-
+                                case 1:
+                                    {
+                                        foreach(IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+                                        {
+                                            Console.WriteLine(baseStation + "\n");
+                                        }
+                                    }
+                                    break;
                                 case 2:
                                     {
                                         foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
@@ -273,6 +355,7 @@ namespace ConsoleUI
 
                                 case 3:
                                     {
+
                                         foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
                                         {
                                             Console.WriteLine(customer + "\n");
@@ -280,21 +363,31 @@ namespace ConsoleUI
                                     }
                                     break;
 
+                                case 4:
+                                    {
+                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        {
+                                            Console.WriteLine(parcel + "\n");
+                                        }
+                                    }
+                                    break;
+
                                 case 6:
                                     {
-                                        int a;
+                                        int ACS = 0; //Availible Charge Slots
                                         foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
                                         {
-                                            a = baseStation.ChargeSlots;
+                                            ACS = baseStation.ChargeSlots;
                                             foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
                                             {
                                                 if (droneCharge.BaseStationId == baseStation.Id)
-                                                    a -= 1;
+                                                    ACS -= 1;
                                             }
 
-                                            if (a != 0)
+                                            if (ACS != 0)
                                             {
                                                 Console.WriteLine(baseStation);
+                                                Console.WriteLine("Availible Charge Slots: {0}", ACS);
                                             }
                                         }
                                     }
@@ -320,6 +413,26 @@ namespace ConsoleUI
 
             } while (flag);
 
+        }
+
+        static void PrintAvailibleStations(DalObject.DalObject DO)
+        {
+            int ACS = 0; //Availible Charge Slots
+            foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+            {
+                ACS = baseStation.ChargeSlots;
+                foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                {
+                    if (droneCharge.BaseStationId == baseStation.Id)
+                        ACS -= 1;
+                }
+
+                if (ACS != 0)
+                {
+                    Console.WriteLine(baseStation);
+                    Console.WriteLine("Availible Charge Slots: {0}", ACS);
+                }
+            }
         }
     }
 }

@@ -110,7 +110,49 @@ namespace IDAL
 
             public override string ToString()
             {
-                return base.ToString();
+
+                #region Longitude & Latitude Calculations
+
+                char lon = 'N';
+                if (Longitude < 0)
+                {
+                    lon = 'S';
+                    Longitude *= -1;
+                }
+                double lonDegreesWithFraction = Longitude;
+                int londegrees = (int)lonDegreesWithFraction; // = 48
+
+                double lonfractionalDegrees = lonDegreesWithFraction - londegrees; // = .858222
+                double lonminutesWithFraction = 60 * lonfractionalDegrees; // = 51.49332
+                int lonminutes = (int)lonminutesWithFraction; // = 51
+
+                double lonfractionalMinutes = lonminutesWithFraction - lonminutes; // = .49332
+                double lonsecondsWithFraction = 60 * lonfractionalMinutes; // = 29.6
+
+                char lat = 'E';
+                if (Latitude < 0)
+                {
+                    lat = 'W';
+                    Latitude *= -1;
+                }
+
+                double latDegreesWithFraction = Latitude;
+                int latdegrees = (int)latDegreesWithFraction; // = 48
+
+                double latfractionalDegrees = latDegreesWithFraction - latdegrees; // = .858222
+                double latminutesWithFraction = 60 * latfractionalDegrees; // = 51.49332
+                int latminutes = (int)latminutesWithFraction; // = 51
+
+                double latfractionalMinutes = latminutesWithFraction - latminutes; // = .49332
+                double latsecondsWithFraction = 60 * latfractionalMinutes; // = 29.6
+
+                #endregion
+
+                return "ID: " + Id + "\nName: " + Name + "\nName: " + Name + 
+                    "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
+                    "       Latitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat +
+                    "\nChargeSlots" + ChargeSlots;
+
             }
         }
 
@@ -141,6 +183,7 @@ namespace DalObject
         internal static IDAL.DO.Customer[] Customers = new IDAL.DO.Customer[100];
         internal static IDAL.DO.Parcel[] Parcels = new IDAL.DO.Parcel[1000];
         internal static IDAL.DO.BaseStation[] BaseStations = new IDAL.DO.BaseStation[5];
+        internal static IDAL.DO.DroneCharge[] DroneCharges = new IDAL.DO.DroneCharge[0];
 
         internal class Config
         {
@@ -148,6 +191,7 @@ namespace DalObject
             internal static int FirstCustomer = 0;
             internal static int FirstBaseStation = 0;
             internal static int FirstParcel = 0;
+            internal static int FirstDroneCharge = 0;
         }
         private static Random r = new Random();
         internal static void Initialize()
@@ -187,7 +231,7 @@ namespace DalObject
                 BaseStations[i].Id = i + 1;
                 BaseStations[i].Latitude = r.Next(-100, 100) + r.NextDouble();
                 BaseStations[i].Longitude = r.Next(-100, 100) + r.NextDouble();
-                BaseStations[i].ChargeSlots = r.Next(5, 11);
+                BaseStations[i].ChargeSlots = 1 /*r.Next(5, 11)*/;
             }
             BaseStations[0].Name = "Jerusalem";
             BaseStations[1].Name = "Haifa";
