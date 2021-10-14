@@ -223,13 +223,14 @@ namespace ConsoleUI
                                             Console.WriteLine(ex.Message);
                                             break;
                                         }
-                                        Console.WriteLine(parcel);
 
                                         if (parcel.DroneId == 0)
                                         {
                                             //ERROR
                                             break;
                                         }
+
+                                        Console.WriteLine(parcel);
 
                                         IDAL.DO.Drone drone;
                                         try
