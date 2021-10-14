@@ -97,8 +97,10 @@ namespace ConsoleUI
                     case 2:
                         {
                             Console.WriteLine("\ninsert 1 to decide a drone for a package");
-                            Console.WriteLine("insert 2 to update a Drone");
-                            Console.WriteLine("insert 3 to update a Customer");
+                            Console.WriteLine("insert 2 to pick up a package by a drone");
+                            Console.WriteLine("insert 3 to Deliver a package by a drone");
+                            Console.WriteLine("insert 6 to update a Drone");
+                            Console.WriteLine("insert 7 to update a Customer");
                             Console.WriteLine("insert 4 to charge a drone");
                             Console.WriteLine("insert 5 to decharge a drone");
                             MenuChoice = int.Parse(Console.ReadLine());
@@ -149,7 +151,120 @@ namespace ConsoleUI
                                         Console.WriteLine("Update Complete!\n");
                                     }
                                     break;
+
                                 case 2:
+                                    {
+                                        Console.WriteLine("\nEnter Package ID:");
+                                        int Id = int.Parse(Console.ReadLine());
+
+                                        IDAL.DO.Parcel parcel;
+                                        try
+                                        {
+                                            parcel = DO.GetParcel(Id);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+                                        Console.WriteLine(parcel);
+
+                                        if (parcel.DroneId == 0)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+
+                                        IDAL.DO.Drone drone;
+                                        try
+                                        {
+                                            drone = DO.GetDrone(parcel.DroneId);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+
+                                        if (drone.Status != IDAL.DO.DroneStatuses.Availible)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+                                        if (drone.Battery <= 20)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+
+                                        drone.Status = IDAL.DO.DroneStatuses.InDelivery;
+                                        drone.Battery -= 5;
+                                        parcel.PickedUp = DateTime.Now;
+                                        
+                                        DO.SetDrone(drone);
+                                        DO.SetParcel(parcel);
+
+                                        Console.WriteLine("Drone {0} has Picked Up the Package {1}", drone.Id, parcel.Id);
+                                    }
+                                    break;
+
+                                case 3:
+                                    {
+                                        Console.WriteLine("\nEnter Package ID:");
+                                        int Id = int.Parse(Console.ReadLine());
+
+                                        IDAL.DO.Parcel parcel;
+                                        try
+                                        {
+                                            parcel = DO.GetParcel(Id);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+                                        Console.WriteLine(parcel);
+
+                                        if (parcel.DroneId == 0)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+
+                                        IDAL.DO.Drone drone;
+                                        try
+                                        {
+                                            drone = DO.GetDrone(parcel.DroneId);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                            break;
+                                        }
+
+                                        if (drone.Status != IDAL.DO.DroneStatuses.InDelivery)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+                                        if (drone.Battery < 15)
+                                        {
+                                            //ERROR
+                                            break;
+                                        }
+
+                                        drone.Status = IDAL.DO.DroneStatuses.Availible;
+                                        drone.Battery -= 5;
+                                        parcel.Delivered = DateTime.Now;
+
+                                        DO.SetDrone(drone);
+                                        DO.SetParcel(parcel);
+
+                                        Console.WriteLine("Drone {0} has Delivered the Package {1}", drone.Id, parcel.Id);
+                                    }
+                                    break;
+
+                                case 6:
                                     {
                                         Console.WriteLine("\nEnter ID:");
                                         int Id = int.Parse(Console.ReadLine());
@@ -169,7 +284,7 @@ namespace ConsoleUI
                                     }
                                     break;
 
-                                case 3:
+                                case 7:
                                     {
                                         Console.WriteLine("\nEnter ID:");
                                         int Id = int.Parse(Console.ReadLine());
@@ -240,6 +355,7 @@ namespace ConsoleUI
 
                                         DO.AddDroneCharge(drone.Id, baseStation.Id);
                                         drone.Status = IDAL.DO.DroneStatuses.Maintenance;
+                                        drone.Battery = 100;
                                         DO.SetDrone(drone);
                                         Console.WriteLine("Drone {0} is Being Charged at Base Station {1}!\n", drone.Id, baseStation.Id);
                                     }
@@ -275,13 +391,27 @@ namespace ConsoleUI
                     case 3:
                         {
 
-                            Console.WriteLine("\ninsert 2 to view a Drone");
+                            Console.WriteLine("\ninsert 1 to view a Base Station");
+                            Console.WriteLine("insert 2 to view a Drone");
                             Console.WriteLine("insert 3 to view a Customer");
                             Console.WriteLine("insert 4 to view a Package");
                             MenuChoice = int.Parse(Console.ReadLine());
                             Console.WriteLine("Enter ID:");
                             switch (MenuChoice)
                             {
+                                case 1:
+                                    {
+                                        try
+                                        {
+                                            Console.WriteLine(DO.GetBaseStation(int.Parse(Console.ReadLine())));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine(ex.Message);
+                                        }
+                                    }
+                                    break;
+
                                 case 2:
                                     try
                                     {
@@ -369,6 +499,21 @@ namespace ConsoleUI
                                         {
                                             Console.WriteLine(parcel + "\n");
                                         }
+                                    }
+                                    break;
+
+                                case 5:
+                                    {
+                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        {
+                                        
+                                            if(parcel.DroneId == 0)
+                                            {
+                                            Console.WriteLine(parcel + "\n");
+                                            }
+                                        }
+
+
                                     }
                                     break;
 

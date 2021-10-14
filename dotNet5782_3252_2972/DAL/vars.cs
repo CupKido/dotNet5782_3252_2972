@@ -151,7 +151,7 @@ namespace IDAL
                 return "ID: " + Id + "\nName: " + Name + "\nName: " + Name + 
                     "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
                     "       Latitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat +
-                    "\nChargeSlots" + ChargeSlots;
+                    "\nChargeSlots: " + ChargeSlots;
 
             }
         }
@@ -278,7 +278,7 @@ namespace DalObject
             Config.FirstCustomer = 10;
 
 
-            DateTime start = new DateTime(1995, 1, 1);
+            DateTime start = new DateTime(2020, 1, 1);
             int range = (DateTime.Today - start).Days;
 
             for (int i = 0; i < 10; i++)
