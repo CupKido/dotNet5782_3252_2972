@@ -261,7 +261,7 @@ namespace DalObject
                 }
                 for (int j = 0; j < 7; j++)
                 {
-                    Customers[i].Phone += r.Next(0, 9);
+                    Customers[i].Phone += r.Next(0,10);
                 }
 
             }
