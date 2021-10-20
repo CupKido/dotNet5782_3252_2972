@@ -35,58 +35,14 @@ namespace ConsoleUI
                                 break;
 
                             case 2: //Adding Drone
-                                try
-                                {
-                                    DO.AddDrone(11, "blab", IDAL.DO.WeightCategories.Heavy);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                }
+                                AddDrone(DO);
                                 break;
 
                             case 3: //Adding Customer
-                                Console.WriteLine("Please Enter New ID: ");
-                                int Id = int.Parse(Console.ReadLine());
-                                try
                                 {
-                                    DO.GetCustomer(Id);
-                                    Console.WriteLine("ID Already Taken!");
-                                    break;
+                                    AddCustomer(DO);
+                                    
                                 }
-                                catch (Exception ex)
-                                {
-
-                                }
-                                Console.WriteLine("Please Enter Name: ");
-                                String Name = Console.ReadLine();
-
-                                Console.WriteLine("Please Enter Phone Number: ");
-                                String Phone = Console.ReadLine();
-                                if (Phone.Length != 10)
-                                {
-                                    Console.WriteLine("illigel number!");
-                                    break;
-                                }
-
-                                Console.WriteLine("Please Enter Longitude: ");
-                                double Longitude = double.Parse(Console.ReadLine());
-
-                                Console.WriteLine("Please Enter Latitude: ");
-                                double Latitude = double.Parse(Console.ReadLine());
-
-                                try
-                                {
-                                    DO.AddCustomer(Id, Name, Phone, Longitude, Latitude);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                    break;
-                                }
-
-                                Console.WriteLine("Customer Added!");
-
                                 break;
                         }
                         break;
@@ -112,8 +68,11 @@ namespace ConsoleUI
                                 case 1:
                                     {
                                         Console.WriteLine("\nEnter Package ID:");
-                                        int Id = int.Parse(Console.ReadLine());
-
+                                        int Id;
+                                        while(!int.TryParse(Console.ReadLine(), out Id))
+                                        {
+                                            Console.WriteLine("Error: please insert a number");
+                                        }
                                         IDAL.DO.Parcel parcel;
                                         try
                                         {
@@ -470,10 +429,7 @@ namespace ConsoleUI
                             {
                                 case 1:
                                     {
-                                        foreach(IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
-                                        {
-                                            Console.WriteLine(baseStation + "\n");
-                                        }
+                                        PrintAvailibleStations(DO);
                                     }
                                     break;
                                 case 2:
@@ -562,6 +518,55 @@ namespace ConsoleUI
 
         }
 
+        private static void AddCustomer(DalObject.DalObject DO)
+        {
+            Console.WriteLine("Please Enter New ID: ");
+            int Id = int.Parse(Console.ReadLine());
+
+            try
+            {
+                DO.GetCustomer(Id);
+                Console.WriteLine("ID Already Taken!");
+                return;
+            }
+            catch (Exception ex)
+            { }
+
+            Console.WriteLine("Please Enter Name: ");
+            String Name = Console.ReadLine();
+
+            Console.WriteLine("Please Enter Phone Number: ");
+            String Phone = Console.ReadLine();
+            if (Phone.Length != 10)
+            {
+                Console.WriteLine("illigel number!");
+                return;
+            }
+
+            Console.WriteLine("Please Enter Longitude: ");
+            double Longitude = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Please Enter Latitude: ");
+            double Latitude = double.Parse(Console.ReadLine());
+
+            try
+            {
+                DO.AddCustomer(Id, Name, Phone, Longitude, Latitude);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            Console.WriteLine("Customer Added!");
+        }
+
+        static void AddDrone(DalObject.DalObject dO)
+        {
+            throw new NotImplementedException();
+        }
+
         static void PrintAvailibleStations(DalObject.DalObject DO)
         {
             int ACS = 0; //Availible Charge Slots
@@ -579,6 +584,13 @@ namespace ConsoleUI
                     Console.WriteLine(baseStation);
                     Console.WriteLine("Availible Charge Slots: {0}", ACS);
                 }
+            }
+        }
+        static void PrintBaseStations(DalObject.DalObject DO)
+        {
+            foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+            {
+                Console.WriteLine(baseStation + "\n");
             }
         }
     }
