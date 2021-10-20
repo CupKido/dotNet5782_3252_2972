@@ -24,6 +24,7 @@ namespace ConsoleUI
                     #region Object Addition
 
                     case 1:
+                        Console.WriteLine("insert 1 to add a Base Station");
                         Console.WriteLine("insert 2 to add a Drone");
                         Console.WriteLine("insert 3 to add a Customer");
                  
@@ -32,6 +33,7 @@ namespace ConsoleUI
                         {
                             case 1:
                                 //Add Base Station
+                                AddBaseStation(DO);
                                 break;
 
                             case 2: //Adding Drone
@@ -39,11 +41,9 @@ namespace ConsoleUI
                                 break;
 
                             case 3: //Adding Customer
-                                {
-                                    AddCustomer(DO);
-                                    
-                                }
-                                break;
+                                
+                                AddCustomer(DO);
+                                break;  
                         }
                         break;
 
@@ -518,6 +518,52 @@ namespace ConsoleUI
 
         }
 
+        private static void AddBaseStation(DalObject.DalObject DO) 
+        {
+            Console.WriteLine("Please Enter New ID: ");
+            int Id = int.Parse(Console.ReadLine());
+
+            try
+            {
+                DO.GetBaseStation(Id);
+                Console.WriteLine("ID Already exists!");
+                return;
+            }
+            catch (Exception ex)
+            { }
+
+            Console.WriteLine("Please Enter Name: ");
+            String Name = Console.ReadLine();
+
+           
+            Console.WriteLine("Please Enter Longitude: ");
+            double Longitude = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Please Enter Latitude: ");
+            double Latitude = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Please Enter ChargeSlots: ");
+            int ChargeSlots = int.Parse(Console.ReadLine());
+            if (ChargeSlots<0)
+            {
+                Console.WriteLine("illigel number of chargeslots!");
+                return;
+            }
+
+
+            try
+            {
+                DO.AddBaseStations(Id,  Name,  Longitude,  Latitude,  ChargeSlots);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            Console.WriteLine("BaseStation Added!");
+        }
+
         private static void AddCustomer(DalObject.DalObject DO)
         {
             Console.WriteLine("Please Enter New ID: ");
@@ -531,6 +577,7 @@ namespace ConsoleUI
             }
             catch (Exception ex)
             { }
+            
 
             Console.WriteLine("Please Enter Name: ");
             String Name = Console.ReadLine();
