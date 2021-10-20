@@ -26,6 +26,7 @@ namespace ConsoleUI
                     case 1:
                         Console.WriteLine("insert 2 to add a Drone");
                         Console.WriteLine("insert 3 to add a Customer");
+                 
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
                         {
