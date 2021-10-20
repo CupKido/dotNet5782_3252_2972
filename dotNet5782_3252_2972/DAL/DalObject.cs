@@ -26,7 +26,7 @@ namespace DalObject
 
             for (int i = 0; i < CN; i++)
             {
-                if (DataSource.Drones[i].Id == Id)
+                if (DataSource.Customers[i].Id == Id)
                 {
                     throw new Exception("Id already taken");
                 }

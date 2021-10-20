@@ -231,7 +231,7 @@ namespace DalObject
                 BaseStations[i].Id = i + 1;
                 BaseStations[i].Latitude = r.Next(-100, 100) + r.NextDouble();
                 BaseStations[i].Longitude = r.Next(-100, 100) + r.NextDouble();
-                BaseStations[i].ChargeSlots = 1 /*r.Next(5, 11)*/;
+                BaseStations[i].ChargeSlots = r.Next(3, 6);
             }
             BaseStations[0].Name = "Jerusalem";
             BaseStations[1].Name = "Haifa";
