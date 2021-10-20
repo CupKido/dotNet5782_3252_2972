@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDAL.DO;
+using System;
 
 namespace ConsoleUI
 {
@@ -27,7 +28,8 @@ namespace ConsoleUI
                         Console.WriteLine("insert 1 to add a Base Station");
                         Console.WriteLine("insert 2 to add a Drone");
                         Console.WriteLine("insert 3 to add a Customer");
-                 
+                        Console.WriteLine("insert 4 to add a Parcel");
+
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
                         {
@@ -43,7 +45,11 @@ namespace ConsoleUI
                             case 3: //Adding Customer
                                 
                                 AddCustomer(DO);
-                                break;  
+                                break;
+
+                            case 4:
+                                AddParcel(DO);
+                                break;
                         }
                         break;
 
@@ -518,6 +524,11 @@ namespace ConsoleUI
 
         }
 
+        private static void AddParcel(DalObject.DalObject DO)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void AddBaseStation(DalObject.DalObject DO) 
         {
             Console.WriteLine("Please Enter New ID: ");
@@ -609,10 +620,47 @@ namespace ConsoleUI
             Console.WriteLine("Customer Added!");
         }
 
-        static void AddDrone(DalObject.DalObject dO)
+        private static void AddDrone(DalObject.DalObject DO)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Please Enter New ID: ");
+            int Id = int.Parse(Console.ReadLine());
+
+            try
+            {
+                DO.GetDrone(Id);
+                Console.WriteLine("ID Already exists!");
+                return;
+            }
+            catch (Exception ex)
+            { }
+
+            Console.WriteLine("Please Enter Model: Mavic, SkyDrone or Parrot ");
+            String Model = Console.ReadLine();
+
+
+            Console.WriteLine("Please Enter number for MaxWeight: Light = 0, Intermediate = 1,  Heavy = 2 ");
+            int max = int.Parse(Console.ReadLine());
+            IDAL.DO.WeightCategories MaxWeight = (WeightCategories)max;
+
+            if(max<0 || max>2)
+            {
+                Console.WriteLine(" illegal number ");
+                return;
+            }
+
+
+            try
+            {
+                DO.AddDrone(Id, Model, MaxWeight);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            Console.WriteLine("Drone Added!");
         }
+
+      
 
         static void PrintAvailibleStations(DalObject.DalObject DO)
         {
