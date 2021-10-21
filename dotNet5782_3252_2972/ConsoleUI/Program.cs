@@ -72,50 +72,8 @@ namespace ConsoleUI
                             switch (MenuChoice)
                             {
                                 case 1:
-                                    {
-                                        Console.WriteLine("\nEnter Package ID:");
-                                        int Id;
-                                        while(!int.TryParse(Console.ReadLine(), out Id))
-                                        {
-                                            Console.WriteLine("Error: please insert a number");
-                                        }
-                                        IDAL.DO.Parcel parcel;
-                                        try
-                                        {
-                                            parcel = DO.GetParcel(Id);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Console.WriteLine(ex.Message);
-                                            break;
-                                        }
-                                        Console.WriteLine(parcel);
 
-                                        Console.WriteLine("Enter Drone's ID:");
-                                        Id = int.Parse(Console.ReadLine());
-                                        IDAL.DO.Drone drone;
-                                        try
-                                        {
-                                            drone = DO.GetDrone(Id);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Console.WriteLine(ex.Message);
-                                            break;
-                                        }
-                                        if(drone.MaxWeight < parcel.Weight)
-                                        {
-                                            Console.WriteLine("The Drone Can't Carry the Package!\n");
-                                            break;
-                                        }
-                                        Console.WriteLine(drone);
-
-                                        parcel.DroneId = Id;
-                                        parcel.scheduled = DateTime.Now;
-                                        DO.SetParcel(parcel);
-
-                                        Console.WriteLine("Update Complete!\n");
-                                    }
+                                    DroneForPackage(DO);
                                     break;
 
                                 case 2:
@@ -522,6 +480,54 @@ namespace ConsoleUI
 
             } while (flag);
 
+        }
+
+        private static void DroneForPackage(DalObject.DalObject DO)
+        {
+            {
+                Console.WriteLine("\nEnter Package ID:");
+                int Id;
+                while (!int.TryParse(Console.ReadLine(), out Id))
+                {
+                    Console.WriteLine("Error: please insert a number");
+                }
+                IDAL.DO.Parcel parcel;
+                try
+                {
+                    parcel = DO.GetParcel(Id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
+                Console.WriteLine(parcel);
+
+                Console.WriteLine("Enter Drone's ID:");
+                Id = int.Parse(Console.ReadLine());
+                IDAL.DO.Drone drone;
+                try
+                {
+                    drone = DO.GetDrone(Id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
+                if (drone.MaxWeight < parcel.Weight)
+                {
+                    Console.WriteLine("The Drone Can't Carry the Package!\n");
+                    return;
+                }
+                Console.WriteLine(drone);
+
+                parcel.DroneId = Id;
+                parcel.scheduled = DateTime.Now;
+                DO.SetParcel(parcel);
+
+                Console.WriteLine("Update Complete!\n");
+            }
         }
 
         private static void AddParcel(DalObject.DalObject DO)
