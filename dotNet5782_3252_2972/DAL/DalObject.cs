@@ -165,7 +165,7 @@ namespace DalObject
 
         public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
         {
-            if (DataSource.Config.FirstParcel == 10)
+            if (DataSource.Config.FirstParcel == 1000)
             {
                 throw new Exception("Parcel Array Full");
             }

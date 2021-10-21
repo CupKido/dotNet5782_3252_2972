@@ -28,7 +28,7 @@ namespace ConsoleUI
                         Console.WriteLine("insert 1 to add a Base Station");
                         Console.WriteLine("insert 2 to add a Drone");
                         Console.WriteLine("insert 3 to add a Customer");
-                        Console.WriteLine("insert 4 to add a Parcel");
+                        Console.WriteLine("insert 4 to add a Package");
 
                         MenuChoice = int.Parse(Console.ReadLine());
                         switch (MenuChoice)
@@ -526,7 +526,58 @@ namespace ConsoleUI
 
         private static void AddParcel(DalObject.DalObject DO)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Please Enter New ID: ");
+            int Id = int.Parse(Console.ReadLine());
+
+            try
+            {
+                DO.GetBaseStation(Id);
+                Console.WriteLine("ID Already exists!");
+                return;
+            }
+            catch (Exception ex)
+            { }
+
+            Console.WriteLine("Please Enter SenderID: ");
+            int SenderID = int.Parse(Console.ReadLine());
+
+
+            Console.WriteLine("Please Enter TargetID: ");
+            int TargetID = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Please Enter a number for PackageWight:   Light = 0, Intermediate = 1, Heavy = 2 ");
+            int num = int.Parse(Console.ReadLine());
+            IDAL.DO.WeightCategories PackageWight = (WeightCategories) num;
+
+            if (num < 0 || num > 2)
+            {
+                Console.WriteLine("illigel PackageWight!");
+                return;
+            }
+
+
+            Console.WriteLine("Please Enter a number for priority:   Regular = 0, Fast = 1, Emergency = 2 ");
+            num = int.Parse(Console.ReadLine());
+            IDAL.DO.Priorities priority = (Priorities)num;
+
+            if (num < 0 || num>2)
+            {
+                Console.WriteLine("illigel priority!");
+                return;
+            }
+
+
+            try
+            {
+                DO.AddParcel(Id, SenderID, TargetID, PackageWight, priority);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            Console.WriteLine("Package Added!");
         }
 
         private static void AddBaseStation(DalObject.DalObject DO) 
