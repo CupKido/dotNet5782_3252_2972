@@ -148,7 +148,7 @@ namespace IDAL
 
                 #endregion
 
-                return "ID: " + Id + "\nName: " + Name + "\nName: " + Name + 
+                return "ID: " + Id + "\nName: " + Name + 
                     "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
                     "       Latitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat +
                     "\nChargeSlots: " + ChargeSlots;
