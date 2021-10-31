@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IDAL.DO;
+
 namespace DalObject
 {
-    public class DalObject
+    public class DalObject : IDAL.IDal
     {
 
         public DalObject()
@@ -104,17 +105,17 @@ namespace DalObject
             newDrone.Id = Id;
             newDrone.Model = Model;
             newDrone.MaxWeight = MaxWeight;
-            newDrone.Status = IDAL.DO.DroneStatuses.Availible;
-            newDrone.Battery = 100;
+            //newDrone.Status = IDAL.DO.DroneStatuses.Availible;
+            //newDrone.Battery = 100;
             DataSource.Drones.Add(newDrone);
         }
 
-        public List<IDAL.DO.Drone> GetAllDrones()
+        public List<Drone> GetAllDrones()
         {
             return DataSource.Drones;
         }
 
-        public IDAL.DO.Drone GetDrone(int Id)
+        public Drone GetDrone(int Id)
         {
             foreach (Drone drone in DataSource.Drones)
             {
@@ -138,7 +139,7 @@ namespace DalObject
             throw new Exception("Drone Not Found!");
         }
 
-        public IDAL.DO.Drone RemoveDrone(int Id)
+        public Drone RemoveDrone(int Id)
         {
             foreach (Drone drone in DataSource.Drones)
             {
@@ -150,6 +151,12 @@ namespace DalObject
                 
             }
             throw new Exception("Drone Not Found!");
+        }
+
+        public Double[] AskForElectricity()
+        {
+            double[] array = { DataSource.Config.AvailbleElec, DataSource.Config.LightElec, DataSource.Config.IntermediateElec, DataSource.Config.HeavyElec, DataSource.Config.ChargePerHours };
+            return array;
         }
         #endregion
 
@@ -319,7 +326,6 @@ namespace DalObject
         {
             return DataSource.DroneCharges;
         }
-
 
         public DroneCharge RemoveDroneCharge(int DroneId)
         {

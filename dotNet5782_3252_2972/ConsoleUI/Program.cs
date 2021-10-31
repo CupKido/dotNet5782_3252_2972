@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            DalObject.DalObject DO = new DalObject.DalObject();
+            IDAL.IDal DO = new DalObject.DalObject();
             bool flag = true;
             int MenuChoice;
             do
@@ -273,7 +273,7 @@ namespace ConsoleUI
 
         }
 
-        private static void PrintParcel(DalObject.DalObject DO)
+        private static void PrintParcel(IDAL.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -291,7 +291,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void PrintCustomer(DalObject.DalObject DO)
+        private static void PrintCustomer(IDAL.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -309,7 +309,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void PrintBaseStation(DalObject.DalObject DO)
+        private static void PrintBaseStation(IDAL.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -327,7 +327,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void DisChargeDrone(DalObject.DalObject DO)
+        private static void DisChargeDrone(IDAL.IDal DO)
         {
             Console.WriteLine("\nPlease Enter the Drone's ID: ");
             IDAL.DO.Drone drone;
@@ -341,12 +341,12 @@ namespace ConsoleUI
                 return;
             }
             DO.RemoveDroneCharge(drone.Id);
-            drone.Status = IDAL.DO.DroneStatuses.Availible;
+            //drone.Status = IDAL.DO.DroneStatuses.Availible;
             DO.SetDrone(drone);
             Console.WriteLine(drone + "\n");
         }
 
-        private static void ChargeDrone(DalObject.DalObject DO)
+        private static void ChargeDrone(IDAL.IDal DO)
         {
             Console.WriteLine("\nPlease Enter the Drone's ID: ");
             IDAL.DO.Drone drone;
@@ -378,13 +378,13 @@ namespace ConsoleUI
             Console.WriteLine(baseStation);
 
             DO.AddDroneCharge(drone.Id, baseStation.Id);
-            drone.Status = IDAL.DO.DroneStatuses.Maintenance;
-            drone.Battery = 100;
+            //drone.Status = IDAL.DO.DroneStatuses.Maintenance;
+            //drone.Battery = 100;
             DO.SetDrone(drone);
             Console.WriteLine("Drone {0} is Being Charged at Base Station {1}!\n", drone.Id, baseStation.Id);
         }
 
-        private static void CustomerUpdate(DalObject.DalObject DO)
+        private static void CustomerUpdate(IDAL.IDal DO)
         {
             Console.WriteLine("\nEnter ID:");
             int Id = int.Parse(Console.ReadLine());
@@ -421,7 +421,7 @@ namespace ConsoleUI
             Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
         }
 
-        private static void PrintDrone(DalObject.DalObject DO)
+        private static void PrintDrone(IDAL.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -439,7 +439,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void DeliverPackage(DalObject.DalObject DO)
+        private static void DeliverPackage(IDAL.IDal DO)
         {
             Console.WriteLine("\nEnter Package ID:");
             int Id = int.Parse(Console.ReadLine());
@@ -474,19 +474,19 @@ namespace ConsoleUI
                 return;
             }
 
-            if (drone.Status != IDAL.DO.DroneStatuses.InDelivery)
-            {
-                //ERROR
-                return;
-            }
-            if (drone.Battery < 15)
-            {
-                //ERROR
-                return;
-            }
+            //if (drone.Status != IDAL.DO.DroneStatuses.InDelivery)
+            //{
+            //    //ERROR
+            //    return;
+            //}
+            //if (drone.Battery < 15)
+            //{
+            //    //ERROR
+            //    return;
+            //}
 
-            drone.Status = IDAL.DO.DroneStatuses.Availible;
-            drone.Battery -= 5;
+            //drone.Status = IDAL.DO.DroneStatuses.Availible;
+            //drone.Battery -= 5;
             parcel.Delivered = DateTime.Now;
 
             DO.SetDrone(drone);
@@ -495,7 +495,7 @@ namespace ConsoleUI
             Console.WriteLine("Drone {0} has Delivered the Package {1}", drone.Id, parcel.Id);
         }
 
-        private static void PickPackage(DalObject.DalObject DO)
+        private static void PickPackage(IDAL.IDal DO)
         {
             Console.WriteLine("\nEnter Package ID:");
             int Id = int.Parse(Console.ReadLine());
@@ -529,19 +529,19 @@ namespace ConsoleUI
                 return;
             }
 
-            if (drone.Status != IDAL.DO.DroneStatuses.Availible)
-            {
-                //ERROR
-                return;
-            }
-            if (drone.Battery <= 20)
-            {
-                //ERROR
-                return;
-            }
+            //if (drone.Status != IDAL.DO.DroneStatuses.Availible)
+            //{
+            //    //ERROR
+            //    return;
+            //}
+            //if (drone.Battery <= 20)
+            //{
+            //    //ERROR
+            //    return;
+            //}
 
-            drone.Status = IDAL.DO.DroneStatuses.InDelivery;
-            drone.Battery -= 5;
+            //drone.Status = IDAL.DO.DroneStatuses.InDelivery;
+            //drone.Battery -= 5;
             parcel.PickedUp = DateTime.Now;
 
             DO.SetDrone(drone);
@@ -550,7 +550,7 @@ namespace ConsoleUI
             Console.WriteLine("Drone {0} has Picked Up the Package {1}", drone.Id, parcel.Id);
         }
 
-        private static void DroneForPackage(DalObject.DalObject DO)
+        private static void DroneForPackage(IDAL.IDal DO)
         {
             {
                 Console.WriteLine("\nEnter Package ID:");
@@ -598,7 +598,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void AddParcel(DalObject.DalObject DO)
+        private static void AddParcel(IDAL.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -654,7 +654,7 @@ namespace ConsoleUI
             Console.WriteLine("Package Added!");
         }
 
-        private static void AddBaseStation(DalObject.DalObject DO) 
+        private static void AddBaseStation(IDAL.IDal DO) 
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -700,7 +700,7 @@ namespace ConsoleUI
             Console.WriteLine("BaseStation Added!");
         }
 
-        private static void AddCustomer(DalObject.DalObject DO)
+        private static void AddCustomer(IDAL.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -745,7 +745,7 @@ namespace ConsoleUI
             Console.WriteLine("Customer Added!");
         }
 
-        private static void AddDrone(DalObject.DalObject DO)
+        private static void AddDrone(IDAL.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -785,7 +785,7 @@ namespace ConsoleUI
             Console.WriteLine("Drone Added!");
         }
 
-        static void PrintAvailibleStations(DalObject.DalObject DO)
+        static void PrintAvailibleStations(IDAL.IDal DO)
         {
             int ACS = 0; //Availible Charge Slots
             foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
@@ -805,7 +805,7 @@ namespace ConsoleUI
             }
         }
 
-        static void PrintBaseStations(DalObject.DalObject DO)
+        static void PrintBaseStations(IDAL.IDal DO)
         {
             foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
             {

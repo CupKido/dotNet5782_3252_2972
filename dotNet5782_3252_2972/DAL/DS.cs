@@ -13,6 +13,16 @@ namespace DalObject
         internal static List<IDAL.DO.BaseStation> BaseStations = new List<IDAL.DO.BaseStation>();
         internal static List<IDAL.DO.DroneCharge> DroneCharges = new List<IDAL.DO.DroneCharge>();
 
+        internal class Config
+        {
+            internal static Double AvailbleElec = 1;
+            internal static Double LightElec = 15;
+            internal static Double IntermediateElec = 25;
+            internal static Double HeavyElec = 40;
+            internal static Double ChargePerHours = 40;
+            
+        }
+
         private static Random r = new Random();
         internal static void Initialize()
         {
@@ -22,7 +32,7 @@ namespace DalObject
             {
                 IDAL.DO.Drone drone = new IDAL.DO.Drone();
                 drone.Id = i + 1;
-                drone.Battery = r.Next(25, 100) + r.NextDouble();
+                //drone.Battery = r.Next(25, 100) + r.NextDouble();
 
 
                 drone.MaxWeight = (IDAL.DO.WeightCategories)r.Next(0, 3); //IDAL.DO.WeightCategories.Heavy;
