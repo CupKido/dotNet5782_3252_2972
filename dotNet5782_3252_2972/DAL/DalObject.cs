@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using IDAL.DO;
 namespace DalObject
 {
     public class DalObject
@@ -18,71 +18,68 @@ namespace DalObject
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
         {
-            if (DataSource.Config.FirstDrone == 100)
+            try
             {
-                throw new Exception("Customer Array Full");
+                GetCustomer(Id);
+                throw new Exception("Id already taken");
             }
-            int CN = DataSource.Config.FirstCustomer;
-
-            for (int i = 0; i < CN; i++)
+            catch
             {
-                if (DataSource.Customers[i].Id == Id)
-                {
-                    throw new Exception("Id already taken");
-                }
+
             }
+            
+            Customer newCustomer = new Customer();
 
-
-            DataSource.Customers[CN].Id = Id;
-            DataSource.Customers[CN].Name = Name;
-            DataSource.Customers[CN].Phone = Phone;
-            DataSource.Customers[CN].Longitude = Longitude;
-            DataSource.Customers[CN].Latitude = Latitude;
-
-            DataSource.Config.FirstCustomer++;
+            newCustomer.Id = Id;
+            newCustomer.Name = Name;
+            newCustomer.Phone = Phone;
+            newCustomer.Longitude = Longitude;
+            newCustomer.Latitude = Latitude;
+            DataSource.Customers.Add(newCustomer);
         }
 
-        public void SetCustomer(IDAL.DO.Customer customer)
+        public void SetCustomer(Customer customer)
         {
-            for (int i = 0; i < DataSource.Config.FirstCustomer; i++)
+            foreach (Customer exCustomer in DataSource.Customers)
             {
-                if (DataSource.Customers[i].Id == customer.Id)
+                if (exCustomer.Id == customer.Id)
                 {
-                    DataSource.Customers[i] = customer;
+                    DataSource.Customers.Remove(exCustomer);
+                    DataSource.Customers.Add(customer);
+                    return;
                 }
-            }
-        }
-
-        public IDAL.DO.Customer GetCustomer(int Id)
-        {
-            for (int i = 0; i < DataSource.Config.FirstCustomer; i++)
-            {
-                if (DataSource.Customers[i].Id == Id)
-                    return DataSource.Customers[i];
             }
             throw new Exception("Customer Not Found!");
         }
 
-        public List<IDAL.DO.Customer> GetAllCustomers()
+        public Customer GetCustomer(int Id)
         {
-            List<IDAL.DO.Customer> list = new List<IDAL.DO.Customer>();
-            for (int i = 0; i < DataSource.Config.FirstCustomer; i++)
+            foreach (Customer customer in DataSource.Customers)
             {
-                list.Add(DataSource.Customers[i]);
-            }
-            return list;
-        }
-
-        public IDAL.DO.Drone RemoveCustomer(int Id)
-        {
-            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
-            {
-                if (DataSource.Drones[i].Id == Id)
+                if (customer.Id == Id)
                 {
-                    //Add Func in next targil
+                    return customer;
                 }
             }
-            throw new Exception("Drone Not Found!");
+            throw new Exception("Customer Not Found!");
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            return DataSource.Customers;
+        }
+
+        public Customer RemoveCustomer(int Id)
+        {
+            foreach (Customer customer in DataSource.Customers)
+            {
+                if (customer.Id == Id)
+                {
+                    DataSource.Customers.Remove(customer);
+                    return customer;
+                }
+            }
+            throw new Exception("Customer Not Found!");
         }
 
         #endregion
@@ -91,71 +88,66 @@ namespace DalObject
 
         public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight)
         {
-            if (DataSource.Config.FirstDrone == 10)
-            {
-                throw new Exception("Drone Array Full");
-            }
-            int DN = DataSource.Config.FirstDrone;
 
-            for (int i = 0; i < DN; i++)
+            try
             {
-                if (DataSource.Drones[i].Id == Id)
-                {
-                    throw new Exception("Id already taken");
-                }
+                GetDrone(Id);
+                throw new Exception("Id already taken");
+            }
+            catch
+            {
+
             }
 
+            Drone newDrone = new Drone(); 
 
-            DataSource.Drones[DN].Id = Id;
-            DataSource.Drones[DN].Model = Model;
-            DataSource.Drones[DN].MaxWeight = MaxWeight;
-            DataSource.Drones[DN].Status = IDAL.DO.DroneStatuses.Availible;
-            DataSource.Drones[DN].Battery = 100;
-
-            DataSource.Config.FirstDrone++;
+            newDrone.Id = Id;
+            newDrone.Model = Model;
+            newDrone.MaxWeight = MaxWeight;
+            newDrone.Status = IDAL.DO.DroneStatuses.Availible;
+            newDrone.Battery = 100;
+            DataSource.Drones.Add(newDrone);
         }
 
         public List<IDAL.DO.Drone> GetAllDrones()
         {
-            List<IDAL.DO.Drone> list = new List<IDAL.DO.Drone>();
-
-            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
-            {
-                list.Add(DataSource.Drones[i]);
-            }
-            return list;
-
+            return DataSource.Drones;
         }
 
         public IDAL.DO.Drone GetDrone(int Id)
         {
-            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
+            foreach (Drone drone in DataSource.Drones)
             {
-                if (DataSource.Drones[i].Id == Id)
-                    return DataSource.Drones[i];
+                if (drone.Id == Id)
+                    return drone;
             }
             throw new Exception("Drone Not Found!");
         }
 
-        public void SetDrone(IDAL.DO.Drone Drone)
+        public void SetDrone(IDAL.DO.Drone newDrone)
         {
-            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
+            foreach (Drone exDrone in DataSource.Drones)
             {
-                if (DataSource.Drones[i].Id == Drone.Id)
+                if (exDrone.Id == newDrone.Id)
                 {
-                    DataSource.Drones[i] = Drone;
+                    DataSource.Drones.Remove(exDrone);
+                    DataSource.Drones.Add(newDrone);
+                    return;
                 }
             }
+            throw new Exception("Drone Not Found!");
         }
 
         public IDAL.DO.Drone RemoveDrone(int Id)
         {
-            for (int i = 0; i < DataSource.Config.FirstDrone; i++)
+            foreach (Drone drone in DataSource.Drones)
             {
-                if (DataSource.Drones[i].Id == Id)
+                if (drone.Id == Id)
                 {
-                    //Add Func in next targil
+                    DataSource.Drones.Remove(drone);
+                    return drone;
                 }
+                
             }
             throw new Exception("Drone Not Found!");
         }
@@ -165,18 +157,14 @@ namespace DalObject
 
         public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
         {
-            if (DataSource.Config.FirstParcel == 1000)
+            try
             {
-                throw new Exception("Parcel Array Full");
+                GetParcel(Id);
+                throw new Exception("Id already taken");
             }
-            int PN = DataSource.Config.FirstParcel;
-
-            for (int i = 0; i < PN; i++)
+            catch
             {
-                if (DataSource.Parcels[i].Id == Id)
-                {
-                    throw new Exception("Id already taken");
-                }
+
             }
 
             if (SenderId == TargetId)
@@ -198,49 +186,57 @@ namespace DalObject
             {
                 throw new Exception("Target customer is not signed in the system");
             }
+            Parcel parcel = new Parcel();
+            parcel.Id = Id;
+            parcel.SenderId = SenderId;
+            parcel.TargetId = TargetId;
+            parcel.Weight = PackageWight;
+            parcel.Priority = priority;
+            parcel.Requested = DateTime.Now;
+            DataSource.Parcels.Add(parcel);
 
-            DataSource.Parcels[PN].Id = Id;
-            DataSource.Parcels[PN].SenderId = SenderId;
-            DataSource.Parcels[PN].TargetId = TargetId;
-            DataSource.Parcels[PN].Weight = PackageWight;
-            DataSource.Parcels[PN].Priority = priority;
-            DataSource.Parcels[PN].Requested = DateTime.Now;
-
-
-            DataSource.Config.FirstParcel++;
         }
 
         public List<IDAL.DO.Parcel> GetAllParcels()
         {
-            List<IDAL.DO.Parcel> list = new List<IDAL.DO.Parcel>();
-
-            for (int i = 0; i < DataSource.Config.FirstParcel; i++)
-            {
-                list.Add(DataSource.Parcels[i]);
-            }
-            return list;
-
+            return DataSource.Parcels;
         }
 
         public IDAL.DO.Parcel GetParcel(int Id)
         {
-            for (int i = 0; i < DataSource.Config.FirstParcel; i++)
+            foreach (Parcel parcel in DataSource.Parcels)
             {
-                if (DataSource.Parcels[i].Id == Id)
-                    return DataSource.Parcels[i];
+                if (parcel.Id == Id)
+                    return parcel;
             }
             throw new Exception("Package Not Found!");
         }
 
-        public void SetParcel(IDAL.DO.Parcel parcel)
+        public void SetParcel(IDAL.DO.Parcel newParcel)
         {
-            for (int i = 0; i < DataSource.Config.FirstParcel; i++)
+            foreach (Parcel exParcel in DataSource.Parcels)
             {
-                if (DataSource.Parcels[i].Id == parcel.Id)
+                if (exParcel.Id == newParcel.Id)
                 {
-                    DataSource.Parcels[i] = parcel;
+                    DataSource.Parcels.Remove(exParcel);
+                    DataSource.Parcels.Add(newParcel);
+                    return;
                 }
             }
+            throw new Exception("Package Not Found!");
+        }
+
+        public Parcel RemoveParcel(int Id)
+        {
+            foreach (Parcel parcel in DataSource.Parcels)
+            {
+                if (parcel.Id == Id)
+                {
+                    DataSource.Parcels.Remove(parcel);
+                    return parcel;
+                }
+            }
+            throw new Exception("Package Not Found!");
         }
 
         #endregion
@@ -249,49 +245,39 @@ namespace DalObject
 
         public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots)
         {
-            if (DataSource.Config.FirstBaseStation == 5)
+            try
             {
-                throw new Exception("Base Stations Array Full");
+                GetBaseStation(Id);
+                throw new Exception("Id already taken");
             }
-            int BSN = DataSource.Config.FirstBaseStation;
-
-            for (int i = 0; i < BSN; i++)
+            catch
             {
-                if (DataSource.BaseStations[i].Id == Id)
-                {
-                    throw new Exception("Id already taken");
-                }
+
             }
 
+            BaseStation baseStation = new BaseStation();
 
-            DataSource.BaseStations[BSN].Id = Id;
-            DataSource.BaseStations[BSN].Name = Name;
-            DataSource.BaseStations[BSN].Longitude = Longitude;
-            DataSource.BaseStations[BSN].Latitude = Latitude;
-            DataSource.BaseStations[BSN].ChargeSlots = ChargeSlots;
+            baseStation.Id = Id;
+            baseStation.Name = Name;
+            baseStation.Longitude = Longitude;
+            baseStation.Latitude = Latitude;
+            baseStation.ChargeSlots = ChargeSlots;
 
-
-            DataSource.Config.FirstBaseStation++;
+            DataSource.BaseStations.Add(baseStation);
+            
         }
 
         public List<IDAL.DO.BaseStation> GetAllBaseStations()
         {
-            List<IDAL.DO.BaseStation> list = new List<IDAL.DO.BaseStation>();
-
-            for (int i = 0; i < DataSource.Config.FirstBaseStation; i++)
-            {
-                list.Add(DataSource.BaseStations[i]);
-            }
-            return list;
-
+            return DataSource.BaseStations;
         }
 
         public IDAL.DO.BaseStation GetBaseStation(int Id)
         {
-            for (int i = 0; i < DataSource.Config.FirstBaseStation; i++)
+            foreach (BaseStation baseStation in DataSource.BaseStations)
             {
-                if (DataSource.BaseStations[i].Id == Id)
-                    return DataSource.BaseStations[i];
+                if (baseStation.Id == Id)
+                    return baseStation;
             }
             throw new Exception("Base Station Not Found!");
         }
@@ -303,70 +289,43 @@ namespace DalObject
 
         public void AddDroneCharge(int DroneId, int BaseStationId)
         {
-            List<IDAL.DO.DroneCharge> list = new List<IDAL.DO.DroneCharge>();
-            if (DataSource.DroneCharges.Length != 0)
-            {
-                foreach (IDAL.DO.DroneCharge droneCharge in DataSource.DroneCharges)
-                {
-                    list.Add(droneCharge);
-                }
-            }
+            IDAL.DO.DroneCharge droneCharge = new IDAL.DO.DroneCharge();
 
+            droneCharge.DroneId = DroneId;
+            droneCharge.BaseStationId = BaseStationId;
 
-
-
-            int DCN = DataSource.Config.FirstDroneCharge;
-
-            IDAL.DO.DroneCharge droneCharge1 = new IDAL.DO.DroneCharge();
-
-            droneCharge1.DroneId = DroneId;
-            droneCharge1.BaseStationId = BaseStationId;
-
-            list.Add(droneCharge1);
-
-            DataSource.DroneCharges = list.ToArray();
-
-
-
-            DataSource.Config.FirstDroneCharge++;
+            DataSource.DroneCharges.Add(droneCharge);
         }
 
-        public List<IDAL.DO.DroneCharge> GetAllDroneCharges()
+        public DroneCharge GetDroneCharge(int DroneId)
         {
-
-            List<IDAL.DO.DroneCharge> list = new List<IDAL.DO.DroneCharge>();
-
-            if (DataSource.Config.FirstDroneCharge == 0)
+            foreach(DroneCharge droneCharge in DataSource.DroneCharges)
             {
-                return list;
-            }
-
-            foreach (IDAL.DO.DroneCharge droneCharge in DataSource.DroneCharges)
-            {
-                list.Add(droneCharge);
-            }
-            return list;
-        }
-
-        public void RemoveDroneCharge(int DroneId)
-        {
-            if (DataSource.DroneCharges.Length == 0)
-            {
-                throw new Exception("No Drone is Being Charged!");
-            }
-
-            List<IDAL.DO.DroneCharge> list = new List<IDAL.DO.DroneCharge>();
-
-            foreach (IDAL.DO.DroneCharge droneCharge in DataSource.DroneCharges)
-            {
-                if(droneCharge.DroneId != DroneId)
+                if(droneCharge.DroneId == DroneId)
                 {
-                    list.Add(droneCharge);
+                    return droneCharge;
                 }
             }
+            throw new Exception("drone " + DroneId + " is not being charged!");
+        }
 
-            DataSource.DroneCharges = list.ToArray();
+        public void SetDroneCharge(DroneCharge newDC)
+        {
+            DataSource.DroneCharges.Remove(GetDroneCharge(newDC.DroneId));
+            DataSource.DroneCharges.Add(newDC);
+        }
 
+        public List<DroneCharge> GetAllDroneCharges()
+        {
+            return DataSource.DroneCharges;
+        }
+
+
+        public DroneCharge RemoveDroneCharge(int DroneId)
+        {
+            DroneCharge DC = GetDroneCharge(DroneId);
+            DataSource.DroneCharges.Remove(DC);
+            return DC;
         }
 
         #endregion
