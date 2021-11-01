@@ -76,6 +76,7 @@ namespace DalObject
             //10 Customers
             for (int i = 0; i < 10; i++)
             {
+                string[] Names = { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
                 IDAL.DO.Customer customer = new IDAL.DO.Customer();
                 customer.Id = i + 1;
                 customer.Latitude = r.Next(-100, 100) + r.NextDouble();
@@ -99,9 +100,10 @@ namespace DalObject
                 {
                     customer.Phone += r.Next(0,10);
                 }
+                customer.Name = Names[i];
                 Customers.Add(customer);
             }
-            //Customers[0].Name = "Itzhak";
+            //customers[0].Name = "Itzhak";
             //Customers[1].Name = "Shlomo";
             //Customers[2].Name = "Moshe";
             //Customers[3].Name = "Yosef";
@@ -111,6 +113,8 @@ namespace DalObject
             //Customers[7].Name = "Jason";
             //Customers[8].Name = "Yaakov";
             //Customers[9].Name = "Avi";
+            ///string[] Names= { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
+            
             
 
             DateTime start = new DateTime(2020, 1, 1);
