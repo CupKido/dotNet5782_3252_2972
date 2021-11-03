@@ -9,11 +9,11 @@ namespace BL
     public partial class BL : IBL.IBL
     {
         public  List<IDAL.DO.Drone> Drones = new List<IDAL.DO.Drone>();
-        IDAL.IDal dal ;
+        public IDAL.IDal dal ;
         public BL()
         {
             dal = new DalObject.DalObject();
-            dal.AskForElectricity();
+            double[] arr= dal.AskForElectricity();
         }
     }
 }
