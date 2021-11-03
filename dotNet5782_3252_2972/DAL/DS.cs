@@ -72,11 +72,12 @@ namespace DalObject
                 }
                 BaseStations.Add(BS);
             }
-            
+
             //10 Customers
+            string[] Names = { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
+
             for (int i = 0; i < 10; i++)
             {
-                string[] Names = { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
                 IDAL.DO.Customer customer = new IDAL.DO.Customer();
                 customer.Id = i + 1;
                 customer.Latitude = r.Next(-100, 100) + r.NextDouble();
