@@ -8,7 +8,7 @@ namespace BL
 {
     public partial class BL : IBL.IBL
     {
-        public  List<IDAL.DO.Drone> Drones = new List<IDAL.DO.Drone>();
+        public  List<IBL.BO.Drone> Drones = new List<IBL.BO.Drone>();
         public IDAL.IDal dal ;
         public Double AvailbleElec { get; set; }
         public Double LightElec { get; set; }
@@ -24,8 +24,9 @@ namespace BL
             IntermediateElec = arr[2];
             HeavyElec = arr[3];
             ChargePerHours = arr[4];
-            Drones = dal.GetAllDrones();
-            
+            List<IDAL.DO.Drone> DalDrones = dal.GetAllDrones();
+        
+
         }
     }
 }
