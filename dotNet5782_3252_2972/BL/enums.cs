@@ -7,4 +7,5 @@ using System.Threading.Tasks;
 namespace IBL.BO
 {
     public enum DroneStatuses { Availible, Maintenance, InDelivery }
+    public enum Priorities { Regular, Fast, Emergency }
 }
