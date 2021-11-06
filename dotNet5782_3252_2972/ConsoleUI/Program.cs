@@ -7,7 +7,6 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            DateTime d;
             IDAL.IDal DO = new DalObject.DalObject();
             bool flag = true;
             int MenuChoice;
