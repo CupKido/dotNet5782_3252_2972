@@ -2,11 +2,12 @@
 using System;
 
 namespace ConsoleUI
-{   //change for push
+{
     class Program
     {
         static void Main(string[] args)
         {
+            DateTime d;
             IDAL.IDal DO = new DalObject.DalObject();
             bool flag = true;
             int MenuChoice;
