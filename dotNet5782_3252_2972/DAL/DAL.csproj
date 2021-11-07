@@ -4,4 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Exceptions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Exceptions.cs" />
+  </ItemGroup>
+
 </Project>
