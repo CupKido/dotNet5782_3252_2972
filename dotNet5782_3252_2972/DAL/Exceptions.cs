@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace IDAL
 {
     namespace DO
     {
-        public class ItemAlreadyExistsExcepton : Exception
+        public class ItemAlreadyExistsException : Exception
         {
             public int Id;
-            public ItemAlreadyExistsExcepton(int ItemId) : base()
+            public ItemAlreadyExistsException(int ItemId) : base()
             {
                 Id = ItemId;
             }
-            public ItemAlreadyExistsExcepton(int ItemId, String message) : base(message)
+            public ItemAlreadyExistsException(int ItemId, String message) : base(message)
             {
                 Id = ItemId;
             }
-            public ItemAlreadyExistsExcepton(int ItemId, String message, Exception inner) : base(message, inner)
+            public ItemAlreadyExistsException(int ItemId, String message, Exception inner) : base(message, inner)
             {
                 Id = ItemId;
             }
@@ -28,18 +29,18 @@ namespace IDAL
             }
         }
 
-        public class ItemNotFoundExcepton : Exception
+        public class ItemNotFoundException : Exception
         {
             public int Id;
-            public ItemNotFoundExcepton(int ItemId) : base()
+            public ItemNotFoundException(int ItemId) : base()
             {
                 Id = ItemId;
             }
-            public ItemNotFoundExcepton(int ItemId, String message) : base(message)
+            public ItemNotFoundException(int ItemId, String message) : base(message)
             {
                 Id = ItemId;
             }
-            public ItemNotFoundExcepton(int ItemId, String message, Exception inner) : base(message, inner)
+            public ItemNotFoundException(int ItemId, String message, Exception inner) : base(message, inner)
             {
                 Id = ItemId;
             }
