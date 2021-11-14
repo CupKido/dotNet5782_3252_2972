@@ -10,13 +10,13 @@ namespace IBL.BO
     {
         public int Id { get; set; }
 
-        public bool parcelStage { get; set; }
+        public bool ParcelStatus { get; set; } // waiting for pickup or on the way to target
 
         public Priorities priority { get; set; }
 
-        public CustomerInDelivery Sender { get; set; }
+        public CustomerInParcel Sender { get; set; }
 
-        public CustomerInDelivery Target { get; set; }
+        public CustomerInParcel Target { get; set; }
 
         public Location PickUp { get; set; }
 

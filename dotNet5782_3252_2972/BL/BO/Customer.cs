@@ -13,6 +13,10 @@ namespace IBL.BO
         public String Phone { get; set; }
         public Location Address { get; set; }
 
+        public List<ParcelInCustomer> FromThisCustomer = new List<ParcelInCustomer>();
+
+        public List<ParcelInCustomer> ToThisCustomer = new List<ParcelInCustomer>();
+
         public override string ToString()
         {
 

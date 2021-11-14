@@ -21,12 +21,12 @@ namespace IBL.BO
             #region Longitude & Latitude Calculations
 
             char lon = 'N';
-            if (Longitude < 0)
+            if (StationLocation.Longitude < 0)
             {
                 lon = 'S';
-                Longitude *= -1;
+                StationLocation.Longitude *= -1;
             }
-            double lonDegreesWithFraction = Longitude;
+            double lonDegreesWithFraction = StationLocation.Longitude;
             int londegrees = (int)lonDegreesWithFraction; // = 48
 
             double lonfractionalDegrees = lonDegreesWithFraction - londegrees; // = .858222
@@ -37,13 +37,13 @@ namespace IBL.BO
             double lonsecondsWithFraction = 60 * lonfractionalMinutes; // = 29.6
 
             char lat = 'E';
-            if (Latitude < 0)
+            if (StationLocation.Latitude < 0)
             {
                 lat = 'W';
-                Latitude *= -1;
+                StationLocation.Latitude *= -1;
             }
 
-            double latDegreesWithFraction = Latitude;
+            double latDegreesWithFraction = StationLocation.Latitude;
             int latdegrees = (int)latDegreesWithFraction; // = 48
 
             double latfractionalDegrees = latDegreesWithFraction - latdegrees; // = .858222

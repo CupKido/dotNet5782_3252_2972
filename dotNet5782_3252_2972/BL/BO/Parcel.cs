@@ -5,12 +5,12 @@ namespace IBL.BO
     public class Parcel
     {
         public int Id { get; set; }
-        public CustomerInDelivery Sender { get; set; }
-        public CustomerInDelivery Target { get; set; }
+        public CustomerInParcel Sender { get; set; }
+        public CustomerInParcel Target { get; set; }
         public IDAL.DO.WeightCategories Weight { get; set; }
         public IDAL.DO.Priorities Priority { get; set; }
-        public DateTime Requested { get; set; }
         public int DroneId { get; set; }
+        public DateTime Requested { get; set; }
         public DateTime scheduled { get; set; }
         public DateTime PickedUp { get; set; }
         public DateTime Delivered { get; set; }

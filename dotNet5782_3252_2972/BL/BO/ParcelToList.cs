@@ -19,5 +19,8 @@ namespace IBL.BO
 
         public Priorities Priority { get; set; }
 
+        public ParcelStatuses Status { get; set; }
+
+
     }
 }
