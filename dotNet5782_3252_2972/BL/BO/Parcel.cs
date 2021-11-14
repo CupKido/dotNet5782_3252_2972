@@ -5,8 +5,8 @@ namespace IBL.BO
     public class Parcel
     {
         public int Id { get; set; }
-        public int SenderId { get; set; }
-        public int TargetId { get; set; }
+        public CustomerInDelivery Sender { get; set; }
+        public CustomerInDelivery Target { get; set; }
         public IDAL.DO.WeightCategories Weight { get; set; }
         public IDAL.DO.Priorities Priority { get; set; }
         public DateTime Requested { get; set; }
@@ -17,7 +17,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            String res = "ID: " + Id + "\nSender ID: " + SenderId + "   Target ID: " + TargetId +
+            String res = "ID: " + Id + "\nSender ID: " + Sender.Id + "   Target ID: " + Target.Id +
                 "\nWeight: " + Weight + "   Priority: " + Priority + "\nRequested: " + Requested;
             if (DroneId != 0)
             {

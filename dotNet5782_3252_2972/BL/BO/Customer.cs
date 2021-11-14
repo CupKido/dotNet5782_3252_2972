@@ -11,8 +11,7 @@ namespace IBL.BO
         public int Id { get; set; }
         public String Name { get; set; }
         public String Phone { get; set; }
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
+        public Location Address { get; set; }
 
         public override string ToString()
         {
@@ -20,12 +19,12 @@ namespace IBL.BO
             #region Longitude & Latitude Calculations
 
             char lon = 'N';
-            if (Longitude < 0)
+            if (Address.Longitude < 0)
             {
                 lon = 'S';
-                Longitude *= -1;
+                Address.Longitude *= -1;
             }
-            double lonDegreesWithFraction = Longitude;
+            double lonDegreesWithFraction = Address.Longitude;
             int londegrees = (int)lonDegreesWithFraction; // = 48
 
             double lonfractionalDegrees = lonDegreesWithFraction - londegrees; // = .858222
@@ -36,13 +35,13 @@ namespace IBL.BO
             double lonsecondsWithFraction = 60 * lonfractionalMinutes; // = 29.6
 
             char lat = 'E';
-            if (Latitude < 0)
+            if (Address.Latitude < 0)
             {
                 lat = 'W';
-                Latitude *= -1;
+                Address.Latitude *= -1;
             }
 
-            double latDegreesWithFraction = Latitude;
+            double latDegreesWithFraction = Address.Latitude;
             int latdegrees = (int)latDegreesWithFraction; // = 48
 
             double latfractionalDegrees = latDegreesWithFraction - latdegrees; // = .858222

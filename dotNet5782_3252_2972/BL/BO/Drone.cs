@@ -12,14 +12,15 @@ namespace IBL.BO
 
         public String Model { get; set; }
 
-        public IDAL.DO.WeightCategories MaxWeight { get; set; }
+        public WeightCategories MaxWeight { get; set; }
 
         public DroneStatuses Status { get; set; }
-        
+
         public double Battery { get; set; }
 
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
+        public Location CurrentLocation { get; set; }
+
+        public ParcelInDelivery CurrentParcel { get; set; }
 
         public override string ToString()
         {

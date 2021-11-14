@@ -39,9 +39,23 @@ namespace BL
 
                     newD.Status = DroneStatuses.InDelivery;
                     newD.Id = PDrone.Id;
-                    newD.MaxWeight = PDrone.MaxWeight;
+                    newD.MaxWeight = (WeightCategories)PDrone.MaxWeight;
                     newD.Model = PDrone.Model;
-
+                    newD.CurrentParcel = new ParcelInDelivery()
+                    {
+                        Id = p.Id,
+                        Sender = new CustomerInDelivery()
+                        {
+                            Id = p.SenderId,
+                            Name = dal.GetCustomer(p.SenderId).Name
+                        },
+                        Target = new CustomerInDelivery()
+                        {
+                            Id = p.TargetId,
+                            Name = dal.GetCustomer(p.TargetId).Name
+                        },
+                        priority = (Priorities)p.Priority
+                    };
 
                     IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
                     IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
@@ -50,21 +64,21 @@ namespace BL
                     {
                         BaseStation closestToSender = ClosestBaseStation(sender.Longitude, sender.Latitude);
                         BaseStation closestToTarget = ClosestBaseStation(target.Longitude, target.Latitude);
-                        newD.Latitude = closestToSender.Latitude;
-                        newD.Longitude = closestToSender.Longitude;
+                        newD.CurrentLocation.Latitude = closestToSender.Latitude;
+                        newD.CurrentLocation.Longitude = closestToSender.Longitude;
                         newD.Battery =
-                            getDistanceFromLatLonInKm(closestToSender.Latitude, closestToSender.Longitude, sender.Latitude, sender.Longitude) * AvailbleElec + //to sender
-                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) * arr[(int)p.Weight + 1] + //to target
-                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.Latitude, closestToTarget.Longitude) * AvailbleElec; //to station
+                            getDistanceFromLatLonInKm(closestToSender.Latitude, closestToSender.Longitude, sender.Latitude, sender.Longitude) / AvailbleElec + //to sender
+                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
+                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.Latitude, closestToTarget.Longitude) / AvailbleElec; //to station
                     }
                     else
                     {
                         BaseStation closestToTarget = ClosestBaseStation(target.Longitude, target.Latitude);
-                        newD.Latitude = sender.Latitude;
-                        newD.Longitude = sender.Longitude;
+                        newD.CurrentLocation.Latitude = sender.Latitude;
+                        newD.CurrentLocation.Longitude = sender.Longitude;
                         newD.Battery =
-                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) * arr[(int)p.Weight + 1] + //to target
-                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.Latitude, closestToTarget.Longitude) * AvailbleElec; //to station
+                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
+                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.Latitude, closestToTarget.Longitude) / AvailbleElec; //to station
                     }
 
                     if (newD.Battery > 100)
@@ -87,7 +101,7 @@ namespace BL
             {
                 Drone newD = new Drone();
                 newD.Id = d.Id;
-                newD.MaxWeight = d.MaxWeight;
+                newD.MaxWeight = (WeightCategories)d.MaxWeight;
                 newD.Model = d.Model;
                 switch (r.Next(2))
                 {
