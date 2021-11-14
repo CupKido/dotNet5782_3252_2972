@@ -22,7 +22,7 @@ namespace DalObject
             try
             {
                 GetCustomer(Id);
-                throw new Exception("Id already taken");
+                throw new ItemAlreadyExistsException(Id, "Id already taken");
             }
             catch
             {
@@ -50,7 +50,7 @@ namespace DalObject
                     return;
                 }
             }
-            throw new Exception("Customer Not Found!");
+            throw new ItemNotFoundException(customer.Id, "Customer Not Found!");
         }
 
         public Customer GetCustomer(int Id)
@@ -62,7 +62,7 @@ namespace DalObject
                     return customer;
                 }
             }
-            throw new Exception("Customer Not Found!");
+            throw new ItemNotFoundException(Id, "Customer Not Found!");
         }
 
         public List<Customer> GetAllCustomers()
@@ -80,20 +80,20 @@ namespace DalObject
                     return customer;
                 }
             }
-            throw new Exception("Customer Not Found!");
+            throw new ItemNotFoundException(Id, "Customer Not Found!");
         }
 
         #endregion
 
         #region Drones
 
-        public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight)
+        public void AddDrone(int Id, String Model, WeightCategories MaxWeight)
         {
 
             try
             {
                 GetDrone(Id);
-                throw new Exception("Id already taken");
+                throw new ItemAlreadyExistsException(Id, "Id already taken");
             }
             catch
             {
@@ -122,10 +122,10 @@ namespace DalObject
                 if (drone.Id == Id)
                     return drone;
             }
-            throw new Exception("Drone Not Found!");
+            throw new ItemNotFoundException(Id, "Drone Not Found!");
         }
 
-        public void SetDrone(IDAL.DO.Drone newDrone)
+        public void SetDrone(Drone newDrone)
         {
             foreach (Drone exDrone in DataSource.Drones)
             {
@@ -136,7 +136,7 @@ namespace DalObject
                     return;
                 }
             }
-            throw new Exception("Drone Not Found!");
+            throw new ItemNotFoundException(newDrone.Id, "Drone Not Found!");
         }
 
         public Drone RemoveDrone(int Id)
@@ -150,7 +150,7 @@ namespace DalObject
                 }
                 
             }
-            throw new Exception("Drone Not Found!");
+            throw new ItemNotFoundException(Id, "Drone Not Found!");
         }
 
         public Double[] AskForElectricity()
@@ -167,7 +167,7 @@ namespace DalObject
             try
             {
                 GetParcel(Id);
-                throw new Exception("Id already taken");
+                throw new ItemAlreadyExistsException(Id, "Parcel Id already taken");
             }
             catch
             {
@@ -175,7 +175,7 @@ namespace DalObject
             }
 
             if (SenderId == TargetId)
-                throw new Exception("Can't send a Package to yourself!");
+                throw new IllegalActionException("Can't send a Package to yourself!");
 
             try
             {
@@ -183,7 +183,7 @@ namespace DalObject
             }
             catch
             {
-                throw new Exception("The Sender is not signed in the system");
+                throw new IllegalActionException("The Sender is not signed in the system");
             }
             try
             {
@@ -191,7 +191,7 @@ namespace DalObject
             }
             catch
             {
-                throw new Exception("Target customer is not signed in the system");
+                throw new IllegalActionException("Target customer is not signed in the system");
             }
             Parcel parcel = new Parcel();
             parcel.Id = Id;
@@ -216,10 +216,10 @@ namespace DalObject
                 if (parcel.Id == Id)
                     return parcel;
             }
-            throw new Exception("Package Not Found!");
+            throw new ItemNotFoundException(Id, "Package Not Found!");
         }
 
-        public void SetParcel(IDAL.DO.Parcel newParcel)
+        public void SetParcel(Parcel newParcel)
         {
             foreach (Parcel exParcel in DataSource.Parcels)
             {
@@ -230,7 +230,7 @@ namespace DalObject
                     return;
                 }
             }
-            throw new Exception("Package Not Found!");
+            throw new ItemNotFoundException(newParcel.Id, "Package Not Found!");
         }
 
         public Parcel RemoveParcel(int Id)
@@ -243,7 +243,7 @@ namespace DalObject
                     return parcel;
                 }
             }
-            throw new Exception("Package Not Found!");
+            throw new ItemNotFoundException(Id, "Package Not Found!");
         }
 
         #endregion
@@ -255,7 +255,7 @@ namespace DalObject
             try
             {
                 GetBaseStation(Id);
-                throw new Exception("Id already taken");
+                throw new ItemAlreadyExistsException(Id, "Base Station Id already taken");
             }
             catch
             {
@@ -286,9 +286,10 @@ namespace DalObject
                 if (baseStation.Id == Id)
                     return baseStation;
             }
-            throw new Exception("Base Station Not Found!");
+            throw new ItemNotFoundException(Id, "Base Station Not Found!");
         }
 
+        //Add Set BaseStation
 
         #endregion
 
@@ -296,7 +297,13 @@ namespace DalObject
 
         public void AddDroneCharge(int DroneId, int BaseStationId)
         {
-            IDAL.DO.DroneCharge droneCharge = new IDAL.DO.DroneCharge();
+            try
+            {
+                GetDroneCharge(DroneId);
+                throw new ItemAlreadyExistsException(DroneId, "Drone is already being charged");
+            }
+            catch { }
+            DroneCharge droneCharge = new DroneCharge();
 
             droneCharge.DroneId = DroneId;
             droneCharge.BaseStationId = BaseStationId;
@@ -313,7 +320,7 @@ namespace DalObject
                     return droneCharge;
                 }
             }
-            throw new Exception("drone " + DroneId + " is not being charged!");
+            throw new ItemNotFoundException(DroneId, "Drone is not being charged!");
         }
 
         public void SetDroneCharge(DroneCharge newDC)
