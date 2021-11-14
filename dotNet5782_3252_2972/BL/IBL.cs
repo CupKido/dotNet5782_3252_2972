@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IBL.BO;
 namespace IBL
 {
-    interface IBL
+    public interface IBL
     {
 
         //#region Customers
@@ -69,7 +69,7 @@ namespace IBL
 
         //#region Base Stations
 
-        //public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots);
+        public void AddBaseStations(int Id, String Name, Location StationLocation, int ChargeSlots);
 
         //public List<IDAL.DO.BaseStation> GetAllBaseStations();
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
