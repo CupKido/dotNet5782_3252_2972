@@ -234,22 +234,7 @@ namespace ConsoleUI_BL
 
                                 case 6:
                                     {
-                                        //int ACS = 0; //Availible Charge Slots
-                                        //foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
-                                        //{
-                                        //    ACS = baseStation.ChargeSlots;
-                                        //    foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
-                                        //    {
-                                        //        if (droneCharge.BaseStationId == baseStation.Id)
-                                        //            ACS -= 1;
-                                        //    }
-
-                                        //    if (ACS != 0)
-                                        //    {
-                                        //        Console.WriteLine(baseStation);
-                                        //        Console.WriteLine("Availible Charge Slots: {0}", ACS);
-                                        //    }
-                                        //}
+                                        PrintAvailibleBaseStations(myBL);
                                     }
                                     break;
                             }
@@ -273,6 +258,14 @@ namespace ConsoleUI_BL
 
 
 
+            }
+        }
+
+        private static void PrintAvailibleBaseStations(IBL.IBL myBL)
+        {
+            foreach(BaseStationToList bs in myBL.GetAllBaseStationsBy(p => p.DroneInChargesList.Count < p.ChargeSlots))
+            {
+                Console.WriteLine(bs);
             }
         }
 

@@ -73,6 +73,9 @@ namespace IBL
 
         public IEnumerable<BaseStationToList> GetAllBaseStations();
 
+        public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
+
+
         public BaseStation GetBaseStation(int Id);
 
         public Drone GetDrone(int Id);

@@ -286,6 +286,21 @@ namespace BLobject
                    };
         }
 
+        public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
+        {
+            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+                   where predicate(GetBaseStation(bs.Id))
+                   let ACS = getAvailibleSlotsForBaseStation(bs)
+                   select new BaseStationToList()
+                   {
+                       Id = bs.Id,
+                       Name = bs.Name,
+                       ChargeSlotsAvailible = ACS,
+                       ChargeSlotsTaken = bs.ChargeSlots - ACS
+                   };
+
+        }
+
         public BaseStation GetBaseStation(int Id)
         {
             IDAL.DO.BaseStation bs;
