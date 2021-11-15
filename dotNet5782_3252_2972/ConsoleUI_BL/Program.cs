@@ -139,7 +139,7 @@ namespace ConsoleUI_BL
                             {
                                 case 1:
                                     {
-                                        //PrintBaseStation(DO);
+                                        PrintBaseStation(myBL);
                                     }
                                     break;
 
@@ -186,7 +186,7 @@ namespace ConsoleUI_BL
                             {
                                 case 1:
                                     {
-                                        PrintAvailibleStations(myBL);
+                                        PrintBaseStations(myBL);
                                     }
                                     break;
                                 case 2:
@@ -276,7 +276,25 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void PrintAvailibleStations(IBL.IBL myBL)
+        private static void PrintBaseStation(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter Base Station ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                Console.WriteLine(myBL.GetBaseStation(Id));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+        }
+
+        private static void PrintBaseStations(IBL.IBL myBL)
         {
             foreach(BaseStationToList bs in myBL.GetAllBaseStations())
             {

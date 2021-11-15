@@ -322,6 +322,12 @@ namespace BLobject
                    };
         }
 
+
+
+        #endregion
+
+        #region Drones 
+
         public Drone GetDrone(int Id)
         {
             return BLDrones.FirstOrDefault(p => p.Id == Id);

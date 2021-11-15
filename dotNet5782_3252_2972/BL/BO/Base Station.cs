@@ -55,10 +55,16 @@ namespace IBL.BO
 
             #endregion
 
+            string DronesPrinted = "";
+            foreach(DroneInCharge DIC in DroneInChargesList)
+            {
+                DronesPrinted += "ID: " + DIC.Id + " Battery: " + DIC.Battery + "\n";
+            }
+
             return "ID: " + Id + "\nName: " + Name +
                 "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
                 "       Latitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat +
-                "\nChargeSlots: " + ChargeSlots;
+                "\nChargeSlots: " + ChargeSlots + "\nDrones in charging:\n" + ((DronesPrinted == "") ? "None" : DronesPrinted);
 
         }
     }
