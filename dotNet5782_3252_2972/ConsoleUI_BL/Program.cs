@@ -301,10 +301,17 @@ namespace ConsoleUI_BL
             } while (!double.TryParse(Console.ReadLine(), out BSLatitude));
             do
             {
-                Console.WriteLine("Insert BaseStation ID:");
+                Console.WriteLine("Insert BaseStation Charge slots amount:");
             } while (!int.TryParse(Console.ReadLine(), out BSChargeSlots));
 
-            myBL.AddBaseStations(BSId, BSName, new Location() { Longitude = BSLongitude, Latitude = BSLatitude }, BSChargeSlots);
+            try
+            {
+                myBL.AddBaseStations(BSId, BSName, new Location() { Longitude = BSLongitude, Latitude = BSLatitude }, BSChargeSlots);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 }

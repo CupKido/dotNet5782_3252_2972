@@ -25,7 +25,7 @@ namespace IDAL
             }
             public override string ToString()
             {
-                return "Item with ID: " + Id + " already exists in data!\n" + Message;
+                return "Item with ID: " + Id + " already exists in data!\n" + Message + "\n";
             }
         }
 
@@ -46,7 +46,7 @@ namespace IDAL
             }
             public override string ToString()
             {
-                return "Item with ID: " + Id + " was not found in data!\n" + Message;
+                return "Item with ID: " + Id + " was not found in data!\n" + Message + "\n";
             }
         }
 
@@ -60,7 +60,7 @@ namespace IDAL
 
             public override string ToString()
             {
-                return "Illegal Action has been attempted!\n" + Message;
+                return "Illegal Action has been attempted!\n" + Message + "\n";
             }
         }
     }

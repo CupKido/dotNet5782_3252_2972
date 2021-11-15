@@ -1,6 +1,7 @@
 ﻿using IBL.BO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 namespace BL
 {
     public partial class BL : IBL.IBL
@@ -25,7 +26,7 @@ namespace BL
             HeavyElec = arr[3];
             ChargePerHours = arr[4];
             List<IDAL.DO.Customer> SatisfiedCustomers = new List<IDAL.DO.Customer>();
-            List<IDAL.DO.Drone> DalDronesList = dal.GetAllDrones();
+            List<IDAL.DO.Drone> DalDronesList = dal.GetAllDrones().ToList();
 
             Random r = new Random();
 
@@ -124,14 +125,14 @@ namespace BL
                             }
                             else
                             {
-                                try
-                                {
-                                    IDAL.DO.BaseStation randomBS = dal.GetAllBaseStations()[r.Next(dal.GetAllBaseStations().Count)];
+                                if(dal.GetAllBaseStations().ToList().Count != 0) 
+                                { 
+                                    IDAL.DO.BaseStation randomBS = dal.GetAllBaseStations().ToList()[r.Next(dal.GetAllBaseStations().ToList().Count)];
                                     newD.CurrentLocation.Longitude = randomBS.Longitude;
                                     newD.CurrentLocation.Latitude = randomBS.Latitude;
                                     newD.Battery = 100;
                                 }
-                                catch
+                                else
                                 {
                                     newD.Battery = 100;
                                     newD.CurrentLocation.Longitude = r.Next(50);
@@ -188,7 +189,7 @@ namespace BL
         private BaseStation closestBaseStation(double longitude, double latitude)
         {
             //need to throw exception if there are no BaseStation
-            IDAL.DO.BaseStation closest = dal.GetAllBaseStations()[0];
+            IDAL.DO.BaseStation closest = dal.GetAllBaseStations().ToList()[0];
             double Mindistance = getDistanceFromLatLonIncoords(latitude, longitude, closest.Latitude, closest.Longitude);
             double currentDis;
             foreach (IDAL.DO.BaseStation bs in dal.GetAllBaseStations())
@@ -242,7 +243,15 @@ namespace BL
 
         public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
+            try
+            {
             dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
+            }
+            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
+
         }
     }
 }

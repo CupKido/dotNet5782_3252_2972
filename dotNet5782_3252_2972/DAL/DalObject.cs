@@ -24,6 +24,10 @@ namespace DalObject
                 GetCustomer(Id);
                 throw new ItemAlreadyExistsException(Id, "Id already taken");
             }
+            catch (ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
             catch
             {
 
@@ -65,7 +69,7 @@ namespace DalObject
             throw new ItemNotFoundException(Id, "Customer Not Found!");
         }
 
-        public List<Customer> GetAllCustomers()
+        public IEnumerable<Customer> GetAllCustomers()
         {
             return DataSource.Customers;
         }
@@ -95,6 +99,10 @@ namespace DalObject
                 GetDrone(Id);
                 throw new ItemAlreadyExistsException(Id, "Id already taken");
             }
+            catch (ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
             catch
             {
 
@@ -110,7 +118,7 @@ namespace DalObject
             DataSource.Drones.Add(newDrone);
         }
 
-        public List<Drone> GetAllDrones()
+        public IEnumerable<Drone> GetAllDrones()
         {
             return DataSource.Drones;
         }
@@ -169,6 +177,10 @@ namespace DalObject
                 GetParcel(Id);
                 throw new ItemAlreadyExistsException(Id, "Parcel Id already taken");
             }
+            catch (ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
             catch
             {
 
@@ -204,7 +216,7 @@ namespace DalObject
 
         }
 
-        public List<IDAL.DO.Parcel> GetAllParcels()
+        public IEnumerable<Parcel> GetAllParcels()
         {
             return DataSource.Parcels;
         }
@@ -257,6 +269,10 @@ namespace DalObject
                 GetBaseStation(Id);
                 throw new ItemAlreadyExistsException(Id, "Base Station Id already taken");
             }
+            catch(ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
             catch
             {
 
@@ -274,7 +290,7 @@ namespace DalObject
             
         }
 
-        public List<IDAL.DO.BaseStation> GetAllBaseStations()
+        public IEnumerable<BaseStation> GetAllBaseStations()
         {
             return DataSource.BaseStations;
         }
@@ -301,6 +317,10 @@ namespace DalObject
             {
                 GetDroneCharge(DroneId);
                 throw new ItemAlreadyExistsException(DroneId, "Drone is already being charged");
+            }
+            catch (ItemAlreadyExistsException ex)
+            {
+                throw;
             }
             catch { }
             DroneCharge droneCharge = new DroneCharge();
@@ -329,7 +349,7 @@ namespace DalObject
             DataSource.DroneCharges.Add(newDC);
         }
 
-        public List<DroneCharge> GetAllDroneCharges()
+        public IEnumerable<DroneCharge> GetAllDroneCharges()
         {
             return DataSource.DroneCharges;
         }
