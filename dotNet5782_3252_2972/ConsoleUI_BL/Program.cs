@@ -191,42 +191,42 @@ namespace ConsoleUI_BL
                                     break;
                                 case 2:
                                     {
-                                        foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
-                                        {
-                                            Console.WriteLine(drone + "\n");
-                                        }
+                                        //foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
+                                        //{
+                                        //    Console.WriteLine(drone + "\n");
+                                        //}
                                     }
                                     break;
 
                                 case 3:
                                     {
 
-                                        foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
-                                        {
-                                            Console.WriteLine(customer + "\n");
-                                        }
+                                        //foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
+                                        //{
+                                        //    Console.WriteLine(customer + "\n");
+                                        //}
                                     }
                                     break;
 
                                 case 4:
                                     {
-                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
-                                        {
-                                            Console.WriteLine(parcel + "\n");
-                                        }
+                                        //foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        //{
+                                        //    Console.WriteLine(parcel + "\n");
+                                        //}
                                     }
                                     break;
 
                                 case 5:
                                     {
-                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
-                                        {
+                                        //foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        //{
 
-                                            if (parcel.DroneId == 0)
-                                            {
-                                                Console.WriteLine(parcel + "\n");
-                                            }
-                                        }
+                                        //    if (parcel.DroneId == 0)
+                                        //    {
+                                        //        Console.WriteLine(parcel + "\n");
+                                        //    }
+                                        //}
 
 
                                     }
@@ -234,22 +234,22 @@ namespace ConsoleUI_BL
 
                                 case 6:
                                     {
-                                        int ACS = 0; //Availible Charge Slots
-                                        foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
-                                        {
-                                            ACS = baseStation.ChargeSlots;
-                                            foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
-                                            {
-                                                if (droneCharge.BaseStationId == baseStation.Id)
-                                                    ACS -= 1;
-                                            }
+                                        //int ACS = 0; //Availible Charge Slots
+                                        //foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+                                        //{
+                                        //    ACS = baseStation.ChargeSlots;
+                                        //    foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                                        //    {
+                                        //        if (droneCharge.BaseStationId == baseStation.Id)
+                                        //            ACS -= 1;
+                                        //    }
 
-                                            if (ACS != 0)
-                                            {
-                                                Console.WriteLine(baseStation);
-                                                Console.WriteLine("Availible Charge Slots: {0}", ACS);
-                                            }
-                                        }
+                                        //    if (ACS != 0)
+                                        //    {
+                                        //        Console.WriteLine(baseStation);
+                                        //        Console.WriteLine("Availible Charge Slots: {0}", ACS);
+                                        //    }
+                                        //}
                                     }
                                     break;
                             }

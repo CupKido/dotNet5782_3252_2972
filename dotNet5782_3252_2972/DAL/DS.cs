@@ -139,7 +139,7 @@ namespace DalObject
                 parcel.Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
                 parcel.DroneId = 0;
                 parcel.Requested = start.AddDays(r.Next(range));
-
+                Parcels.Add(parcel);
             }
 
 

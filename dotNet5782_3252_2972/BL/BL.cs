@@ -32,70 +32,73 @@ namespace BL
             //if in delivery
             foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                IDAL.DO.Drone PDrone = dal.GetDrone(p.DroneId);
-                if (p.DroneId != 0 && p.Delivered == DateTime.MinValue)
+                if (p.DroneId != 0)
                 {
-
-                    Drone newD = new Drone();
-
-                    newD.Status = DroneStatuses.InDelivery;
-                    newD.Id = PDrone.Id;
-                    newD.MaxWeight = (WeightCategories)PDrone.MaxWeight;
-                    newD.Model = PDrone.Model;
-                    newD.CurrentParcel = new ParcelInDelivery()
+                    IDAL.DO.Drone PDrone = dal.GetDrone(p.DroneId);
+                    if ( p.Delivered == DateTime.MinValue)
                     {
-                        Id = p.Id,
-                        Sender = new CustomerInParcel()
+
+                        Drone newD = new Drone();
+
+                        newD.Status = DroneStatuses.InDelivery;
+                        newD.Id = PDrone.Id;
+                        newD.MaxWeight = (WeightCategories)PDrone.MaxWeight;
+                        newD.Model = PDrone.Model;
+                        newD.CurrentParcel = new ParcelInDelivery()
                         {
-                            Id = p.SenderId,
-                            Name = dal.GetCustomer(p.SenderId).Name
-                        },
-                        Target = new CustomerInParcel()
+                            Id = p.Id,
+                            Sender = new CustomerInParcel()
+                            {
+                                Id = p.SenderId,
+                                Name = dal.GetCustomer(p.SenderId).Name
+                            },
+                            Target = new CustomerInParcel()
+                            {
+                                Id = p.TargetId,
+                                Name = dal.GetCustomer(p.TargetId).Name
+                            },
+                            priority = (Priorities)p.Priority
+                        };
+
+                        IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
+                        IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
+
+                        if (p.PickedUp == DateTime.MinValue)
                         {
-                            Id = p.TargetId,
-                            Name = dal.GetCustomer(p.TargetId).Name
-                        },
-                        priority = (Priorities)p.Priority
-                    };
+                            BaseStation closestToSender = closestBaseStation(sender.Longitude, sender.Latitude);
+                            BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
+                            newD.CurrentLocation.Latitude = closestToSender.StationLocation.Latitude;
+                            newD.CurrentLocation.Longitude = closestToSender.StationLocation.Longitude;
+                            newD.Battery =
+                                getDistanceFromLatLonInKm(closestToSender.StationLocation.Latitude, closestToSender.StationLocation.Longitude, sender.Latitude, sender.Longitude) / AvailbleElec + //to sender
+                                getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
+                                getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.StationLocation.Latitude, closestToTarget.StationLocation.Longitude) / AvailbleElec; //to station
+                        }
+                        else
+                        {
+                            BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
+                            newD.CurrentLocation.Latitude = sender.Latitude;
+                            newD.CurrentLocation.Longitude = sender.Longitude;
+                            newD.Battery =
+                                getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
+                                getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.StationLocation.Latitude, closestToTarget.StationLocation.Longitude) / AvailbleElec; //to station
+                        }
 
-                    IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
-                    IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
-
-                    if (p.PickedUp == DateTime.MinValue)
-                    {
-                        BaseStation closestToSender = closestBaseStation(sender.Longitude, sender.Latitude);
-                        BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
-                        newD.CurrentLocation.Latitude = closestToSender.StationLocation.Latitude;
-                        newD.CurrentLocation.Longitude = closestToSender.StationLocation.Longitude;
-                        newD.Battery =
-                            getDistanceFromLatLonInKm(closestToSender.StationLocation.Latitude, closestToSender.StationLocation.Longitude, sender.Latitude, sender.Longitude) / AvailbleElec + //to sender
-                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
-                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.StationLocation.Latitude, closestToTarget.StationLocation.Longitude) / AvailbleElec; //to station
+                        if (newD.Battery > 100)
+                        {
+                            newD.Battery = 100;
+                        }
+                        else
+                        {
+                            newD.Battery = r.Next((int)newD.Battery, 99) + 1;
+                        }
+                        BLDrones.Add(newD);
+                        DalDronesList.Remove(PDrone);
                     }
-                    else
+                    else if (p.Delivered != DateTime.MinValue)
                     {
-                        BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
-                        newD.CurrentLocation.Latitude = sender.Latitude;
-                        newD.CurrentLocation.Longitude = sender.Longitude;
-                        newD.Battery =
-                            getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
-                            getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.StationLocation.Latitude, closestToTarget.StationLocation.Longitude) / AvailbleElec; //to station
+                        SatisfiedCustomers.Add(dal.GetCustomer(p.TargetId));
                     }
-
-                    if (newD.Battery > 100)
-                    {
-                        newD.Battery = 100;
-                    }
-                    else
-                    {
-                        newD.Battery = r.Next((int)newD.Battery, 99) + 1;
-                    }
-                    BLDrones.Add(newD);
-                    DalDronesList.Remove(PDrone);
-                }
-                else if (p.Delivered != DateTime.MinValue)
-                {
-                    SatisfiedCustomers.Add(dal.GetCustomer(p.TargetId));
                 }
             }
 
@@ -111,9 +114,31 @@ namespace BL
                     case 0:
                         {
                             newD.Status = DroneStatuses.Availible;
-                            IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
-                            BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
-                            newD.Battery = r.Next((int)(getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec), 100) + 1;
+                            if(SatisfiedCustomers.Count != 0)
+                            {
+                                IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
+                                BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
+                                newD.Battery = r.Next((int)(getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec), 100) + 1;
+                                newD.CurrentLocation.Longitude = SC.Longitude;
+                                newD.CurrentLocation.Latitude = SC.Latitude;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    IDAL.DO.BaseStation randomBS = dal.GetAllBaseStations()[r.Next(dal.GetAllBaseStations().Count)];
+                                    newD.CurrentLocation.Longitude = randomBS.Longitude;
+                                    newD.CurrentLocation.Latitude = randomBS.Latitude;
+                                    newD.Battery = 100;
+                                }
+                                catch
+                                {
+                                    newD.Battery = 100;
+                                    newD.CurrentLocation.Longitude = r.Next(50);
+                                    newD.CurrentLocation.Latitude = r.Next(50);
+                                }
+                            }
+                            
                         }
                         break;
                     case 1:
