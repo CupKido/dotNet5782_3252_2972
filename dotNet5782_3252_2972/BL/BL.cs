@@ -37,7 +37,7 @@ namespace BLobject
                 if (p.DroneId != 0)
                 {
                     IDAL.DO.Drone PDrone = dal.GetDrone(p.DroneId);
-                    if ( p.Delivered == DateTime.MinValue)
+                    if (p.Delivered == DateTime.MinValue)
                     {
 
                         Drone newD = new Drone();
@@ -116,31 +116,41 @@ namespace BLobject
                     case 0:
                         {
                             newD.Status = DroneStatuses.Availible;
-                            if(SatisfiedCustomers.Count != 0)
+                            if (SatisfiedCustomers.Count != 0)
                             {
                                 IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
                                 BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
                                 newD.Battery = r.Next((int)(getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec), 100) + 1;
-                                newD.CurrentLocation.Longitude = SC.Longitude;
-                                newD.CurrentLocation.Latitude = SC.Latitude;
+                                newD.CurrentLocation = new Location()
+                                {
+                                    Latitude = SC.Longitude,
+                                    Longitude = SC.Latitude
+                                };
                             }
                             else
                             {
-                                if(dal.GetAllBaseStations().ToList().Count != 0) 
-                                { 
+                                if (dal.GetAllBaseStations().ToList().Count != 0)
+                                {
                                     IDAL.DO.BaseStation randomBS = dal.GetAllBaseStations().ToList()[r.Next(dal.GetAllBaseStations().ToList().Count)];
-                                    newD.CurrentLocation.Longitude = randomBS.Longitude;
-                                    newD.CurrentLocation.Latitude = randomBS.Latitude;
+                                    newD.CurrentLocation = new Location()
+                                    {
+                                        Latitude = randomBS.Latitude,
+                                        Longitude = randomBS.Longitude
+                                    };
+
                                     newD.Battery = 100;
                                 }
                                 else
                                 {
                                     newD.Battery = 100;
-                                    newD.CurrentLocation.Longitude = r.Next(50);
-                                    newD.CurrentLocation.Latitude = r.Next(50);
+                                    newD.CurrentLocation = new Location()
+                                    {
+                                        Latitude = r.Next(50),
+                                        Longitude = r.Next(50)
+                                    };
                                 }
                             }
-                            
+
                         }
                         break;
                     case 1:
@@ -177,7 +187,13 @@ namespace BLobject
             }
 
             Random r = new Random();
-            dal.AddDroneCharge( newD.Id, availibleStation[ r.Next(availibleStation.Count) ].Id);
+            BaseStation bs = GetBaseStation(availibleStation[r.Next(availibleStation.Count)].Id);
+            newD.CurrentLocation = new Location()
+            {
+                Latitude = bs.StationLocation.Latitude,
+                Longitude = bs.StationLocation.Longitude
+            };
+            dal.AddDroneCharge(newD.Id, bs.Id);
 
         }
 
@@ -190,7 +206,7 @@ namespace BLobject
                     ACS -= 1;
             }
             return ACS;
-        }
+        } //returns amount of availible slots in station
 
         private int getAvailibleSlotsForBaseStation(IDAL.DO.BaseStation baseStation)
         {
@@ -201,7 +217,7 @@ namespace BLobject
                     ACS -= 1;
             }
             return ACS;
-        }
+        } //returns amount of availible slots in station
 
         private BaseStation closestBaseStation(double longitude, double latitude)
         {
@@ -218,7 +234,7 @@ namespace BLobject
                     closest = bs;
                 }
             }
-            
+
             return new BaseStation()
             {
                 Id = closest.Id,
@@ -264,7 +280,7 @@ namespace BLobject
         {
             try
             {
-            dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
+                dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
             }
             catch (IDAL.DO.ItemAlreadyExistsException ex)
             {
@@ -320,7 +336,8 @@ namespace BLobject
                     DroneInChargesList = GetDronesInBaseStation(bs).ToList()
 
                 };
-            }catch(IDAL.DO.ItemNotFoundException ex)
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
             {
                 throw;
             }
@@ -337,15 +354,85 @@ namespace BLobject
                    };
         }
 
-
-
         #endregion
 
         #region Drones 
 
+        public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId)
+        {
+            try
+            {
+                IDAL.DO.BaseStation bs = dal.GetBaseStation(stationId);
+                dal.AddDrone(Id, Model, (IDAL.DO.WeightCategories)MaxWeight);
+                BLDrones.Add(new Drone()
+                {
+                    Id = Id,
+                    Battery = 100,
+                    MaxWeight = MaxWeight,
+                    Model = Model,
+                    Status = DroneStatuses.Maintenance,
+                    CurrentLocation = new Location()
+                    {
+                        Latitude = bs.Latitude,
+                        Longitude = bs.Longitude
+                    },
+                    CurrentParcel = null
+                });
+                dal.AddDroneCharge(Id, stationId);
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<DroneToList> GetAllDrones()
+        {
+            return from Drone d in BLDrones
+                   select new DroneToList()
+                   {
+                       Id = d.Id,
+                       Battery = d.Battery,
+                       CurrentLocation = d.CurrentLocation,
+                       Model = d.Model,
+                       Status = d.Status,
+                       MaxWeight = d.MaxWeight,
+                       CarriedParcelId = dal.GetAllParcels().FirstOrDefault(p => p.DroneId == d.Id).Id
+                   };
+        }
+
+        public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate)
+        {
+            return from Drone d in GetAllDrones()
+                   where predicate(d)
+                   select new DroneToList()
+                   {
+                       Id = d.Id,
+                       Battery = d.Battery,
+                       CurrentLocation = d.CurrentLocation,
+                       Model = d.Model,
+                       Status = d.Status,
+                       MaxWeight = d.MaxWeight,
+                       CarriedParcelId = dal.GetAllParcels().FirstOrDefault(p => p.DroneId == d.Id).Id
+                   };
+        }
+
         public Drone GetDrone(int Id)
         {
-            return BLDrones.FirstOrDefault(p => p.Id == Id);
+            Drone d = BLDrones.FirstOrDefault(p => p.Id == Id);
+            if (d == null)
+            {
+                throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
+            }
+            return d;
         }
 
         #endregion

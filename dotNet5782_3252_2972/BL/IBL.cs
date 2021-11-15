@@ -25,9 +25,10 @@ namespace IBL
 
         #region Drones
 
-        //public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight);
+        public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId);
 
-        //public List<IDAL.DO.Drone> GetAllDrones();
+        public IEnumerable<DroneToList> GetAllDrones();
+        public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
 
         //public IDAL.DO.Drone GetDrone(int Id);
 

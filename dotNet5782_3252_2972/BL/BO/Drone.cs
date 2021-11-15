@@ -24,7 +24,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ID: " + Id + "\nModel: " + Model + "\nMax Weight: " + MaxWeight + "\nStatus: " /*+ Status + "\nBattery: " + Battery*/;
+            return "ID: " + Id + "\nModel: " + Model + "\nMax Weight: " + MaxWeight + "\nStatus: " + Status + "\nBattery: " + Battery + "\nLocation: " + CurrentLocation + ((CurrentParcel == null) ? "" : ("\nCurrent Parcel: " + CurrentParcel.Id));
         }
     }
 }

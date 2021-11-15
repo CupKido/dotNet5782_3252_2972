@@ -42,7 +42,7 @@ namespace ConsoleUI_BL
                                     break;
 
                                 case 2: //Adding Drone
-                                    //AddDrone(DO);
+                                    AddDrone(myBL);
                                     break;
 
                                 case 3: //Adding Customer
@@ -145,7 +145,7 @@ namespace ConsoleUI_BL
 
                                 case 2:
                                     {
-                                        //PrintDrone(DO);
+                                        PrintDrone(myBL);
 
                                     }
                                     break;
@@ -191,10 +191,7 @@ namespace ConsoleUI_BL
                                     break;
                                 case 2:
                                     {
-                                        //foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
-                                        //{
-                                        //    Console.WriteLine(drone + "\n");
-                                        //}
+                                        PrintDrones(myBL);
                                     }
                                     break;
 
@@ -259,6 +256,63 @@ namespace ConsoleUI_BL
 
 
             }
+        }
+
+        private static void PrintDrone(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter drone's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                Console.WriteLine(myBL.GetDrone(Id));
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private static void PrintDrones(IBL.IBL myBL)
+        {
+            foreach(DroneToList d in myBL.GetAllDrones())
+            {
+                Console.WriteLine(d);
+            }
+        }
+
+        private static void AddDrone(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter new drone's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            Console.WriteLine("Enter Model: ");
+            String Model = Console.ReadLine();
+
+            int MaxWeight;
+            do
+            {
+                Console.WriteLine("Enter drone's max wieght capability:\n 1 - Light     2 - Intermediate     3 - Heavy");
+            } while (!int.TryParse(Console.ReadLine(), out MaxWeight) && MaxWeight > 0 && MaxWeight < 4);
+
+            int StationId;
+            do
+            {
+                Console.WriteLine("Enter starting base station's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out StationId));
+
+            try
+            {
+            myBL.AddDrone(Id, Model, (WeightCategories)(MaxWeight - 1), StationId);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
         }
 
         private static void PrintAvailibleBaseStations(IBL.IBL myBL)

@@ -12,7 +12,7 @@ namespace IBL.BO
         
         public String Model { get; set; }
 
-        public WeightCategories Weight { get; set; }
+        public WeightCategories MaxWeight { get; set; }
 
         public double Battery { get; set; }
 
@@ -21,5 +21,10 @@ namespace IBL.BO
         public Location CurrentLocation { get; set; }
 
         public int CarriedParcelId { get; set; }
+
+        public override string ToString()
+        {
+            return "ID: " + Id + "  Model: " + Model + "  Max Weight: " + MaxWeight + "  Status: " + Status + "  Battery: " + Battery;
+        }
     }
 }
