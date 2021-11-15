@@ -1,5 +1,5 @@
 ﻿using System;
-using BL;
+using BLobject;
 using IBL.BO;
 namespace ConsoleUI_BL
 {
@@ -7,7 +7,7 @@ namespace ConsoleUI_BL
     {
         static void Main(string[] args)
         {
-            IBL.IBL myBL = new BL.BL();
+            IBL.IBL myBL = new BLobject.BL();
             bool Exit = false;
             int MenuChoice;
 
@@ -186,7 +186,7 @@ namespace ConsoleUI_BL
                             {
                                 case 1:
                                     {
-                                        //PrintAvailibleStations(DO);
+                                        PrintAvailibleStations(myBL);
                                     }
                                     break;
                                 case 2:
@@ -273,6 +273,14 @@ namespace ConsoleUI_BL
 
 
 
+            }
+        }
+
+        private static void PrintAvailibleStations(IBL.IBL myBL)
+        {
+            foreach(BaseStationToList bs in myBL.GetAllBaseStations())
+            {
+                Console.WriteLine(bs);
             }
         }
 

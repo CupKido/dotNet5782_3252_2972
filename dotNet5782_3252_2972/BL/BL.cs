@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace BL
+
+
+namespace BLobject
 {
     public partial class BL : IBL.IBL
     {
@@ -161,18 +163,12 @@ namespace BL
 
         private void sendToMaitenance(Drone newD)
         {
+
             List<BaseStation> availibleStation = new List<BaseStation>();
-            int ACS = 0; //Availible Charge Slots
+
             foreach (IDAL.DO.BaseStation baseStation in dal.GetAllBaseStations())
             {
-                ACS = baseStation.ChargeSlots;
-                foreach (IDAL.DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
-                {
-                    if (droneCharge.BaseStationId == baseStation.Id)
-                        ACS -= 1;
-                }
-
-                if (ACS != 0)
+                if (getAvailibleSlotsForBaseStation(baseStation) != 0)
                 {
                     availibleStation.Add(new BaseStation()
                     {
@@ -184,6 +180,28 @@ namespace BL
             Random r = new Random();
             dal.AddDroneCharge( newD.Id, availibleStation[ r.Next(availibleStation.Count) ].Id);
 
+        }
+
+        private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
+        {
+            int ACS = baseStation.ChargeSlots;
+            foreach (IDAL.DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
+            {
+                if (droneCharge.BaseStationId == baseStation.Id)
+                    ACS -= 1;
+            }
+            return ACS;
+        }
+
+        private int getAvailibleSlotsForBaseStation(IDAL.DO.BaseStation baseStation)
+        {
+            int ACS = baseStation.ChargeSlots;
+            foreach (IDAL.DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
+            {
+                if (droneCharge.BaseStationId == baseStation.Id)
+                    ACS -= 1;
+            }
+            return ACS;
         }
 
         private BaseStation closestBaseStation(double longitude, double latitude)
@@ -241,6 +259,8 @@ namespace BL
             return deg * (Math.PI / 180);
         }
 
+        #region Base Stations
+
         public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
             try
@@ -253,5 +273,20 @@ namespace BL
             }
 
         }
+
+        public IEnumerable<BaseStationToList> GetAllBaseStations()
+        {
+            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+                   let ACS = getAvailibleSlotsForBaseStation(bs)
+                   select new BaseStationToList()
+                   {
+                       Id = bs.Id,
+                       Name = bs.Name,
+                       ChargeSlotsAvailible = ACS,
+                       ChargeSlotsTaken = bs.ChargeSlots - ACS
+                   };
+        }
+
+        #endregion
     }
 }

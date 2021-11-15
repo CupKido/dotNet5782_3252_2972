@@ -9,7 +9,7 @@ namespace IBL
     public interface IBL
     {
 
-        //#region Customers
+        #region Customers
 
         //public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude);
 
@@ -21,9 +21,9 @@ namespace IBL
 
         //public Customer RemoveCustomer(int Id);
 
-        //#endregion
+        #endregion
 
-        //#region Drones
+        #region Drones
 
         //public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight);
 
@@ -37,9 +37,9 @@ namespace IBL
 
         //public Double[] AskForElectricity();
 
-        //#endregion
+        #endregion
 
-        //#region Parcels
+        #region Parcels
 
         //public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
 
@@ -51,9 +51,9 @@ namespace IBL
 
         //public Parcel RemoveParcel(int Id);
 
-        //#endregion
+        #endregion
 
-        //#region Drone Charges
+        #region Drone Charges
 
         //public void AddDroneCharge(int DroneId, int BaseStationId);
 
@@ -65,16 +65,17 @@ namespace IBL
 
         //public DroneCharge RemoveDroneCharge(int DroneId);
 
-        //#endregion
+        #endregion
 
-        //#region Base Stations
+        #region Base Stations
 
         public void AddBaseStations(int Id, String Name, Location StationLocation, int ChargeSlots);
 
-        //public List<IDAL.DO.BaseStation> GetAllBaseStations();
+        public IEnumerable<BaseStationToList> GetAllBaseStations();
+
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 
-        //#endregion
+        #endregion
 
     }
 }

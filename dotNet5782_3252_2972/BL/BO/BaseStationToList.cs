@@ -17,5 +17,9 @@ namespace IBL.BO
 
         public int ChargeSlotsTaken { get; set; }
 
+        public override string ToString()
+        {
+            return "Id: " + Id + "  Name: " + Name + "   Availible slots: " + ChargeSlotsAvailible + "  Taken slots: " + ChargeSlotsTaken;
+        }
     }
 }
