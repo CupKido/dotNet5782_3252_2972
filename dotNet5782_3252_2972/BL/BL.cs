@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace BLobject
 {
     public partial class BL : IBL.IBL
@@ -285,6 +284,47 @@ namespace BLobject
                        ChargeSlotsAvailible = ACS,
                        ChargeSlotsTaken = bs.ChargeSlots - ACS
                    };
+        }
+
+        public BaseStation GetBaseStation(int Id)
+        {
+            IDAL.DO.BaseStation bs;
+            try
+            {
+                bs = dal.GetBaseStation(Id);
+                return new BaseStation()
+                {
+                    Id = bs.Id,
+                    StationLocation = new Location()
+                    {
+                        Latitude = bs.Latitude,
+                        Longitude = bs.Longitude
+                    },
+                    ChargeSlots = bs.ChargeSlots,
+                    Name = bs.Name,
+                    DroneInChargesList = GetDronesInBaseStation(bs).ToList()
+
+                };
+            }catch(IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+        }
+
+        private IEnumerable<DroneInCharge> GetDronesInBaseStation(IDAL.DO.BaseStation bs)
+        {
+            return from IDAL.DO.DroneCharge DC in dal.GetAllDroneCharges()
+                   where DC.BaseStationId == bs.Id
+                   select new DroneInCharge()
+                   {
+                       Battery = GetDrone(DC.DroneId).Battery,
+                       Id = DC.DroneId
+                   };
+        }
+
+        public Drone GetDrone(int Id)
+        {
+            return BLDrones.FirstOrDefault(p => p.Id == Id);
         }
 
         #endregion

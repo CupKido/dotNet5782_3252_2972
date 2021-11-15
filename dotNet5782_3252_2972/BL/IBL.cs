@@ -73,6 +73,10 @@ namespace IBL
 
         public IEnumerable<BaseStationToList> GetAllBaseStations();
 
+        public BaseStation GetBaseStation(int Id);
+
+        public Drone GetDrone(int Id);
+
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 
         #endregion
