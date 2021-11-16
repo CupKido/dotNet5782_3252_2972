@@ -17,7 +17,7 @@ namespace IBL
 
         //public Customer GetCustomer(int Id);
 
-        //public List<Customer> GetAllCustomers();
+        public IEnumerable<Customer> GetAllCustomers();
 
         //public Customer RemoveCustomer(int Id);
 
@@ -29,6 +29,8 @@ namespace IBL
 
         public IEnumerable<DroneToList> GetAllDrones();
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
+
+        public Drone GetDrone(int Id);
 
         //public IDAL.DO.Drone GetDrone(int Id);
 
@@ -78,8 +80,6 @@ namespace IBL
 
 
         public BaseStation GetBaseStation(int Id);
-
-        public Drone GetDrone(int Id);
 
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 

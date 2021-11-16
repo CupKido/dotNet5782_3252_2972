@@ -198,10 +198,7 @@ namespace ConsoleUI_BL
                                 case 3:
                                     {
 
-                                        //foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
-                                        //{
-                                        //    Console.WriteLine(customer + "\n");
-                                        //}
+                                        printCustomers(myBL);
                                     }
                                     break;
 
@@ -254,6 +251,14 @@ namespace ConsoleUI_BL
                 }
 
 
+
+            }
+        }
+
+        private static void printCustomers(IBL.IBL myBL)
+        {
+            foreach(CustomerToList c in myBL.GetAllCustomers())
+            {
 
             }
         }

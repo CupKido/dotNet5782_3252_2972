@@ -436,5 +436,34 @@ namespace BLobject
         }
 
         #endregion
+
+        #region Customers
+
+        public IEnumerable<Customer> GetAllCustomers()
+        {
+            return from IDAL.DO.Customer c in dal.GetAllCustomers()
+                   select new CustomerToList()
+                   {
+                       Id = c.Id,
+                       Name = c.Name,
+                       Phone = c.Phone,
+                       SentAndDelivered = getSentAndDelivered(c)
+                       //need to create private funcs for others params
+                   };
+        }
+
+        private int getSentAndDelivered(IDAL.DO.Customer c)
+        {
+            int sum = 0;
+            foreach(IDAL.DO.Parcel p in dal.GetAllParcels())
+            {
+                if(p.SenderId == c.Id && p.Delivered != DateTime.MinValue)
+                {
+                    sum++;
+                }
+            }
+            return sum;
+        }
+        #endregion
     }
 }
