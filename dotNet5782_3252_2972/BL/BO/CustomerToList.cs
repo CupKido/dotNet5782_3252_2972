@@ -23,5 +23,10 @@ namespace IBL.BO
 
         public int OnTheWay { get; set; }
 
+        public override string ToString()
+        {
+            return "ID: " + Id + " Name: " + Name + " Phone: " + Phone + " Sent And Delivered: " + SentAndDelivered + " Sent but not Delivered: " + SentAndNotDelivered + " Recieved: " + Recieved + " On The Way: " + OnTheWay;
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace BLobject
 {
     public partial class BL : IBL.IBL
     {
-        
+
         public IDAL.IDal dal; //with dal we have access to data source
         List<DroneToList> BLDrones = new List<DroneToList>();
         public Double AvailbleElec { get; set; }
@@ -47,7 +47,7 @@ namespace BLobject
                         newD.MaxWeight = (WeightCategories)PDrone.MaxWeight;
                         newD.Model = PDrone.Model;
                         newD.CarriedParcelId = p.Id;
-                        
+
                         IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
                         IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
 
@@ -382,6 +382,7 @@ namespace BLobject
 
         public IEnumerable<DroneToList> GetAllDrones()
         {
+            return BLDrones;
             return from Drone d in BLDrones
                    select new DroneToList()
                    {
@@ -418,40 +419,170 @@ namespace BLobject
             {
                 throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
             }
-            return new Drone() { 
-            Id = d.Id,
-            Battery = d.Battery,
-            CurrentParcel = GetParcel(d.CarriedParcelId),
-            MaxWeight = d.MaxWeight,
-            Model = d.Model,
-            Status = d.Status,
-            CurrentLocation = d.CurrentLocation
+            if (d.CarriedParcelId == 0)
+            {
+                return new Drone()
+                {
+                    Id = d.Id,
+                    Battery = d.Battery,
+                    MaxWeight = d.MaxWeight,
+                    Model = d.Model,
+                    Status = d.Status,
+                    CurrentLocation = d.CurrentLocation
+                };
+            }
+
+            Parcel p = GetParcel(d.CarriedParcelId);
+            Customer sender = GetCustomer(p.Sender.Id);
+            Customer target = GetCustomer(p.Target.Id);
+            return new Drone()
+            {
+                Id = d.Id,
+                Battery = d.Battery,
+                CurrentParcel = new ParcelInDelivery()
+                {
+                    Id = p.Id,
+                    ParcelStatus = ((p.PickedUp != DateTime.MinValue) ? true : false),
+                    PickUp = sender.Address,
+                    Drop = target.Address,
+                    DeliveryDistance = getDistanceFromLatLonInKm(sender.Address.Latitude, sender.Address.Longitude, target.Address.Latitude, target.Address.Longitude),
+                    priority = (Priorities)p.Priority,
+                    Sender = new CustomerInParcel()
+                    {
+                        Id = sender.Id,
+                        Name = sender.Name
+                    },
+                    Target = new CustomerInParcel() { Id = target.Id, Name = target.Name }
+                },
+                MaxWeight = d.MaxWeight,
+                Model = d.Model,
+                Status = d.Status,
+                CurrentLocation = d.CurrentLocation
             };
         }
 
-        private Parcel GetParcel(int Id)
+        public Parcel GetParcel(int Id)
         {
-            return from IDAL.DO.Parcel p in dal.GetAllParcels()
-                   
-                   where p.Id == Id
-                   select new Parcel()
-                   {
-                       Id = p.Id,
-                       DroneId = p.DroneId,
-                       Priority = p.Priority,
-                       Sender = GetCustomer(p.SenderId),
-                       Target = GetCustomer(p.TargetId),
-                       Weight = p.Weight,
-                       Requested = p.Requested,
-                       scheduled = p.scheduled,
-                       PickedUp = p.PickedUp,
-                       Delivered = p.Delivered
-                   };
+            try
+            {
+                IDAL.DO.Parcel p = dal.GetParcel(Id);
+                Customer sender = GetCustomer(p.SenderId);
+                Customer target = GetCustomer(p.TargetId);
+                return new Parcel()
+                {
+                    Id = p.Id,
+                    DroneId = p.DroneId,
+                    Priority = p.Priority,
+                    Sender = new CustomerInParcel() { Id = sender.Id, Name = sender.Name },
+                    Target = new CustomerInParcel() { Id = target.Id, Name = target.Name },
+                    Weight = p.Weight,
+                    Requested = p.Requested,
+                    scheduled = p.scheduled,
+                    PickedUp = p.PickedUp,
+                    Delivered = p.Delivered
+                };
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+
+
         }
 
-        private Customer GetCustomer(int targetId)
+        public Customer GetCustomer(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IDAL.DO.Customer c = dal.GetCustomer(Id);
+
+                return new Customer()
+                {
+                    Id = c.Id,
+                    Address = new Location()
+                    {
+                        Latitude = c.Latitude,
+                        Longitude = c.Longitude
+                    },
+                    Name = c.Name,
+                    Phone = c.Phone,
+                    FromThisCustomer = getFromeThisCustomer(c),
+                    ToThisCustomer = getToThisCustomer(c),
+                };
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        private List<ParcelInCustomer> getToThisCustomer(IDAL.DO.Customer c)
+        {
+            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                    where p.TargetId == c.Id
+                    let sender = dal.GetCustomer(p.SenderId)
+                    select new ParcelInCustomer()
+                    {
+                        Id = p.Id,
+
+                        Priority = (Priorities)p.Priority,
+                        Weight = (WeightCategories)p.Weight,
+                        Status = getParcelStatus(p),
+                        OtherSide = new CustomerInParcel()
+                        {
+                            Id = sender.Id,
+                            Name = sender.Name
+                        }
+                    }).ToList();
+        }
+
+        private List<ParcelInCustomer> getFromeThisCustomer(IDAL.DO.Customer c)
+        {
+            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                    where p.SenderId == c.Id
+                    let target = dal.GetCustomer(p.TargetId)
+                    select new ParcelInCustomer()
+                    {
+                        Id = p.Id,
+
+                        Priority = (Priorities)p.Priority,
+                        Weight = (WeightCategories)p.Weight,
+                        Status = getParcelStatus(p),
+                        OtherSide = new CustomerInParcel()
+                        {
+                            Id = target.Id,
+                            Name = target.Name
+                        }
+                    }).ToList();
+        }
+
+        private ParcelStatuses getParcelStatus(IDAL.DO.Parcel p)
+        {
+            if (p.Delivered != DateTime.MinValue)
+            {
+                return ParcelStatuses.Delivered;
+            }
+            else if (p.PickedUp != DateTime.MinValue)
+            {
+                return ParcelStatuses.PickedUp;
+            }
+            else if (p.scheduled != DateTime.MinValue)
+            {
+                return ParcelStatuses.Associated;
+            }
+            else
+            {
+                return ParcelStatuses.Created;
+            }
         }
 
         #endregion
@@ -516,9 +647,9 @@ namespace BLobject
         private int getSentAndDelivered(IDAL.DO.Customer c)
         {
             int sum = 0;
-            foreach(IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if(p.SenderId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                if (p.SenderId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
                 {
                     sum++;
                 }

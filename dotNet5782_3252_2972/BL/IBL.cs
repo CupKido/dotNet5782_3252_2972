@@ -15,7 +15,7 @@ namespace IBL
 
         //public void SetCustomer(Customer customer);
 
-        //public Customer GetCustomer(int Id);
+        public Customer GetCustomer(int Id);
 
         public IEnumerable<CustomerToList> GetAllCustomers();
 

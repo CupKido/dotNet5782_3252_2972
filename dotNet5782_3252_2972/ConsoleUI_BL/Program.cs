@@ -152,7 +152,7 @@ namespace ConsoleUI_BL
 
                                 case 3:
                                     {
-                                       // PrintCustomer(DO);
+                                       PrintCustomer(myBL);
 
                                     }
                                     break;
@@ -197,7 +197,6 @@ namespace ConsoleUI_BL
 
                                 case 3:
                                     {
-
                                         printCustomers(myBL);
                                     }
                                     break;
@@ -255,12 +254,30 @@ namespace ConsoleUI_BL
             }
         }
 
+        private static void PrintCustomer(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter customers's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                Console.WriteLine(myBL.GetCustomer(Id));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private static void printCustomers(IBL.IBL myBL)
         {
             foreach(CustomerToList c in myBL.GetAllCustomers())
             {
-
+                Console.WriteLine(c);
             }
+            Console.WriteLine("\n");
         }
 
         private static void PrintDrone(IBL.IBL myBL)
@@ -285,6 +302,7 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(d);
             }
+            Console.WriteLine("\n");
         }
 
         private static void AddDrone(IBL.IBL myBL)
@@ -326,6 +344,7 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(bs);
             }
+            Console.WriteLine("\n");
         }
 
         private static void PrintBaseStation(IBL.IBL myBL)
@@ -352,6 +371,7 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(bs);
             }
+            Console.WriteLine("\n");
         }
 
         private static void AddBaseStation(IBL.IBL myBL)

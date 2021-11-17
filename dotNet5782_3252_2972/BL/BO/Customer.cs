@@ -57,9 +57,23 @@ namespace IBL.BO
 
             #endregion
 
+            string FromThisCustomerString = "";
+            string ToThisCustomerString = "";
+
+            foreach(ParcelInCustomer pic in FromThisCustomer)
+            {
+                FromThisCustomerString += pic.ToString() + "\n";
+            }
+
+            foreach (ParcelInCustomer pic in ToThisCustomer)
+            {
+                ToThisCustomerString += pic.ToString() + "\n";
+            }
+
             return "ID: " + Id + "\nName: " + Name + "\nPhone: " + Phone +
                 "\nLongitude: " + londegrees + "°" + lonminutes + "'" + Math.Round(lonsecondsWithFraction, 3) + "\"" + lon +
-                "\nLatitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat;
+                "\nLatitude: " + latdegrees + "°" + latminutes + "'" + Math.Round(latsecondsWithFraction, 3) + "\"" + lat + "\n" +
+                "Arriving Parcels:\n" + ToThisCustomerString + "\n" + "Sent Parcels:\n" + FromThisCustomerString;
 
         }
     }
