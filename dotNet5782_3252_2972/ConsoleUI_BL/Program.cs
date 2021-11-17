@@ -47,7 +47,7 @@ namespace ConsoleUI_BL
 
                                 case 3: //Adding Customer
 
-                                    //AddCustomer(DO);
+                                    AddCustomer(myBL);
                                     break;
 
                                 case 4:
@@ -251,6 +251,48 @@ namespace ConsoleUI_BL
             }
         }
 
+        private static void AddCustomer(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter new customer's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id) || Id < 1);
+
+            Console.WriteLine("Enter Name: ");
+            String Name = Console.ReadLine();
+
+            String Phone;
+            int Phoneint;
+            do
+            {
+                Console.WriteLine("Enter Phone: ");
+                Phone = Console.ReadLine();
+            } while (!int.TryParse(Phone, out Phoneint) || Phone.Length != 10);
+
+            
+            double CLongitude;
+            do
+            {
+                Console.WriteLine("Insert BaseStation Longitude:");
+            } while (!double.TryParse(Console.ReadLine(), out CLongitude));
+
+            double CLatitude;
+            do
+            {
+                Console.WriteLine("Insert BaseStation Latitude:");
+            } while (!double.TryParse(Console.ReadLine(), out CLatitude));
+
+            try
+            {
+                myBL.AddCustomer(Id, Name, Phone, CLongitude, CLatitude);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private static void printParcels(IBL.IBL myBL)
         {
             foreach (ParcelToList p in myBL.GetAllParcels())
@@ -407,11 +449,12 @@ namespace ConsoleUI_BL
 
             do
             {
-                Console.WriteLine("Insert BaseStation ID:");
+                Console.WriteLine("Insert BaseStation number:");
             } while (!int.TryParse(Console.ReadLine(), out BSId));
 
             Console.WriteLine("Enter Station Name: ");
             BSName = Console.ReadLine();
+
             do
             {
                 Console.WriteLine("Insert BaseStation Longitude:");

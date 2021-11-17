@@ -11,7 +11,7 @@ namespace IBL
 
         #region Customers
 
-        //public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude);
+        public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude);
 
         //public void SetCustomer(Customer customer);
 

@@ -264,6 +264,10 @@ namespace BLobject
 
         public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
+            if(Id < 0)
+            {
+                throw new NegetiveNumberException(Id, "Base Station number cannot be negetive!");
+            }
             try
             {
                 dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
@@ -277,15 +281,17 @@ namespace BLobject
 
         public IEnumerable<BaseStationToList> GetAllBaseStations()
         {
-            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
-                   let ACS = getAvailibleSlotsForBaseStation(bs)
-                   select new BaseStationToList()
-                   {
-                       Id = bs.Id,
-                       Name = bs.Name,
-                       ChargeSlotsAvailible = ACS,
-                       ChargeSlotsTaken = bs.ChargeSlots - ACS
-                   };
+            List<BaseStationToList> AllBaseStations = (from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+                                                               let ACS = getAvailibleSlotsForBaseStation(bs)
+                                                               select new BaseStationToList()
+                                                               {
+                                                                   Id = bs.Id,
+                                                                   Name = bs.Name,
+                                                                   ChargeSlotsAvailible = ACS,
+                                                                   ChargeSlotsTaken = bs.ChargeSlots - ACS
+                                                               }).ToList();
+            AllBaseStations.Sort();
+            return AllBaseStations;
         }
 
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
@@ -378,7 +384,7 @@ namespace BLobject
             {
                 throw;
             }
-        }
+        } //need to fix
 
         public IEnumerable<DroneToList> GetAllDrones()
         {
@@ -588,6 +594,18 @@ namespace BLobject
         #endregion
 
         #region Customers
+
+        public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
+        {
+            try
+            {
+                dal.AddCustomer(Id, Name, Phone, Longitude, Latitude);
+            }
+            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            {
+                throw new ItemAlreadyExistsException(Id, ex.Message, ex);
+            }
+        } //need to fix
 
         public IEnumerable<CustomerToList> GetAllCustomers()
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IBL.BO
 {
-    public class BaseStationToList
+    public class BaseStationToList : IComparable
     {
 
         public int Id { get; set; }
@@ -16,6 +16,11 @@ namespace IBL.BO
         public int ChargeSlotsAvailible { get; set; }
 
         public int ChargeSlotsTaken { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Id.CompareTo(((BaseStationToList)obj).Id);
+        }
 
         public override string ToString()
         {
