@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IBL.BO
 {
-    public class DroneToList
+    public class DroneToList : IComparable
     {
         public int Id { get; set; }
         
@@ -21,6 +21,11 @@ namespace IBL.BO
         public Location CurrentLocation { get; set; }
 
         public int CarriedParcelId { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Id.CompareTo(((DroneToList)obj).Id);
+        }
 
         public override string ToString()
         {

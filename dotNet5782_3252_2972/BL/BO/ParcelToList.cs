@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IBL.BO
 {
-    public class ParcelToList
+    public class ParcelToList : IComparable
     {
 
         public int Id { get; set; }
@@ -20,6 +20,11 @@ namespace IBL.BO
         public Priorities Priority { get; set; }
 
         public ParcelStatuses Status { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Id.CompareTo(((ParcelToList)obj).Id);
+        }
 
         public override string ToString()
         {

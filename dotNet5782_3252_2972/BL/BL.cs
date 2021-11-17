@@ -264,7 +264,7 @@ namespace BLobject
 
         public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
-            if(Id < 0)
+            if (Id < 0)
             {
                 throw new NegetiveNumberException(Id, "Base Station number cannot be negetive!");
             }
@@ -282,14 +282,14 @@ namespace BLobject
         public IEnumerable<BaseStationToList> GetAllBaseStations()
         {
             List<BaseStationToList> AllBaseStations = (from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
-                                                               let ACS = getAvailibleSlotsForBaseStation(bs)
-                                                               select new BaseStationToList()
-                                                               {
-                                                                   Id = bs.Id,
-                                                                   Name = bs.Name,
-                                                                   ChargeSlotsAvailible = ACS,
-                                                                   ChargeSlotsTaken = bs.ChargeSlots - ACS
-                                                               }).ToList();
+                                                       let ACS = getAvailibleSlotsForBaseStation(bs)
+                                                       select new BaseStationToList()
+                                                       {
+                                                           Id = bs.Id,
+                                                           Name = bs.Name,
+                                                           ChargeSlotsAvailible = ACS,
+                                                           ChargeSlotsTaken = bs.ChargeSlots - ACS
+                                                       }).ToList();
             AllBaseStations.Sort();
             return AllBaseStations;
         }
@@ -388,6 +388,7 @@ namespace BLobject
 
         public IEnumerable<DroneToList> GetAllDrones()
         {
+            BLDrones.Sort();
             return BLDrones;
             return from Drone d in BLDrones
                    select new DroneToList()
@@ -609,18 +610,20 @@ namespace BLobject
 
         public IEnumerable<CustomerToList> GetAllCustomers()
         {
-            return from IDAL.DO.Customer c in dal.GetAllCustomers()
-                   select new CustomerToList()
-                   {
-                       Id = c.Id,
-                       Name = c.Name,
-                       Phone = c.Phone,
-                       SentAndDelivered = getSentAndDelivered(c),
-                       SentAndNotDelivered = getSentAndNotDelivered(c),
-                       OnTheWay = getOnTheWay(c),
-                       Recieved = getRecieved(c)
-                       //need to create private funcs for others params
-                   };
+            List<CustomerToList> CTL = (from IDAL.DO.Customer c in dal.GetAllCustomers()
+                                        select new CustomerToList()
+                                        {
+                                            Id = c.Id,
+                                            Name = c.Name,
+                                            Phone = c.Phone,
+                                            SentAndDelivered = getSentAndDelivered(c),
+                                            SentAndNotDelivered = getSentAndNotDelivered(c),
+                                            OnTheWay = getOnTheWay(c),
+                                            Recieved = getRecieved(c)
+                                            //need to create private funcs for others params
+                                        }).ToList();
+            CTL.Sort();
+            return CTL;
         }
 
         private int getRecieved(IDAL.DO.Customer c)
@@ -680,16 +683,18 @@ namespace BLobject
 
         public IEnumerable<ParcelToList> GetAllParcels()
         {
-            return from IDAL.DO.Parcel p in dal.GetAllParcels()
-                   select new ParcelToList()
-                   {
-                       Id = p.Id,
-                       Priority = (Priorities)p.Priority,
-                       Weight = (WeightCategories)p.Weight,
-                       Status = getParcelStatus(p),
-                       SenderName = dal.GetCustomer(p.SenderId).Name,
-                       TargetName = dal.GetCustomer(p.TargetId).Name,
-                   };
+            List<ParcelToList> PTL = (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                                            select new ParcelToList()
+                                            {
+                                                Id = p.Id,
+                                                Priority = (Priorities)p.Priority,
+                                                Weight = (WeightCategories)p.Weight,
+                                                Status = getParcelStatus(p),
+                                                SenderName = dal.GetCustomer(p.SenderId).Name,
+                                                TargetName = dal.GetCustomer(p.TargetId).Name,
+                                            }).ToList();
+            PTL.Sort();
+            return PTL;
         }
 
         #endregion
