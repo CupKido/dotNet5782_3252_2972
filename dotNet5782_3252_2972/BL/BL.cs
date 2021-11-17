@@ -657,5 +657,23 @@ namespace BLobject
             return sum;
         }
         #endregion
+
+        #region Parcel
+
+        public IEnumerable<ParcelToList> GetAllParcels()
+        {
+            return from IDAL.DO.Parcel p in dal.GetAllParcels()
+                   select new ParcelToList()
+                   {
+                       Id = p.Id,
+                       Priority = (Priorities)p.Priority,
+                       Weight = (WeightCategories)p.Weight,
+                       Status = getParcelStatus(p),
+                       SenderName = dal.GetCustomer(p.SenderId).Name,
+                       TargetName = dal.GetCustomer(p.TargetId).Name,
+                   };
+        }
+
+        #endregion
     }
 }

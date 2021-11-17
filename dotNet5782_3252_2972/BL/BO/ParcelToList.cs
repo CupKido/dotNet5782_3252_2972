@@ -21,6 +21,10 @@ namespace IBL.BO
 
         public ParcelStatuses Status { get; set; }
 
+        public override string ToString()
+        {
+            return "ID: " + Id + " | " + "Sender's Name: " + SenderName + " | " + "Target's Name: " + TargetName + " | " + "Weight: " + Weight + " | " + "Priority: " + Priority + " | " + "Status: " + Status;
+        }
 
     }
 }

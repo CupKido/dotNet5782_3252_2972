@@ -17,13 +17,14 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            String res = "ID: " + Id + "\nSender ID: " + Sender.Id + "   Target ID: " + Target.Id +
-                "\nWeight: " + Weight + "   Priority: " + Priority + "\nRequested: " + Requested;
-            if (DroneId != 0)
-            {
-                res += "\nScheduled: " + scheduled + "  Drone's ID: " + DroneId;
-            }
-            return res;
+            return "ID: " + Id +
+                "\nSender ID: " + Sender.Id + " Name: " + Sender.Name +
+                "\nTarget ID: " + Target.Id + " Name: " + Target.Name +
+                "\nWeight: " + Weight + "   Priority: " + Priority + 
+                "\nRequested: " + Requested +
+                ((DroneId != 0) ? ("\nDrone's ID: " + DroneId + "\nScheduled: " + scheduled) : "") +
+                ((PickedUp != DateTime.MinValue) ? ("\nPicked Up Date: " + PickedUp) : "") +
+                ((PickedUp != DateTime.MinValue) ? ("\nDelivered Date: " + Delivered) : "");
         }
     }
 }

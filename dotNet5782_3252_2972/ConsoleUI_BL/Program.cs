@@ -159,7 +159,7 @@ namespace ConsoleUI_BL
 
                                 case 4:
                                     {
-                                        //PrintParcel(DO);
+                                        PrintParcel(myBL);
                                     }
                                     break;
 
@@ -203,10 +203,7 @@ namespace ConsoleUI_BL
 
                                 case 4:
                                     {
-                                        //foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
-                                        //{
-                                        //    Console.WriteLine(parcel + "\n");
-                                        //}
+                                        printParcels(myBL);
                                     }
                                     break;
 
@@ -251,6 +248,32 @@ namespace ConsoleUI_BL
 
 
 
+            }
+        }
+
+        private static void printParcels(IBL.IBL myBL)
+        {
+            foreach (ParcelToList p in myBL.GetAllParcels())
+            {
+                Console.WriteLine(p);
+            }
+            Console.WriteLine("\n");
+        }
+
+        private static void PrintParcel(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter parcel's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                Console.WriteLine(myBL.GetParcel(Id));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 

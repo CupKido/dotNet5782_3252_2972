@@ -46,9 +46,9 @@ namespace IBL
 
         //public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
 
-        //public List<IDAL.DO.Parcel> GetAllParcels();
+        public IEnumerable<ParcelToList> GetAllParcels();
 
-        //public IDAL.DO.Parcel GetParcel(int Id);
+        public Parcel GetParcel(int Id);
 
         //public void SetParcel(IDAL.DO.Parcel newParcel);
 
