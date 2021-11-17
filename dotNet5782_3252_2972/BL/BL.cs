@@ -7,9 +7,9 @@ namespace BLobject
 {
     public partial class BL : IBL.IBL
     {
-        public List<IBL.BO.Drone> Drones = new List<IBL.BO.Drone>();
+        
         public IDAL.IDal dal; //with dal we have access to data source
-        List<Drone> BLDrones = new List<Drone>();
+        List<DroneToList> BLDrones = new List<DroneToList>();
         public Double AvailbleElec { get; set; }
         public Double LightElec { get; set; }
         public Double IntermediateElec { get; set; }
@@ -40,28 +40,14 @@ namespace BLobject
                     if (p.Delivered == DateTime.MinValue)
                     {
 
-                        Drone newD = new Drone();
+                        DroneToList newD = new DroneToList();
 
                         newD.Status = DroneStatuses.InDelivery;
                         newD.Id = PDrone.Id;
                         newD.MaxWeight = (WeightCategories)PDrone.MaxWeight;
                         newD.Model = PDrone.Model;
-                        newD.CurrentParcel = new ParcelInDelivery()
-                        {
-                            Id = p.Id,
-                            Sender = new CustomerInParcel()
-                            {
-                                Id = p.SenderId,
-                                Name = dal.GetCustomer(p.SenderId).Name
-                            },
-                            Target = new CustomerInParcel()
-                            {
-                                Id = p.TargetId,
-                                Name = dal.GetCustomer(p.TargetId).Name
-                            },
-                            priority = (Priorities)p.Priority
-                        };
-
+                        newD.CarriedParcelId = p.Id;
+                        
                         IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
                         IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
 
@@ -107,7 +93,7 @@ namespace BLobject
             //if not in delivery
             foreach (IDAL.DO.Drone d in DalDronesList)
             {
-                Drone newD = new Drone();
+                DroneToList newD = new DroneToList();
                 newD.Id = d.Id;
                 newD.MaxWeight = (WeightCategories)d.MaxWeight;
                 newD.Model = d.Model;
@@ -170,7 +156,7 @@ namespace BLobject
 
         }
 
-        private void sendToMaitenance(Drone newD)
+        private void sendToMaitenance(DroneToList newD)
         {
 
             List<BaseStation> availibleStation = new List<BaseStation>();
@@ -364,7 +350,7 @@ namespace BLobject
             {
                 IDAL.DO.BaseStation bs = dal.GetBaseStation(stationId);
                 dal.AddDrone(Id, Model, (IDAL.DO.WeightCategories)MaxWeight);
-                BLDrones.Add(new Drone()
+                BLDrones.Add(new DroneToList()
                 {
                     Id = Id,
                     Battery = 100,
@@ -376,7 +362,7 @@ namespace BLobject
                         Latitude = bs.Latitude,
                         Longitude = bs.Longitude
                     },
-                    CurrentParcel = null
+                    CarriedParcelId = 0
                 });
                 dal.AddDroneCharge(Id, stationId);
             }
@@ -427,19 +413,52 @@ namespace BLobject
 
         public Drone GetDrone(int Id)
         {
-            Drone d = BLDrones.FirstOrDefault(p => p.Id == Id);
+            DroneToList d = BLDrones.FirstOrDefault(p => p.Id == Id);
             if (d == null)
             {
                 throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
             }
-            return d;
+            return new Drone() { 
+            Id = d.Id,
+            Battery = d.Battery,
+            CurrentParcel = GetParcel(d.CarriedParcelId),
+            MaxWeight = d.MaxWeight,
+            Model = d.Model,
+            Status = d.Status,
+            CurrentLocation = d.CurrentLocation
+            };
+        }
+
+        private Parcel GetParcel(int Id)
+        {
+            return from IDAL.DO.Parcel p in dal.GetAllParcels()
+                   
+                   where p.Id == Id
+                   select new Parcel()
+                   {
+                       Id = p.Id,
+                       DroneId = p.DroneId,
+                       Priority = p.Priority,
+                       Sender = GetCustomer(p.SenderId),
+                       Target = GetCustomer(p.TargetId),
+                       Weight = p.Weight,
+                       Requested = p.Requested,
+                       scheduled = p.scheduled,
+                       PickedUp = p.PickedUp,
+                       Delivered = p.Delivered
+                   };
+        }
+
+        private Customer GetCustomer(int targetId)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
 
         #region Customers
 
-        public IEnumerable<Customer> GetAllCustomers()
+        public IEnumerable<CustomerToList> GetAllCustomers()
         {
             return from IDAL.DO.Customer c in dal.GetAllCustomers()
                    select new CustomerToList()
@@ -447,9 +466,51 @@ namespace BLobject
                        Id = c.Id,
                        Name = c.Name,
                        Phone = c.Phone,
-                       SentAndDelivered = getSentAndDelivered(c)
+                       SentAndDelivered = getSentAndDelivered(c),
+                       SentAndNotDelivered = getSentAndNotDelivered(c),
+                       OnTheWay = getOnTheWay(c),
+                       Recieved = getRecieved(c)
                        //need to create private funcs for others params
                    };
+        }
+
+        private int getRecieved(IDAL.DO.Customer c)
+        {
+            int sum = 0;
+            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            {
+                if (p.TargetId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                {
+                    sum++;
+                }
+            }
+            return sum;
+        }
+
+        private int getOnTheWay(IDAL.DO.Customer c)
+        {
+            int sum = 0;
+            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            {
+                if (p.TargetId == c.Id && p.Delivered == DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                {
+                    sum++;
+                }
+            }
+            return sum;
+        }
+
+        private int getSentAndNotDelivered(IDAL.DO.Customer c)
+        {
+            int sum = 0;
+            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            {
+                if (p.SenderId == c.Id && p.Delivered == DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                {
+                    sum++;
+                }
+            }
+            return sum;
         }
 
         private int getSentAndDelivered(IDAL.DO.Customer c)
@@ -457,7 +518,7 @@ namespace BLobject
             int sum = 0;
             foreach(IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if(p.SenderId == c.Id && p.Delivered != DateTime.MinValue)
+                if(p.SenderId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
                 {
                     sum++;
                 }

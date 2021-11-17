@@ -17,7 +17,7 @@ namespace IBL
 
         //public Customer GetCustomer(int Id);
 
-        public IEnumerable<Customer> GetAllCustomers();
+        public IEnumerable<CustomerToList> GetAllCustomers();
 
         //public Customer RemoveCustomer(int Id);
 
