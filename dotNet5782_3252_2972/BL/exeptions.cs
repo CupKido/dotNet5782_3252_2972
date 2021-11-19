@@ -68,4 +68,25 @@ namespace IBL.BO
             return "ERROR: Invalid Number Length!\nInvalid number length inserted: " + Number + "\n" + Message;
         }
     }
+
+    public class OutOfRangeException : Exception
+    {
+        public int Number;
+        public OutOfRangeException(int number) : base()
+        {
+            Number = number;
+        }
+        public OutOfRangeException(int number, String message) : base(message)
+        {
+            Number = number;
+        }
+        public OutOfRangeException(int number, String message, Exception inner) : base(message, inner)
+        {
+            Number = number;
+        }
+        public override string ToString()
+        {
+            return "ERROR: Invalid Number has been chosen!\nInvalid number inserted: " + Number + "\n" + Message;
+        }
+    }
 }

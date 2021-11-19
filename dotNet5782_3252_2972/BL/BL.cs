@@ -352,6 +352,14 @@ namespace BLobject
 
         public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId)
         {
+            if(Id<1 || stationId<1)
+            {
+                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
+            }
+            if ((int)MaxWeight < 0|| (int)MaxWeight >2)
+            {
+                throw new IBL.BO.OutOfRangeException(Id, "Maxweight has to be 1 or 2 or 3 only");
+            }
             try
             {
                 IDAL.DO.BaseStation bs = dal.GetBaseStation(stationId);
@@ -372,7 +380,7 @@ namespace BLobject
                 });
                 dal.AddDroneCharge(Id, stationId);
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (IDAL.DO.ItemNotFoundException ex) //base station not found
             {
                 throw;
             }
@@ -389,7 +397,7 @@ namespace BLobject
         public IEnumerable<DroneToList> GetAllDrones()
         {
             BLDrones.Sort();
-            return BLDrones;
+            //return BLDrones;
             return from Drone d in BLDrones
                    select new DroneToList()
                    {
@@ -421,7 +429,7 @@ namespace BLobject
 
         public Drone GetDrone(int Id)
         {
-            DroneToList d = BLDrones.FirstOrDefault(p => p.Id == Id);
+            DroneToList  d = BLDrones.FirstOrDefault(p => p.Id == Id);
             if (d == null)
             {
                 throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
@@ -598,6 +606,14 @@ namespace BLobject
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
         {
+            if (Id < 1 )
+            {
+                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
+            }
+            if(Phone.Length != 10)
+            {
+                throw new InvalidNumberLengthException(Phone.Length);
+            }
             try
             {
                 dal.AddCustomer(Id, Name, Phone, Longitude, Latitude);
@@ -695,6 +711,39 @@ namespace BLobject
                                             }).ToList();
             PTL.Sort();
             return PTL;
+        }
+
+        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        {
+            if (Id < 0 )
+            {
+                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
+            }
+            if (SenderId < 0)
+            {
+                throw new IBL.BO.NegetiveNumberException(SenderId, " Sender Id can not be negative number or zero");
+            }
+            if (TargetId < 0)
+            {
+                throw new IBL.BO.NegetiveNumberException(TargetId, " Target Id can not be negative number or zero");
+            }
+            if ((int)PackageWight < 0 || (int)PackageWight > 2  )
+            {
+                throw new IBL.BO.OutOfRangeException(Id, "PackageWight has to be 1 or 2 or 3 only");
+            }
+            if ( (int)priority < 0 || (int)priority > 2)
+            {
+                throw new IBL.BO.OutOfRangeException(Id, "priority has to be 1 or 2 or 3 only");
+            }
+            try
+            {
+                dal.AddParcel (Id, SenderId,  TargetId, PackageWight, priority);
+            }
+            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            {
+                throw;
+            }
+
         }
 
         #endregion

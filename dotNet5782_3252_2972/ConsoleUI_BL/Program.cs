@@ -33,7 +33,7 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 3 to add a Customer");
                             Console.WriteLine("insert 4 to add a Package");
 
-                            MenuChoice = int.Parse(Console.ReadLine());
+                            while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
                             switch (MenuChoice)
                             {
                                 case 1:
@@ -51,7 +51,7 @@ namespace ConsoleUI_BL
                                     break;
 
                                 case 4:
-                                    //AddParcel(DO);
+                                    AddParcel(myBL);
                                     break;
                             }
                             break;
@@ -69,8 +69,8 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 7 to update a Customer");
                             Console.WriteLine("insert 4 to charge a drone");
                             Console.WriteLine("insert 5 to decharge a drone");
-                            MenuChoice = int.Parse(Console.ReadLine());
 
+                            while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
 
                             switch (MenuChoice)
                             {
@@ -133,8 +133,8 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 2 to view a Drone");
                             Console.WriteLine("insert 3 to view a Customer");
                             Console.WriteLine("insert 4 to view a Package");
-                            MenuChoice = int.Parse(Console.ReadLine());
 
+                            while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
                             switch (MenuChoice)
                             {
                                 case 1:
@@ -180,7 +180,7 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 4 to view Packages");
                             Console.WriteLine("insert 6 to view available charging ports");
 
-                            MenuChoice = int.Parse(Console.ReadLine());
+                            while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
 
                             switch (MenuChoice)
                             {
@@ -257,7 +257,7 @@ namespace ConsoleUI_BL
             do
             {
                 Console.WriteLine("Enter new customer's ID: ");
-            } while (!int.TryParse(Console.ReadLine(), out Id) || Id < 1);
+            } while (!int.TryParse(Console.ReadLine(), out Id) );
 
             Console.WriteLine("Enter Name: ");
             String Name = Console.ReadLine();
@@ -268,9 +268,8 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine("Enter Phone: ");
                 Phone = Console.ReadLine();
-            } while (!int.TryParse(Phone, out Phoneint) || Phone.Length != 10);
+            } while (!int.TryParse(Phone, out Phoneint) );
 
-            
             double CLongitude;
             do
             {
@@ -384,13 +383,13 @@ namespace ConsoleUI_BL
             do
             {
                 Console.WriteLine("Enter drone's max wieght capability:\n 1 - Light     2 - Intermediate     3 - Heavy");
-            } while (!int.TryParse(Console.ReadLine(), out MaxWeight) && MaxWeight > 0 && MaxWeight < 4);
+            } while (!int.TryParse(Console.ReadLine(), out MaxWeight) );
 
             int StationId;
             do
             {
                 Console.WriteLine("Enter starting base station's ID: ");
-            } while (!int.TryParse(Console.ReadLine(), out StationId));
+            } while (!int.TryParse(Console.ReadLine(), out StationId) );
 
             try
             {
@@ -473,6 +472,52 @@ namespace ConsoleUI_BL
                 myBL.AddBaseStations(BSId, BSName, new Location() { Longitude = BSLongitude, Latitude = BSLatitude }, BSChargeSlots);
             }
             catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        private static void AddParcel(IBL.IBL myBL)
+        {
+            int BSId;
+            int BSSenderId;
+            int BSTargetId;
+            int BSPackageWight;
+            int BSpriority;
+
+
+            do
+            {
+                Console.WriteLine("Insert Parcel number:");
+            } while (!int.TryParse(Console.ReadLine(), out BSId));
+
+            do
+            {
+                Console.WriteLine("Enter Sender ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out BSSenderId));
+
+            do
+            {
+                Console.WriteLine("Enter Target ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out BSTargetId));
+
+          
+            do
+            {
+                Console.WriteLine("Enter package wieght:\n 1 - Light  2 - Intermediate  3 - Heavy");
+            } while (!int.TryParse(Console.ReadLine(), out BSPackageWight));
+            
+           
+            do
+            {
+                Console.WriteLine("Enter package wieght:\n 1 - Regular  2 - Fast  3 - Emergency");
+            } while (!int.TryParse(Console.ReadLine(), out BSpriority));
+
+
+            try
+            {
+                myBL.AddParcel( BSId, BSSenderId,  BSTargetId, (IDAL.DO.WeightCategories)BSPackageWight - 1, (IDAL.DO.Priorities) BSpriority-1);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
