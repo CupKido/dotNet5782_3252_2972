@@ -44,7 +44,7 @@ namespace IBL
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
+        public void AddParcel( int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
 
         public IEnumerable<ParcelToList> GetAllParcels();
 

@@ -15,11 +15,12 @@ namespace BLobject
         public Double IntermediateElec { get; set; }
         public Double HeavyElec { get; set; }
         public Double ChargePerHours { get; set; }
+        private static int runningNumForParcels { get; set; }
         public BL()
         {
             dal = new DalObject.DalObject();
 
-
+            runningNumForParcels = dal.GetAllParcels().Count() + 1;
             double[] arr = dal.AskForElectricity();
             AvailbleElec = arr[0];
             LightElec = arr[1];
@@ -713,12 +714,9 @@ namespace BLobject
             return PTL;
         }
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        public void AddParcel(int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
         {
-            if (Id < 0 )
-            {
-                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
-            }
+           
             if (SenderId < 0)
             {
                 throw new IBL.BO.NegetiveNumberException(SenderId, " Sender Id can not be negative number or zero");
@@ -727,17 +725,18 @@ namespace BLobject
             {
                 throw new IBL.BO.NegetiveNumberException(TargetId, " Target Id can not be negative number or zero");
             }
-            if ((int)PackageWight < 0 || (int)PackageWight > 2  )
-            {
-                throw new IBL.BO.OutOfRangeException(Id, "PackageWight has to be 1 or 2 or 3 only");
-            }
-            if ( (int)priority < 0 || (int)priority > 2)
-            {
-                throw new IBL.BO.OutOfRangeException(Id, "priority has to be 1 or 2 or 3 only");
-            }
+            //if ((int)PackageWight < 0 || (int)PackageWight > 2  )
+            //{
+            //    throw new IBL.BO.OutOfRangeException(Id, "PackageWight has to be 1 or 2 or 3 only");
+            //}
+            //if ( (int)priority < 0 || (int)priority > 2)
+            //{
+            //    throw new IBL.BO.OutOfRangeException(Id, "priority has to be 1 or 2 or 3 only");
+            //}
             try
             {
-                dal.AddParcel (Id, SenderId,  TargetId, PackageWight, priority);
+                dal.AddParcel (runningNumForParcels, SenderId,  TargetId, PackageWight, priority);
+                runningNumForParcels++;
             }
             catch (IDAL.DO.ItemAlreadyExistsException ex)
             {

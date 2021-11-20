@@ -124,7 +124,7 @@ namespace DalObject
             for (int i = 0; i < 10; i++)
             {
                 IDAL.DO.Parcel parcel = new IDAL.DO.Parcel();
-                parcel.Id = i + 1;
+                parcel.Id = Parcels.Count + 1;
                 bool flag = true;
                 while (flag)
                 {
