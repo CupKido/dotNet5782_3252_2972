@@ -883,6 +883,23 @@ namespace BLobject
             }
         }
 
+        public IEnumerable<ParcelToList> GetParcelsWithNoDrone()
+        {
+            List<ParcelToList> PTL = (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                                      where p.DroneId == 0
+                                      select new ParcelToList()
+                                      {
+                                          Id = p.Id,
+                                          Priority = (Priorities)p.Priority,
+                                          Weight = (WeightCategories)p.Weight,
+                                          Status = getParcelStatus(p),
+                                          SenderName = dal.GetCustomer(p.SenderId).Name,
+                                          TargetName = dal.GetCustomer(p.TargetId).Name,
+                                      }).ToList();
+            PTL.Sort();
+            return PTL;
+        }
+
         #endregion
     }
 }

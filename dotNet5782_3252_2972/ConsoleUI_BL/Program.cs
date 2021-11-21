@@ -171,6 +171,7 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 2 to view Drones");
                             Console.WriteLine("insert 3 to view Customers");
                             Console.WriteLine("insert 4 to view Packages");
+                            Console.WriteLine("insert 5 to view unassociated Packages");
                             Console.WriteLine("insert 6 to view available charging ports");
 
                             while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
@@ -202,16 +203,7 @@ namespace ConsoleUI_BL
 
                                 case 5:
                                     {
-                                        //foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
-                                        //{
-
-                                        //    if (parcel.DroneId == 0)
-                                        //    {
-                                        //        Console.WriteLine(parcel + "\n");
-                                        //    }
-                                        //}
-
-
+                                        printUnassociatedPackages(myBL);
                                     }
                                     break;
 
@@ -242,6 +234,15 @@ namespace ConsoleUI_BL
 
 
             }
+        }
+
+        private static void printUnassociatedPackages(IBL.IBL myBL)
+        {
+            foreach(ParcelToList ptl in myBL.GetParcelsWithNoDrone())
+            {
+                Console.WriteLine(ptl);
+            }
+            Console.WriteLine("\n");
         }
 
         private static void sendDroneToCharging(IBL.IBL myBL)

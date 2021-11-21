@@ -52,6 +52,8 @@ namespace IBL
 
         public IEnumerable<ParcelToList> GetAllParcels();
 
+        public IEnumerable<ParcelToList> GetParcelsWithNoDrone();
+
         public Parcel GetParcel(int Id);
 
         //public void SetParcel(IDAL.DO.Parcel newParcel);
