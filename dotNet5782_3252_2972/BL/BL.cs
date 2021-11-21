@@ -363,12 +363,13 @@ namespace BLobject
             }
             try
             {
+                Random r = new Random();
                 IDAL.DO.BaseStation bs = dal.GetBaseStation(stationId);
                 dal.AddDrone(Id, Model, (IDAL.DO.WeightCategories)MaxWeight);
                 BLDrones.Add(new DroneToList()
                 {
                     Id = Id,
-                    Battery = 100,
+                    Battery = r.Next(20,41),
                     MaxWeight = MaxWeight,
                     Model = Model,
                     Status = DroneStatuses.Maintenance,

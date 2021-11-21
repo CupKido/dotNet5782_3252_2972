@@ -515,7 +515,7 @@ namespace ConsoleUI_BL
 
             try
             {
-                myBL.AddParcel( BSId, BSSenderId,  BSTargetId, (IDAL.DO.WeightCategories)BSPackageWight - 1, (IDAL.DO.Priorities) BSpriority-1);
+                myBL.AddParcel(  BSSenderId,  BSTargetId, (IDAL.DO.WeightCategories)BSPackageWight - 1, (IDAL.DO.Priorities) BSpriority-1);
             }
             catch (Exception ex)
             {
