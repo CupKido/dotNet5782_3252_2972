@@ -15,10 +15,10 @@ namespace DalObject
 
         internal class Config
         {
-            internal static Double AvailbleElec = 1;
-            internal static Double LightElec = 15;
-            internal static Double IntermediateElec = 25;
-            internal static Double HeavyElec = 40;
+            internal static Double AvailbleElec = 20;
+            internal static Double LightElec = 35;
+            internal static Double IntermediateElec = 50;
+            internal static Double HeavyElec = 80;
             internal static Double ChargePerHours = 40;
             
         }
@@ -59,8 +59,8 @@ namespace DalObject
             {
                 IDAL.DO.BaseStation BS = new IDAL.DO.BaseStation();
                 BS.Id = i + 1;
-                BS.Latitude = r.Next(-100, 100) + r.NextDouble();
-                BS.Longitude = r.Next(-100, 100) + r.NextDouble();
+                BS.Latitude = r.Next(0, 10) + r.NextDouble();
+                BS.Longitude = r.Next(0, 10) + r.NextDouble();
                 BS.ChargeSlots = r.Next(3, 6);
                 if (i == 0)
                 {
@@ -80,8 +80,8 @@ namespace DalObject
             {
                 IDAL.DO.Customer customer = new IDAL.DO.Customer();
                 customer.Id = i + 1;
-                customer.Latitude = r.Next(-100, 100) + r.NextDouble();
-                customer.Longitude = r.Next(-100, 100) + r.NextDouble();
+                customer.Latitude = r.Next(5, 10) + r.NextDouble();
+                customer.Longitude = r.Next(5, 10) + r.NextDouble();
                 switch (r.Next(1, 5))
                 {
                     case 1:
@@ -139,7 +139,7 @@ namespace DalObject
                 parcel.Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
                 parcel.Requested = start.AddDays(r.Next(range));
 
-                switch (r.Next(3))
+                switch (r.Next(4))
                 {
                     case 0:
                         parcel.DroneId = 0;
@@ -147,17 +147,31 @@ namespace DalObject
 
                     case 1:
                     case 2:
+                    case 3:
                         IDAL.DO.Parcel? takenDroneP;
+                        int times = 0;
                         do
                         {
+                            times++;
                             parcel.DroneId = Drones[r.Next(Drones.Count)].Id;
                             parcel.scheduled = DateTime.Now;
                             if(r.Next(2) == 1)
                             {
                                 parcel.PickedUp = DateTime.Now;
+                                if(r.Next(2) == 1)
+                                {
+                                    parcel.Delivered = DateTime.Now;
+                                }
                             }
-                            takenDroneP = Parcels.FirstOrDefault(p => p.DroneId == parcel.DroneId);
-                        } while (takenDroneP.Value.Id != 0);
+                            takenDroneP = Parcels.FirstOrDefault(p => p.DroneId == parcel.DroneId && p.Delivered == DateTime.MinValue);
+                        } while (takenDroneP.Value.Id != 0 && parcel.Weight > Drones.FirstOrDefault(d => d.Id == parcel.DroneId).MaxWeight && times <= 3);
+                        if(times == 4)
+                        {
+                            parcel.DroneId = 0;
+                            parcel.scheduled = DateTime.MinValue;
+                            parcel.PickedUp = DateTime.MinValue;
+                            parcel.Delivered = DateTime.MinValue;
+                        }
                         break;
                 }
                 

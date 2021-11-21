@@ -13,7 +13,7 @@ namespace IBL
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude);
 
-        //public void SetCustomer(Customer customer);
+        public void UpdateCustomer(int Id, string name, string phone);
 
         public Customer GetCustomer(int Id);
 
@@ -33,6 +33,8 @@ namespace IBL
         public Drone GetDrone(int Id);
 
         public void UpdateDrone(int Id, string Model);
+
+        public void ChargeDrone(int Id);
 
         //public IDAL.DO.Drone GetDrone(int Id);
 
@@ -83,6 +85,7 @@ namespace IBL
         public void UpdateBaseStation(int Id, string Name, int? ChargeSlots);
 
         public BaseStation GetBaseStation(int Id);
+        
 
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 

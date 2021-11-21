@@ -113,4 +113,67 @@ namespace IBL.BO
             return "ERROR: Invalid Number has been chosen!\nInvalid number inserted: " + Number + "\n" + Message;
         }
     }
+
+    public class NotEnoughDroneBatteryException : Exception
+    {
+        public int DroneId;
+
+        public NotEnoughDroneBatteryException(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public NotEnoughDroneBatteryException(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " does not have enough battery to get to charging" + "\n" + Message;
+        }
+    }
+
+    public class DroneIsntAvailibleException : Exception
+    {
+        public int DroneId;
+
+        public DroneIsntAvailibleException(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public DroneIsntAvailibleException(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " is not availible, so it cant be charged." + "\n" + Message;
+        }
+    }
+
+    public class BaseStationFullException : Exception
+    {
+        public int DroneId;
+        public int BSId;
+        
+        public BaseStationFullException(int droneId, int bSId)
+        {
+            DroneId = droneId;
+            BSId = bSId;
+        }
+
+        public BaseStationFullException(int droneId, int bSId, string message) : base(message)
+        {
+            DroneId = droneId;
+            BSId = bSId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " cannot be charged at base station " + BSId + " Since the base station is full." + "\n" + Message;
+        }
+    }
 }

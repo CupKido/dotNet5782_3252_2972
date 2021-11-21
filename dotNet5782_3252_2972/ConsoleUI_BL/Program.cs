@@ -66,10 +66,9 @@ namespace ConsoleUI_BL
                         {
                             Console.WriteLine("\ninsert 1 to change a drone's model");
                             Console.WriteLine("insert 2 to update a base station");
-                            Console.WriteLine("insert 3 to Deliver a package by a drone");
-                            Console.WriteLine("insert 6 to update a Drone");
+                            Console.WriteLine("insert 3 to update a customer");
+                            Console.WriteLine("insert 4 to charge a Drone");
                             Console.WriteLine("insert 7 to update a Customer");
-                            Console.WriteLine("insert 4 to charge a drone");
                             Console.WriteLine("insert 5 to decharge a drone");
 
                             while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
@@ -90,28 +89,20 @@ namespace ConsoleUI_BL
 
                                 case 3:
                                     {
-                                        //DeliverPackage(DO);
+                                        updateCustomer(myBL);
 
                                     }
                                     break;
 
-                                case 6:
+                                case 4:
                                     {
-                                        //PrintDrone(DO);
-
-
+                                        sendDroneToCharging(myBL);
                                     }
                                     break;
 
                                 case 7:
                                     {
                                         //CustomerUpdate(DO);
-                                    }
-                                    break;
-
-                                case 4:
-                                    {
-                                        //ChargeDrone(DO);
                                     }
                                     break;
 
@@ -253,6 +244,52 @@ namespace ConsoleUI_BL
             }
         }
 
+        private static void sendDroneToCharging(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter drone's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+
+            try
+            {
+                myBL.ChargeDrone(Id);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private static void updateCustomer(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter the Customer's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+
+            Console.WriteLine("Enter Name: ");
+            string Name = Console.ReadLine();
+
+            string Phone = "";
+            int temp;
+            do
+            {
+                Console.WriteLine("Enter Phone: ");
+                Phone = Console.ReadLine();
+            } while ((Name == "" && Phone == "") || (!int.TryParse(Phone, out temp) && Phone != ""));
+
+            try
+            {
+            myBL.UpdateCustomer(Id, Name, Phone);
+            }catch(ItemNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private static void updateBaseStation(IBL.IBL myBL)
         {
             int Id;
@@ -271,7 +308,7 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine("Enter the base station's slots amount: ");
                 input = Console.ReadLine();
-                if(input == "")
+                if(input == "" && Name != "")
                 {
                     ChargeSlots = null;
                     break;

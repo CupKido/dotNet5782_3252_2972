@@ -115,7 +115,12 @@ namespace BLobject
                             {
                                 IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
                                 BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
-                                newD.Battery = r.Next((int)(getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec), 100) + 1;
+                                double percentToStation = getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec;
+                                if(percentToStation >= 100)
+                                {
+                                    newD.Battery = 100;
+                                }
+                                else newD.Battery = r.Next((int)percentToStation, 101);
                                 newD.CurrentLocation = new Location()
                                 {
                                     Latitude = SC.Longitude,
@@ -535,128 +540,43 @@ namespace BLobject
             };
         }
 
-        public Parcel GetParcel(int Id)
+        public void ChargeDrone(int Id)
         {
+            Drone droneToCharge;
             try
             {
-                IDAL.DO.Parcel p = dal.GetParcel(Id);
-                Customer sender = GetCustomer(p.SenderId);
-                Customer target = GetCustomer(p.TargetId);
-                return new Parcel()
-                {
-                    Id = p.Id,
-                    DroneId = p.DroneId,
-                    Priority = p.Priority,
-                    Sender = new CustomerInParcel() { Id = sender.Id, Name = sender.Name },
-                    Target = new CustomerInParcel() { Id = target.Id, Name = target.Name },
-                    Weight = p.Weight,
-                    Requested = p.Requested,
-                    scheduled = p.scheduled,
-                    PickedUp = p.PickedUp,
-                    Delivered = p.Delivered
-                };
+            droneToCharge = GetDrone(Id);
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
-            {
-                throw;
-            }
-            catch
+            catch(ItemNotFoundException ex)
             {
                 throw;
             }
 
-
-        }
-
-        public Customer GetCustomer(int Id)
-        {
-            try
+            if(droneToCharge.Status != DroneStatuses.Availible)
             {
-                IDAL.DO.Customer c = dal.GetCustomer(Id);
-
-                return new Customer()
-                {
-                    Id = c.Id,
-                    Address = new Location()
-                    {
-                        Latitude = c.Latitude,
-                        Longitude = c.Longitude
-                    },
-                    Name = c.Name,
-                    Phone = c.Phone,
-                    FromThisCustomer = getFromeThisCustomer(c),
-                    ToThisCustomer = getToThisCustomer(c),
-                };
-            }
-            catch (IDAL.DO.ItemNotFoundException ex)
-            {
-                throw;
-            }
-            catch
-            {
-                throw;
+                throw new DroneIsntAvailibleException(Id);
             }
 
-        }
+            BaseStation BS = closestBaseStation(droneToCharge.CurrentLocation.Longitude, droneToCharge.CurrentLocation.Latitude);
 
-        private List<ParcelInCustomer> getToThisCustomer(IDAL.DO.Customer c)
-        {
-            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
-                    where p.TargetId == c.Id
-                    let sender = dal.GetCustomer(p.SenderId)
-                    select new ParcelInCustomer()
-                    {
-                        Id = p.Id,
-
-                        Priority = (Priorities)p.Priority,
-                        Weight = (WeightCategories)p.Weight,
-                        Status = getParcelStatus(p),
-                        OtherSide = new CustomerInParcel()
-                        {
-                            Id = sender.Id,
-                            Name = sender.Name
-                        }
-                    }).ToList();
-        }
-
-        private List<ParcelInCustomer> getFromeThisCustomer(IDAL.DO.Customer c)
-        {
-            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
-                    where p.SenderId == c.Id
-                    let target = dal.GetCustomer(p.TargetId)
-                    select new ParcelInCustomer()
-                    {
-                        Id = p.Id,
-
-                        Priority = (Priorities)p.Priority,
-                        Weight = (WeightCategories)p.Weight,
-                        Status = getParcelStatus(p),
-                        OtherSide = new CustomerInParcel()
-                        {
-                            Id = target.Id,
-                            Name = target.Name
-                        }
-                    }).ToList();
-        }
-
-        private ParcelStatuses getParcelStatus(IDAL.DO.Parcel p)
-        {
-            if (p.Delivered != DateTime.MinValue)
+            if (BS.DroneInChargesList.Count == BS.ChargeSlots)
             {
-                return ParcelStatuses.Delivered;
+                throw new BaseStationFullException(Id, BS.Id);
             }
-            else if (p.PickedUp != DateTime.MinValue)
+
+            double distanceToBS = getDistanceFromLatLonInKm(droneToCharge.CurrentLocation.Latitude, droneToCharge.CurrentLocation.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
+
+            if(droneToCharge.Battery < distanceToBS / AvailbleElec)
             {
-                return ParcelStatuses.PickedUp;
+                throw new NotEnoughDroneBatteryException(Id);
             }
-            else if (p.scheduled != DateTime.MinValue)
-            {
-                return ParcelStatuses.Associated;
-            }
-            else
-            {
-                return ParcelStatuses.Created;
-            }
+
+            DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
+            BLDrones.Remove(dToUpdate);
+            dToUpdate.Status = DroneStatuses.Maintenance;
+            BLDrones.Add(dToUpdate);
+            dal.AddDroneCharge(Id, BS.Id);
+
         }
 
         #endregion
@@ -699,6 +619,37 @@ namespace BLobject
                                         }).ToList();
             CTL.Sort();
             return CTL;
+        }
+
+        public Customer GetCustomer(int Id)
+        {
+            try
+            {
+                IDAL.DO.Customer c = dal.GetCustomer(Id);
+
+                return new Customer()
+                {
+                    Id = c.Id,
+                    Address = new Location()
+                    {
+                        Latitude = c.Latitude,
+                        Longitude = c.Longitude
+                    },
+                    Name = c.Name,
+                    Phone = c.Phone,
+                    FromThisCustomer = getFromeThisCustomer(c),
+                    ToThisCustomer = getToThisCustomer(c),
+                };
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         private int getRecieved(IDAL.DO.Customer c)
@@ -752,6 +703,75 @@ namespace BLobject
             }
             return sum;
         }
+
+        public void UpdateCustomer(int Id, string name, string phone)
+        {
+            IDAL.DO.Customer lastCustomer;
+
+            try
+            {
+                lastCustomer = dal.GetCustomer(Id);
+
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw new ItemNotFoundException("Customer with specified ID was not found", ex);
+            }
+
+            if(name != "")
+            {
+                lastCustomer.Name = name;
+            }
+
+            if(phone != "")
+            {
+                lastCustomer.Phone = phone;
+            }
+
+            dal.SetCustomer(lastCustomer);
+
+        }
+
+        private List<ParcelInCustomer> getToThisCustomer(IDAL.DO.Customer c)
+        {
+            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                    where p.TargetId == c.Id
+                    let sender = dal.GetCustomer(p.SenderId)
+                    select new ParcelInCustomer()
+                    {
+                        Id = p.Id,
+
+                        Priority = (Priorities)p.Priority,
+                        Weight = (WeightCategories)p.Weight,
+                        Status = getParcelStatus(p),
+                        OtherSide = new CustomerInParcel()
+                        {
+                            Id = sender.Id,
+                            Name = sender.Name
+                        }
+                    }).ToList();
+        }
+
+        private List<ParcelInCustomer> getFromeThisCustomer(IDAL.DO.Customer c)
+        {
+            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+                    where p.SenderId == c.Id
+                    let target = dal.GetCustomer(p.TargetId)
+                    select new ParcelInCustomer()
+                    {
+                        Id = p.Id,
+
+                        Priority = (Priorities)p.Priority,
+                        Weight = (WeightCategories)p.Weight,
+                        Status = getParcelStatus(p),
+                        OtherSide = new CustomerInParcel()
+                        {
+                            Id = target.Id,
+                            Name = target.Name
+                        }
+                    }).ToList();
+        }
+
         #endregion
 
         #region Parcel
@@ -810,7 +830,58 @@ namespace BLobject
 
         }
 
-        
+        public Parcel GetParcel(int Id)
+        {
+            try
+            {
+                IDAL.DO.Parcel p = dal.GetParcel(Id);
+                Customer sender = GetCustomer(p.SenderId);
+                Customer target = GetCustomer(p.TargetId);
+                return new Parcel()
+                {
+                    Id = p.Id,
+                    DroneId = p.DroneId,
+                    Priority = p.Priority,
+                    Sender = new CustomerInParcel() { Id = sender.Id, Name = sender.Name },
+                    Target = new CustomerInParcel() { Id = target.Id, Name = target.Name },
+                    Weight = p.Weight,
+                    Requested = p.Requested,
+                    scheduled = p.scheduled,
+                    PickedUp = p.PickedUp,
+                    Delivered = p.Delivered
+                };
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+
+
+        }
+
+        private ParcelStatuses getParcelStatus(IDAL.DO.Parcel p)
+        {
+            if (p.Delivered != DateTime.MinValue)
+            {
+                return ParcelStatuses.Delivered;
+            }
+            else if (p.PickedUp != DateTime.MinValue)
+            {
+                return ParcelStatuses.PickedUp;
+            }
+            else if (p.scheduled != DateTime.MinValue)
+            {
+                return ParcelStatuses.Associated;
+            }
+            else
+            {
+                return ParcelStatuses.Created;
+            }
+        }
 
         #endregion
     }
