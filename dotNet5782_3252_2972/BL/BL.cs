@@ -56,8 +56,13 @@ namespace BLobject
                         {
                             BaseStation closestToSender = closestBaseStation(sender.Longitude, sender.Latitude);
                             BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
-                            newD.CurrentLocation.Latitude = closestToSender.StationLocation.Latitude;
-                            newD.CurrentLocation.Longitude = closestToSender.StationLocation.Longitude;
+                            newD.CurrentLocation = new Location()
+                            {
+                                Latitude = closestToSender.StationLocation.Latitude,
+                                Longitude = closestToSender.StationLocation.Longitude
+                            };
+                            
+                            
                             newD.Battery =
                                 getDistanceFromLatLonInKm(closestToSender.StationLocation.Latitude, closestToSender.StationLocation.Longitude, sender.Latitude, sender.Longitude) / AvailbleElec + //to sender
                                 getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
@@ -66,8 +71,11 @@ namespace BLobject
                         else
                         {
                             BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
-                            newD.CurrentLocation.Latitude = sender.Latitude;
-                            newD.CurrentLocation.Longitude = sender.Longitude;
+                            newD.CurrentLocation = new Location()
+                            {
+                                Latitude = sender.Latitude,
+                                Longitude = sender.Longitude
+                            };
                             newD.Battery =
                                 getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
                                 getDistanceFromLatLonInKm(target.Latitude, target.Longitude, closestToTarget.StationLocation.Latitude, closestToTarget.StationLocation.Longitude) / AvailbleElec; //to station
@@ -716,23 +724,30 @@ namespace BLobject
 
         public void AddParcel(int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
         {
-           
-            if (SenderId < 0)
+            try
             {
-                throw new IBL.BO.NegetiveNumberException(SenderId, " Sender Id can not be negative number or zero");
+                dal.GetCustomer(SenderId);
             }
-            if (TargetId < 0)
+            catch(IDAL.DO.ItemNotFoundException ex)
             {
-                throw new IBL.BO.NegetiveNumberException(TargetId, " Target Id can not be negative number or zero");
+                throw new ItemNotFoundException("Sender could not be found!", ex);
             }
-            //if ((int)PackageWight < 0 || (int)PackageWight > 2  )
-            //{
-            //    throw new IBL.BO.OutOfRangeException(Id, "PackageWight has to be 1 or 2 or 3 only");
-            //}
-            //if ( (int)priority < 0 || (int)priority > 2)
-            //{
-            //    throw new IBL.BO.OutOfRangeException(Id, "priority has to be 1 or 2 or 3 only");
-            //}
+            try
+            {
+                dal.GetCustomer(SenderId);
+            }
+            catch (IDAL.DO.ItemNotFoundException ex)
+            {
+                throw new ItemNotFoundException("Sender could not be found!", ex);
+            }
+            if ((int)PackageWight < 0 || (int)PackageWight > 2)
+            {
+                throw new OutOfRangeException((int)PackageWight, "Package Weight has to be between 1 to 3 only");
+            }
+            if ((int)priority < 0 || (int)priority > 2)
+            {
+                throw new OutOfRangeException((int)priority, "Priority has to be between 1 to 3 only");
+            }
             try
             {
                 dal.AddParcel (runningNumForParcels, SenderId,  TargetId, PackageWight, priority);

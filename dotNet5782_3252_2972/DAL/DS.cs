@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace DalObject
 {
@@ -28,7 +28,7 @@ namespace DalObject
         {
 
             //5 Drones initializer
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 IDAL.DO.Drone drone = new IDAL.DO.Drone();
                 drone.Id = i + 1;
@@ -137,8 +137,31 @@ namespace DalObject
                 }
                 parcel.Priority = (IDAL.DO.Priorities)r.Next(0, 3);
                 parcel.Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
-                parcel.DroneId = 0;
                 parcel.Requested = start.AddDays(r.Next(range));
+
+                switch (r.Next(3))
+                {
+                    case 0:
+                        parcel.DroneId = 0;
+                        break;
+
+                    case 1:
+                    case 2:
+                        IDAL.DO.Parcel? takenDroneP;
+                        do
+                        {
+                            parcel.DroneId = Drones[r.Next(Drones.Count)].Id;
+                            parcel.scheduled = DateTime.Now;
+                            if(r.Next(2) == 1)
+                            {
+                                parcel.PickedUp = DateTime.Now;
+                            }
+                            takenDroneP = Parcels.FirstOrDefault(p => p.DroneId == parcel.DroneId);
+                        } while (takenDroneP.Value.Id != 0);
+                        break;
+                }
+                
+
                 Parcels.Add(parcel);
             }
 

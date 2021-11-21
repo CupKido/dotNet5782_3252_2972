@@ -27,6 +27,30 @@ namespace IBL.BO
         }
     }
 
+    public class ItemNotFoundException : Exception
+    {
+        public ItemNotFoundException(String message, Exception inner) : base(message, inner) { }
+        public override string ToString()
+        {
+            return InnerException.Message + "\n" + Message + "\n";
+        }
+    }
+
+    public class IllegalActionException : Exception
+    {
+        public IllegalActionException() : base("") { }
+
+        public IllegalActionException(String message) : base(message) { }
+
+        public IllegalActionException(String message, Exception inner) : base(message, inner) { }
+
+        public override string ToString()
+        {
+            return "Illegal Action has been attempted!\n" + Message + "\n";
+        }
+    }
+
+
     public class NegetiveNumberException : Exception
     {
         public int Number;

@@ -24,7 +24,7 @@ namespace IBL.BO
                 "\nRequested: " + Requested +
                 ((DroneId != 0) ? ("\nDrone's ID: " + DroneId + "\nScheduled: " + scheduled) : "") +
                 ((PickedUp != DateTime.MinValue) ? ("\nPicked Up Date: " + PickedUp) : "") +
-                ((PickedUp != DateTime.MinValue) ? ("\nDelivered Date: " + Delivered) : "");
+                ((Delivered != DateTime.MinValue) ? ("\nDelivered Date: " + Delivered) : "");
         }
     }
 }
