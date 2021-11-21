@@ -25,12 +25,14 @@ namespace IBL
 
         #region Drones
 
-        public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId);
+        public void AddDrone(int Id, string Model, WeightCategories MaxWeight, int stationId);
 
         public IEnumerable<DroneToList> GetAllDrones();
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
 
         public Drone GetDrone(int Id);
+
+        public void UpdateDrone(int Id, string Model);
 
         //public IDAL.DO.Drone GetDrone(int Id);
 
@@ -78,6 +80,7 @@ namespace IBL
 
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
 
+        public void UpdateBaseStation(int Id, string Name, int? ChargeSlots);
 
         public BaseStation GetBaseStation(int Id);
 

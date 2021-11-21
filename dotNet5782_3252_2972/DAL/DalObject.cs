@@ -305,7 +305,34 @@ namespace DalObject
             throw new ItemNotFoundException(Id, "Base Station Not Found!");
         }
 
-        //Add Set BaseStation
+        public void SetBaseStation(BaseStation newBS)
+        {
+            foreach (BaseStation exBS in DataSource.BaseStations)
+            {
+                if (exBS.Id == newBS.Id)
+                {
+                    DataSource.BaseStations.Remove(exBS);
+                    DataSource.BaseStations.Add(newBS);
+                    return;
+                }
+            }
+            throw new ItemNotFoundException(newBS.Id, "Base Station Not Found!");
+        }
+
+        public BaseStation RemoveBaseStation(int Id)
+        {
+            try
+            {
+                BaseStation toDeleteBS = GetBaseStation(Id);
+                DataSource.BaseStations.Remove(toDeleteBS);
+                return toDeleteBS;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
 
         #endregion
 

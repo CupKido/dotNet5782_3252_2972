@@ -344,6 +344,40 @@ namespace BLobject
             }
         }
 
+        public void UpdateBaseStation(int Id, string Name, int? ChargeSlots)
+        {
+            IDAL.DO.BaseStation lastBS;
+            try
+            {
+                lastBS = dal.GetBaseStation(Id);
+            }
+            catch(IDAL.DO.ItemNotFoundException ex)
+            {
+                throw new ItemNotFoundException("Base Station with specified ID was not found", ex);
+            }
+
+            if(ChargeSlots < 1)
+            {
+                throw new NegetiveNumberException((int)ChargeSlots, "Charge Slots number cannot be negetive!");
+            }
+
+            if(GetDronesInBaseStation(lastBS).Count() > ChargeSlots)
+            {
+                throw new OutOfRangeException((int)ChargeSlots, "Too many drones in base station num: " + lastBS.Id);
+            }
+
+            if(Name != "")
+            {
+                lastBS.Name = Name;
+            }
+            if(ChargeSlots != null)
+            {
+                lastBS.ChargeSlots = (int)ChargeSlots;
+            }
+
+            dal.SetBaseStation(lastBS);
+        }
+
         private IEnumerable<DroneInCharge> GetDronesInBaseStation(IDAL.DO.BaseStation bs)
         {
             return from IDAL.DO.DroneCharge DC in dal.GetAllDroneCharges()
@@ -361,13 +395,17 @@ namespace BLobject
 
         public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId)
         {
-            if(Id<1 || stationId<1)
+            if(Id<1)
             {
-                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
+                throw new NegetiveNumberException(Id, "Drone Id can not be negative number or zero");
+            }
+            if (stationId < 1)
+            {
+                throw new NegetiveNumberException(Id, "Base Station Id can not be negative number or zero");
             }
             if ((int)MaxWeight < 0|| (int)MaxWeight >2)
             {
-                throw new IBL.BO.OutOfRangeException(Id, "Maxweight has to be 1 or 2 or 3 only");
+                throw new OutOfRangeException(Id, "Maxweight has to be 1 or 2 or 3 only");
             }
             try
             {
@@ -408,17 +446,7 @@ namespace BLobject
         {
             BLDrones.Sort();
             //return BLDrones;
-            return from Drone d in BLDrones
-                   select new DroneToList()
-                   {
-                       Id = d.Id,
-                       Battery = d.Battery,
-                       CurrentLocation = d.CurrentLocation,
-                       Model = d.Model,
-                       Status = d.Status,
-                       MaxWeight = d.MaxWeight,
-                       CarriedParcelId = dal.GetAllParcels().FirstOrDefault(p => p.DroneId == d.Id).Id
-                   };
+            return BLDrones;
         }
 
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate)
@@ -435,6 +463,27 @@ namespace BLobject
                        MaxWeight = d.MaxWeight,
                        CarriedParcelId = dal.GetAllParcels().FirstOrDefault(p => p.DroneId == d.Id).Id
                    };
+        }
+
+        public void UpdateDrone(int Id, string Model)
+        {
+            IDAL.DO.Drone lastDrone;
+            
+            try
+            {
+            lastDrone = dal.GetDrone(Id);
+            
+            }
+            catch(IDAL.DO.ItemNotFoundException ex)
+            {
+                throw new ItemNotFoundException("Drone with specified ID was not found", ex);
+            }
+            lastDrone.Model = Model;
+            dal.SetDrone(lastDrone);
+            DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+            BLDrones.Remove(BLdrone);
+            BLdrone.Model = Model;
+            BLDrones.Add(BLdrone);
         }
 
         public Drone GetDrone(int Id)
@@ -760,6 +809,8 @@ namespace BLobject
             }
 
         }
+
+        
 
         #endregion
     }

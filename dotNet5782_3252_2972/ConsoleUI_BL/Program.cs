@@ -1,6 +1,8 @@
 ﻿using System;
 using BLobject;
 using IBL.BO;
+using System.Linq;
+
 namespace ConsoleUI_BL
 {
     class Program
@@ -62,8 +64,8 @@ namespace ConsoleUI_BL
 
                     case 2:
                         {
-                            Console.WriteLine("\ninsert 1 to decide a drone for a package");
-                            Console.WriteLine("insert 2 to pick up a package by a drone");
+                            Console.WriteLine("\ninsert 1 to change a drone's model");
+                            Console.WriteLine("insert 2 to update a base station");
                             Console.WriteLine("insert 3 to Deliver a package by a drone");
                             Console.WriteLine("insert 6 to update a Drone");
                             Console.WriteLine("insert 7 to update a Customer");
@@ -76,13 +78,13 @@ namespace ConsoleUI_BL
                             {
                                 case 1:
                                     {
-                                        //DroneForPackage(DO);
+                                        updateDronePodel(myBL);
                                     }
                                     break;
 
                                 case 2:
                                     {
-                                        //PickPackage(DO);
+                                        updateBaseStation(myBL);
                                     }
                                     break;
 
@@ -249,6 +251,67 @@ namespace ConsoleUI_BL
 
 
             }
+        }
+
+        private static void updateBaseStation(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter the base station's number: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+
+            Console.WriteLine("Enter Name: ");
+            string Name = Console.ReadLine();
+
+            int? ChargeSlots;
+            int temp;
+            string input;
+            while (true)
+            {
+                Console.WriteLine("Enter the base station's slots amount: ");
+                input = Console.ReadLine();
+                if(input == "")
+                {
+                    ChargeSlots = null;
+                    break;
+                }
+                else if(int.TryParse(input, out temp))
+                {
+                    ChargeSlots = temp;
+                    break;
+                }
+            }
+            try
+            {
+            myBL.UpdateBaseStation(Id, Name, ChargeSlots);
+            }
+            catch(ItemNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private static void updateDronePodel(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter the drone's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+
+
+            Console.WriteLine("Enter the drone's Model: ");
+            string newModel = Console.ReadLine();
+
+            try
+            {
+            myBL.UpdateDrone(Id, newModel);
+            }catch(ItemNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
         }
 
         private static void AddCustomer(IBL.IBL myBL)

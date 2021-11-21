@@ -74,6 +74,9 @@ namespace IDAL
         public IEnumerable<IDAL.DO.BaseStation> GetAllBaseStations();
         public IDAL.DO.BaseStation GetBaseStation(int Id);
 
+        public void SetBaseStation(BaseStation newBS);
+
+        public BaseStation RemoveBaseStation(int Id);
         #endregion
     }
 }
