@@ -221,6 +221,11 @@ namespace DalObject
             return DataSource.Parcels;
         }
 
+        public Parcel FirstParcelInList()
+        {
+            return DataSource.Parcels.First();
+        }
+
         public IDAL.DO.Parcel GetParcel(int Id)
         {
             foreach (Parcel parcel in DataSource.Parcels)

@@ -68,8 +68,10 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 2 to update a base station");
                             Console.WriteLine("insert 3 to update a customer");
                             Console.WriteLine("insert 4 to charge a Drone");
-                            Console.WriteLine("insert 7 to update a Customer");
                             Console.WriteLine("insert 5 to decharge a drone");
+                            Console.WriteLine("insert 6 to connect parcel to drone");
+                            Console.WriteLine("insert 7 to update a Customer");
+                            
 
                             while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
 
@@ -626,13 +628,13 @@ namespace ConsoleUI_BL
           
             do
             {
-                Console.WriteLine("Enter package wieght:\n 1 - Light  2 - Intermediate  3 - Heavy");
+                Console.WriteLine("Enter package weight:\n 1 - Light  2 - Intermediate  3 - Heavy");
             } while (!int.TryParse(Console.ReadLine(), out BSPackageWight));
             
            
             do
             {
-                Console.WriteLine("Enter package wieght:\n 1 - Regular  2 - Fast  3 - Emergency");
+                Console.WriteLine("Enter package priority:\n 1 - Regular  2 - Fast  3 - Emergency");
             } while (!int.TryParse(Console.ReadLine(), out BSpriority));
 
 
@@ -651,9 +653,17 @@ namespace ConsoleUI_BL
             int Id;
             do
             {
-                Console.WriteLine("Enter Sender ID: ");
+                Console.WriteLine("Enter Drone ID: ");
             } while (!int.TryParse(Console.ReadLine(), out Id));
-            myBL.AttributionParcelToDrone()
+            try
+            {
+                myBL.AttributionParcelToDrone(Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+            }
 
         }
     }

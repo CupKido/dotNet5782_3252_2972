@@ -595,15 +595,16 @@ namespace BLobject
                 throw new DroneIsAvailibleException(Id);
             }
             double[] a= dal.AskForElectricity();
-            if(droneDisCharge.Battery>100)
-            {
-                droneDisCharge.Battery = 100;
-            }
+          
 
             DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
             BLDrones.Remove(dToUpdate);
             dToUpdate.Status = DroneStatuses.Availible;
-            dToUpdate.Battery += a[4] * time;
+            dToUpdate.Battery += a[4] * time;   // change to time base 60 minutes
+            if (dToUpdate.Battery > 100)
+            {
+                dToUpdate.Battery = 100;
+            }
             BLDrones.Add(dToUpdate);
             dal.RemoveDroneCharge(Id);
 
@@ -943,43 +944,89 @@ namespace BLobject
                 throw new DroneIsntAvailibleException(id) ;
             }
 
+            bool flag = false;
             IDAL.DO.Parcel p1 = dal.FirstParcelInList();
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
             {
-
-                if((int)p2.Priority > (int)p1.Priority)
+                if((int)p2.Weight > (int)drone.MaxWeight)
                 {
-                    p1 = p2;
-                    continue;
-                }
-                if (((int)p2.Weight > (int)p1.Priority) && (int)p2.Weight<= (int)drone.MaxWeight)
-                {
-                    p1 = p2;
                     continue;
                 }
                 Customer c1 = GetCustomer(p1.SenderId);
                 Customer c2 = GetCustomer(p2.SenderId);
-              
-                //distanc to parcel p1
+                Customer Target = GetCustomer(p1.TargetId);
+
+                //distance drone to parcel p1
                 double distanceP1 = getDistanceFromLatLonInKm(d.CurrentLocation.Latitude, d.CurrentLocation.Longitude, c1.Address.Latitude, c1.Address.Longitude);
-                //distanc to parcel p2
+                //distance drone to parcel p2
                 double distanceP2 = getDistanceFromLatLonInKm(d.CurrentLocation.Latitude, d.CurrentLocation.Longitude, c2.Address.Latitude, c2.Address.Longitude);
+                //distance delivery
+                double distanceDelivery = getDistanceFromLatLonInKm(Target.Address.Latitude, Target.Address.Longitude, c2.Address.Latitude, c1.Address.Longitude);
+                //distance to base station
+                BaseStation BS = closestBaseStation(Target.Address.Longitude , Target.Address.Latitude);
+                double distanceToBs = getDistanceFromLatLonInKm(Target.Address.Latitude, Target.Address.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
+
+           
+
+                double[] arr = dal.AskForElectricity();
+                double ELecInDelivery = arr[(int)p1.Weight + 1];
+
+                if (d.Battery < distanceP2 / AvailbleElec + distanceDelivery / ELecInDelivery +  distanceToBs / AvailbleElec)
+                {
+                    continue;
+                }
+                if (d.Battery < distanceP1 / AvailbleElec + distanceDelivery / ELecInDelivery + distanceToBs / AvailbleElec)
+                {
+                    flag = true;
+                    p1 = p2;
+                    continue;
+                }
+                if ((int)p2.Priority > (int)p1.Priority)
+                {
+                    p1 = p2;
+                    continue;
+                }
+                if ((int)p2.Priority < (int)p1.Priority)
+                {
+                    continue;
+                }
+                if ((int)p2.Weight > (int)p1.Priority) 
+                {
+                    p1 = p2;
+                    continue;
+                }
+                if ((int)p2.Weight < (int)p1.Priority) 
+                {
+                    continue;
+                }
 
                 if (distanceP2< distanceP1)
                 {
                     p1 = p2;
                     continue;
                 }
-                if (d.Battery < distanceP1 / AvailbleElec)
-                {
-                    throw new NotEnoughDroneBatteryException(id);
-                }
+         
 
-                p1 = p2;
+               
             }
+            if(flag)
+            {
+                
+                
+                DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == id);
+                BLDrones.Remove(BLdrone);
+                BLdrone.Status = (DroneStatuses)2;
+                BLDrones.Add(BLdrone);
 
-            g
+                p1.DroneId = id;  // NEED TO CHANGE IN BO INT DRONEID-->> DroneInParcel drone
+                p1.scheduled = DateTime.Now;
+                dal.SetParcel(p1);
+
+                Console.WriteLine("drone id :" + id + " takes parcel number :" + p1.Id);
+
+            }
+            
         }
 
         #endregion
