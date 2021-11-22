@@ -114,6 +114,11 @@ namespace ConsoleUI_BL
                                     break;
                                 case 7:
                                     {
+                                        PickUpParcelByDrone(myBL);
+                                    }
+                                    break;
+                                case 8:
+                                    {
                                         //CustomerUpdate(myBL);
                                     }
                                     break;
@@ -665,6 +670,15 @@ namespace ConsoleUI_BL
 
             }
 
+        }
+
+        private static void PickUpParcelByDrone(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter Drone ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
         }
     }
 }

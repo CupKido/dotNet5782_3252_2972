@@ -1010,7 +1010,7 @@ namespace BLobject
 
                
             }
-            if(true) // to meke condition if didnt found parcels at al
+            if(true) // to meke condition if didnt finnd parcels at all
             {
                 
                 
