@@ -216,4 +216,46 @@ namespace IBL.BO
             return "ERROR: Drone " + DroneId + " cannot be charged at base station " + BSId + " Since the base station is full." + "\n" + Message;
         }
     }
+
+
+
+    public class StatusIsntInDelivery : Exception
+    {
+        public int DroneId;
+
+        public StatusIsntInDelivery(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public StatusIsntInDelivery(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " is not in InDelivery Status " + "\n" + Message;
+        }
+    }
+
+    public class ParcelAlreadyPickedUp: Exception
+    {
+        public int Id;
+
+        public ParcelAlreadyPickedUp(int id)
+        {
+           Id = id;
+        }
+
+        public ParcelAlreadyPickedUp(int id, string message) : base(message)
+        {
+           Id = id;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Parcel " + Id + " already pikced up " + "\n" + Message;
+        }
+    }
 }

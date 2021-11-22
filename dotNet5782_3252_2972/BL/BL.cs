@@ -1027,7 +1027,8 @@ namespace BLobject
 
                 p1.DroneId = id;  // NEED TO CHANGE IN BO INT DRONEID-->> DroneInParcel drone
                 p1.scheduled = DateTime.Now;
-                dal.SetParcel(p1);
+                try { dal.SetParcel(p1); }
+                catch { throw; }
 
                 Console.WriteLine("drone id :" + id + " takes parcel number :" + p1.Id);
 
@@ -1038,6 +1039,32 @@ namespace BLobject
         public void PickUpParcelByDrone(int Id)
         {
             Drone drone = GetDrone(Id);
+            int parcelId = drone.CurrentParcel.Id;
+            IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+            if(drone.Status != DroneStatuses.InDelivery)
+            {
+                throw new StatusIsntInDelivery(Id);
+            }
+            if(parcel.PickedUp != DateTime.MinValue)
+            {
+                throw new ParcelAlreadyPickedUp(parcelId);
+            }
+            double[] arr = dal.AskForElectricity();
+            double ELecInDelivery = arr[(int)parcel.Weight + 1];
+            Customer c = GetCustomer(parcel.TargetId); 
+            double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
+
+
+            DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+            BLDrones.Remove(BLdrone);
+            BLdrone.Battery -= distance / ELecInDelivery;
+            BLdrone.CurrentLocation = c.Address;
+            BLDrones.Add(BLdrone);
+
+            parcel.PickedUp = DateTime.Now;
+            try { dal.SetParcel(parcel); }
+            catch { throw; }
+
 
         }
 
