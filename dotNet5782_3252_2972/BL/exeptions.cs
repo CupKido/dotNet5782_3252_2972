@@ -154,6 +154,26 @@ namespace IBL.BO
         }
     }
 
+    public class DroneIsBusy : Exception
+    {
+        public int DroneId;
+
+        public DroneIsBusy(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public DroneIsBusy(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " is not availible, so it can not be connect to the parcel" + "\n" + Message;
+        }
+    }
+
     public class DroneIsAvailibleException : Exception
     {
         public int DroneId;

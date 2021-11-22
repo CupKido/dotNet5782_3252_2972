@@ -941,11 +941,12 @@ namespace BLobject
             Drone d = GetDrone(id);
             if (d.Status != DroneStatuses.Availible)
             {
-                throw new DroneIsntAvailibleException(id) ;
+                throw new DroneIsBusy(id) ;
             }
 
             bool flag = false;
             IDAL.DO.Parcel p1 = dal.FirstParcelInList();
+           
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
             {
@@ -978,12 +979,13 @@ namespace BLobject
                 }
                 if (d.Battery < distanceP1 / AvailbleElec + distanceDelivery / ELecInDelivery + distanceToBs / AvailbleElec)
                 {
-                   
+                    flag = true;
                     p1 = p2;
                     continue;
                 }
                 if ((int)p2.Priority > (int)p1.Priority)
                 {
+                    flag = true;
                     p1 = p2;
                     continue;
                 }
@@ -993,6 +995,7 @@ namespace BLobject
                 }
                 if ((int)p2.Weight > (int)p1.Priority) 
                 {
+                    flag = true;
                     p1 = p2;
                     continue;
                 }
@@ -1003,20 +1006,23 @@ namespace BLobject
 
                 if (distanceP2< distanceP1)
                 {
+                    flag = true;
                     p1 = p2;
                     continue;
                 }
+                flag = true;
          
 
                
             }
-            if(true) // to meke condition if didnt finnd parcels at all
+            if(flag) // to meke condition if didnt finnd parcels at all
             {
                 
                 
                 DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == id);
                 BLDrones.Remove(BLdrone);
                 BLdrone.Status = (DroneStatuses)2;
+                BLdrone.CarriedParcelId = p1.Id;
                 BLDrones.Add(BLdrone);
 
                 p1.DroneId = id;  // NEED TO CHANGE IN BO INT DRONEID-->> DroneInParcel drone
@@ -1028,6 +1034,13 @@ namespace BLobject
             }
             
         }
+
+        public void PickUpParcelByDrone(int Id)
+        {
+            Drone drone = GetDrone(Id);
+
+        }
+
 
         #endregion
     }

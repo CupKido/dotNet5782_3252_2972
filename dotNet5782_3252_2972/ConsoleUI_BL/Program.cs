@@ -292,9 +292,9 @@ namespace ConsoleUI_BL
             {
                 myBL.DisChargeDrone(Id, TimeInCharge);
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                Console.WriteLine(ex);
             }
 
         }
@@ -679,6 +679,15 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine("Enter Drone ID: ");
             } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                myBL.PickUpParcelByDrone(Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+            }
         }
     }
 }
