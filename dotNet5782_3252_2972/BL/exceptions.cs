@@ -258,4 +258,24 @@ namespace IBL.BO
             return "ERROR: Parcel " + Id + " already pikced up " + "\n" + Message;
         }
     }
+
+        public class ParcelAlreadySupply : Exception
+    {
+        public int Id;
+
+        public ParcelAlreadySupply(int id)
+        {
+            Id = id;
+        }
+
+        public ParcelAlreadySupply(int id, string message) : base(message)
+        {
+            Id = id;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Parcel " + Id + " already delivered " + "\n" + Message;
+        }
+    }
 }

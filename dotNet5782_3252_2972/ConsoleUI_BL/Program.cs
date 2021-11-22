@@ -70,8 +70,10 @@ namespace ConsoleUI_BL
                             Console.WriteLine("insert 4 to charge a Drone");
                             Console.WriteLine("insert 5 to decharge a drone");
                             Console.WriteLine("insert 6 to connect parcel to drone");
-                            Console.WriteLine("insert 7 to update a Customer");
-                            
+                            Console.WriteLine("insert 7 to pick up parcel by drone");
+                            Console.WriteLine("insert 8 to supply parcel by drone");
+
+
 
                             while (!int.TryParse(Console.ReadLine(), out MenuChoice)) ;
 
@@ -119,7 +121,7 @@ namespace ConsoleUI_BL
                                     break;
                                 case 8:
                                     {
-                                        //CustomerUpdate(myBL);
+                                        SupplyParcel(myBL);
                                     }
                                     break;
                             }
@@ -689,5 +691,24 @@ namespace ConsoleUI_BL
 
             }
         }
+         private static void SupplyParcel(IBL.IBL myBL)
+         {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter Drone ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            try
+            {
+                myBL.SupplyParcel(Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+            }
+
+        }
+
     }
 }

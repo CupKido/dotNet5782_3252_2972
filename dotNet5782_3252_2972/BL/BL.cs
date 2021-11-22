@@ -1045,13 +1045,17 @@ namespace BLobject
             {
                 throw new StatusIsntInDelivery(Id);
             }
+            if(!drone.CurrentParcel.ParcelStatus)
+            {
+
+            }
             if(parcel.PickedUp != DateTime.MinValue)
             {
                 throw new ParcelAlreadyPickedUp(parcelId);
             }
             double[] arr = dal.AskForElectricity();
             double ELecInDelivery = arr[(int)parcel.Weight + 1];
-            Customer c = GetCustomer(parcel.TargetId); 
+            Customer c = GetCustomer(parcel.SenderId); 
             double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
 
 
@@ -1065,6 +1069,42 @@ namespace BLobject
             try { dal.SetParcel(parcel); }
             catch { throw; }
 
+
+        }
+        public void SupplyParcel(int Id)
+        {
+            Drone drone = GetDrone(Id);
+            int parcelId = drone.CurrentParcel.Id;
+            IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+            if(drone.CurrentParcel.ParcelStatus)
+            { }
+            if (drone.Status != DroneStatuses.InDelivery)
+            {
+                throw new StatusIsntInDelivery(Id);
+            }
+            if (parcel.Delivered != DateTime.MinValue)
+            {
+                throw new ParcelAlreadySupply(parcelId);
+            }
+
+
+
+            double[] arr = dal.AskForElectricity();
+            double ELecInDelivery = arr[(int)parcel.Weight + 1];
+            Customer c = GetCustomer(parcel.TargetId);
+            double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
+
+
+            DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+            BLDrones.Remove(BLdrone);
+            BLdrone.Battery -= distance / ELecInDelivery;
+            BLdrone.CurrentLocation = c.Address;
+            BLdrone.Status = DroneStatuses.Availible;
+            BLDrones.Add(BLdrone);
+
+            parcel.Delivered = DateTime.Now;
+            try { dal.SetParcel(parcel); }
+            catch { throw; }
 
         }
 
