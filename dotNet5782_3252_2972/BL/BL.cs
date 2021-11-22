@@ -818,9 +818,10 @@ namespace BLobject
             {
                 throw new OutOfRangeException((int)priority, "Priority has to be between 1 to 3 only");
             }
+            DateTime created = DateTime.Now;
             try
             {
-                dal.AddParcel (runningNumForParcels, SenderId,  TargetId, PackageWight, priority);
+                dal.AddParcel (runningNumForParcels, SenderId,  TargetId, PackageWight, priority , created);
                 runningNumForParcels++;
             }
             catch (IDAL.DO.ItemAlreadyExistsException ex)

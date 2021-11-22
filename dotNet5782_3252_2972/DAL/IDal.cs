@@ -41,7 +41,7 @@ namespace IDAL
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
+        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created);
 
         public IEnumerable<Parcel> GetAllParcels();
 

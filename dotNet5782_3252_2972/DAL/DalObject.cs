@@ -170,7 +170,7 @@ namespace DalObject
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace DalObject
             parcel.TargetId = TargetId;
             parcel.Weight = PackageWight;
             parcel.Priority = priority;
-            parcel.Requested = DateTime.Now;
+            parcel.Requested = created;
             DataSource.Parcels.Add(parcel);
 
         }

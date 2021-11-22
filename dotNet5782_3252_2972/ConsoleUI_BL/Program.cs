@@ -102,7 +102,7 @@ namespace ConsoleUI_BL
 
                                 case 7:
                                     {
-                                        //CustomerUpdate(DO);
+                                        //CustomerUpdate(myBL);
                                     }
                                     break;
 
