@@ -949,7 +949,7 @@ namespace BLobject
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
             {
-                if((int)p2.Weight > (int)drone.MaxWeight)
+                if(((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled!=DateTime.MinValue)
                 {
                     continue;
                 }
@@ -978,7 +978,7 @@ namespace BLobject
                 }
                 if (d.Battery < distanceP1 / AvailbleElec + distanceDelivery / ELecInDelivery + distanceToBs / AvailbleElec)
                 {
-                    flag = true;
+                   
                     p1 = p2;
                     continue;
                 }
@@ -1010,7 +1010,7 @@ namespace BLobject
 
                
             }
-            if(flag)
+            if(true) // to meke condition if didnt found parcels at al
             {
                 
                 
