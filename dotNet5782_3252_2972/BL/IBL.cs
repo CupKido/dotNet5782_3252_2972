@@ -36,6 +36,7 @@ namespace IBL
 
         public void ChargeDrone(int Id);
         public void DisChargeDrone(int id, float time);
+        public void AttributionParcelToDrone(int id);
 
         //public IDAL.DO.Drone GetDrone(int Id);
 

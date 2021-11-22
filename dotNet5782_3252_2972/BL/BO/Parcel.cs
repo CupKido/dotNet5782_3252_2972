@@ -10,6 +10,7 @@ namespace IBL.BO
         public IDAL.DO.WeightCategories Weight { get; set; }
         public IDAL.DO.Priorities Priority { get; set; }
         public int DroneId { get; set; }
+       // public DroneInParcel droneInParcel {get; set ;}
         public DateTime Requested { get; set; }
         public DateTime scheduled { get; set; }
         public DateTime PickedUp { get; set; }

@@ -170,7 +170,7 @@ namespace DalObject
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace DalObject
             parcel.TargetId = TargetId;
             parcel.Weight = PackageWight;
             parcel.Priority = priority;
-            parcel.Requested = DateTime.Now;
+            parcel.Requested = created;
             DataSource.Parcels.Add(parcel);
 
         }
@@ -219,6 +219,11 @@ namespace DalObject
         public IEnumerable<Parcel> GetAllParcels()
         {
             return DataSource.Parcels;
+        }
+
+        public Parcel FirstParcelInList()
+        {
+            return DataSource.Parcels.First();
         }
 
         public IDAL.DO.Parcel GetParcel(int Id)
@@ -356,6 +361,7 @@ namespace DalObject
             droneCharge.BaseStationId = BaseStationId;
 
             DataSource.DroneCharges.Add(droneCharge);
+            
         }
 
         public DroneCharge GetDroneCharge(int DroneId)
@@ -385,6 +391,7 @@ namespace DalObject
         {
             DroneCharge DC = GetDroneCharge(DroneId);
             DataSource.DroneCharges.Remove(DC);
+
             return DC;
         }
 

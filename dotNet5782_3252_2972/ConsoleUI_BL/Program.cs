@@ -100,15 +100,19 @@ namespace ConsoleUI_BL
                                     }
                                     break;
 
-                                case 7:
-                                    {
-                                        //CustomerUpdate(myBL);
-                                    }
-                                    break;
-
                                 case 5:
                                     {
                                         DisChargeDrone(myBL);
+                                    }
+                                    break;
+                                case 6:
+                                    {
+                                        AttributionParcelToDrone(myBL);
+                                    }
+                                    break;
+                                case 7:
+                                    {
+                                        //CustomerUpdate(myBL);
                                     }
                                     break;
                             }
@@ -640,6 +644,17 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private static void AttributionParcelToDrone(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter Sender ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+            myBL.AttributionParcelToDrone()
+
         }
     }
 }

@@ -933,6 +933,55 @@ namespace BLobject
             return PTL;
         }
 
+        public void AttributionParcelToDrone(int id)
+        {
+
+            IDAL.DO.Drone drone = dal.GetDrone(id);
+            Drone d = GetDrone(id);
+            if (d.Status != DroneStatuses.Availible)
+            {
+                throw new DroneIsntAvailibleException(id) ;
+            }
+
+            IDAL.DO.Parcel p1 = dal.FirstParcelInList();
+
+            foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
+            {
+
+                if((int)p2.Priority > (int)p1.Priority)
+                {
+                    p1 = p2;
+                    continue;
+                }
+                if (((int)p2.Weight > (int)p1.Priority) && (int)p2.Weight<= (int)drone.MaxWeight)
+                {
+                    p1 = p2;
+                    continue;
+                }
+                Customer c1 = GetCustomer(p1.SenderId);
+                Customer c2 = GetCustomer(p2.SenderId);
+              
+                //distanc to parcel p1
+                double distanceP1 = getDistanceFromLatLonInKm(d.CurrentLocation.Latitude, d.CurrentLocation.Longitude, c1.Address.Latitude, c1.Address.Longitude);
+                //distanc to parcel p2
+                double distanceP2 = getDistanceFromLatLonInKm(d.CurrentLocation.Latitude, d.CurrentLocation.Longitude, c2.Address.Latitude, c2.Address.Longitude);
+
+                if (distanceP2< distanceP1)
+                {
+                    p1 = p2;
+                    continue;
+                }
+                if (d.Battery < distanceP1 / AvailbleElec)
+                {
+                    throw new NotEnoughDroneBatteryException(id);
+                }
+
+                p1 = p2;
+            }
+
+            g
+        }
+
         #endregion
     }
 }
