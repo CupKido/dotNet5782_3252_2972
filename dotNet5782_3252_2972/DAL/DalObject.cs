@@ -356,6 +356,7 @@ namespace DalObject
             droneCharge.BaseStationId = BaseStationId;
 
             DataSource.DroneCharges.Add(droneCharge);
+            
         }
 
         public DroneCharge GetDroneCharge(int DroneId)
@@ -385,6 +386,7 @@ namespace DalObject
         {
             DroneCharge DC = GetDroneCharge(DroneId);
             DataSource.DroneCharges.Remove(DC);
+
             return DC;
         }
 

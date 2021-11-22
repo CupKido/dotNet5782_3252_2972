@@ -154,6 +154,26 @@ namespace IBL.BO
         }
     }
 
+    public class DroneIsAvailibleException : Exception
+    {
+        public int DroneId;
+
+        public DroneIsAvailibleException(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public DroneIsAvailibleException(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " is availible, so it cant be discharged." + "\n" + Message;
+        }
+    }
+
     public class BaseStationFullException : Exception
     {
         public int DroneId;

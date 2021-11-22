@@ -108,7 +108,7 @@ namespace ConsoleUI_BL
 
                                 case 5:
                                     {
-                                        //DisChargeDrone(DO);
+                                        DisChargeDrone(myBL);
                                     }
                                     break;
                             }
@@ -263,6 +263,30 @@ namespace ConsoleUI_BL
             }
         }
 
+        private static void DisChargeDrone(IBL.IBL myBL)
+        {
+            int Id;
+            do
+            {
+                Console.WriteLine("Enter drone's ID: ");
+            } while (!int.TryParse(Console.ReadLine(), out Id));
+
+            float TimeInCharge;
+            do
+            {
+                Console.WriteLine("Enter time in charge : ");
+            } while (!float.TryParse(Console.ReadLine(), out TimeInCharge));
+
+            try
+            {
+                myBL.DisChargeDrone(Id, TimeInCharge);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
         private static void updateCustomer(IBL.IBL myBL)
         {
             int Id;

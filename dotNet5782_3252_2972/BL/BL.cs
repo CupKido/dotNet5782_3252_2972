@@ -578,6 +578,38 @@ namespace BLobject
             dal.AddDroneCharge(Id, BS.Id);
 
         }
+         public void DisChargeDrone(int Id , float time)
+        {
+            Drone droneDisCharge;
+            try
+            {
+                droneDisCharge = GetDrone(Id);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                throw;
+            }
+
+            if (droneDisCharge.Status != DroneStatuses.Maintenance)
+            {
+                throw new DroneIsAvailibleException(Id);
+            }
+            double[] a= dal.AskForElectricity();
+            if(droneDisCharge.Battery>100)
+            {
+                droneDisCharge.Battery = 100;
+            }
+
+            DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
+            BLDrones.Remove(dToUpdate);
+            dToUpdate.Status = DroneStatuses.Availible;
+            dToUpdate.Battery += a[4] * time;
+            BLDrones.Add(dToUpdate);
+            dal.RemoveDroneCharge(Id);
+
+
+
+         }
 
         #endregion
 
