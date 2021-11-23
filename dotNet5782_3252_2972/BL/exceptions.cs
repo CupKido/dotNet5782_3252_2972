@@ -315,7 +315,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: Parcel " + Id + " already pikced up " + "\n" + Message;
+            return "ERROR: Parcel " + Id + " already pikced up by the drone" + "\n" + Message;
         }
     }
 
