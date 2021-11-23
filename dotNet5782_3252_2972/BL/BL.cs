@@ -600,7 +600,7 @@ namespace BLobject
             DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
             BLDrones.Remove(dToUpdate);
             dToUpdate.Status = DroneStatuses.Availible;
-            dToUpdate.Battery += a[4] * time;   // change to time base 60 minutes
+            dToUpdate.Battery += a[4] * (time/60);   // change to time base 60 minutes
             if (dToUpdate.Battery > 100)
             {
                 dToUpdate.Battery = 100;

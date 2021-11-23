@@ -287,7 +287,7 @@ namespace ConsoleUI_BL
             float TimeInCharge;
             do
             {
-                Console.WriteLine("Enter time in charge : ");
+                Console.WriteLine("Enter time (minutes) in charge : ");
             } while (!float.TryParse(Console.ReadLine(), out TimeInCharge));
 
             try
