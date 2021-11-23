@@ -170,7 +170,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: Drone " + DroneId + " is not availible, so it can not be connect to the parcel" + "\n" + Message;
+            return "ERROR: Drone " + DroneId + " is not availible, so it can not be connected to a parcel" + "\n" + Message;
         }
     }
 
@@ -238,6 +238,66 @@ namespace IBL.BO
             return "ERROR: Drone " + DroneId + " is not in InDelivery Status " + "\n" + Message;
         }
     }
+    public class StatusIsntMaintance : Exception
+    {
+        public int DroneId;
+
+        public StatusIsntMaintance(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public StatusIsntMaintance(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: Drone " + DroneId + " is not in Maintance Status " + "\n" + Message;
+        }
+    }
+
+    public class NoParcelForThisDrone : Exception
+    {
+        public int DroneId;
+
+        public NoParcelForThisDrone(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public NoParcelForThisDrone(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: There is no suitable package for the Drone " + DroneId  + "\n" + Message;
+        }
+    }
+
+    public class NoParcelForThisExists : Exception
+    {
+        public int DroneId;
+
+        public NoParcelForThisExists(int droneId)
+        {
+            DroneId = droneId;
+        }
+
+        public NoParcelForThisExists(int droneId, string message) : base(message)
+        {
+            DroneId = droneId;
+        }
+
+        public override string ToString()
+        {
+            return "ERROR: There is no package connected to the Drone " + DroneId + "\n" + Message;
+        }
+    }
+
 
     public class ParcelAlreadyPickedUp: Exception
     {

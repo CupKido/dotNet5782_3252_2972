@@ -592,7 +592,7 @@ namespace BLobject
 
             if (droneDisCharge.Status != DroneStatuses.Maintenance)
             {
-                throw new DroneIsAvailibleException(Id);
+                throw new StatusIsntMaintance(Id);
             }
             double[] a= dal.AskForElectricity();
           
@@ -945,7 +945,7 @@ namespace BLobject
             }
 
             bool flag = false;
-            IDAL.DO.Parcel p1 = dal.FirstParcelInList();
+            IDAL.DO.Parcel p1 = dal.FirstParcelInList(); //p1 is variable (parcel) we gonna check to connect
            
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
@@ -1031,79 +1031,83 @@ namespace BLobject
                 catch { throw; }
 
                 Console.WriteLine("drone id :" + id + " takes parcel number :" + p1.Id);
+                return;
 
             }
-            
+            throw new NoParcelForThisDrone(id);
+
+
         }
 
         public void PickUpParcelByDrone(int Id)
         {
-            Drone drone = GetDrone(Id);
-            int parcelId = drone.CurrentParcel.Id;
-            IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
-            if(drone.Status != DroneStatuses.InDelivery)
+            try
             {
-                throw new StatusIsntInDelivery(Id);
+                Drone drone = GetDrone(Id);
+                if (drone.Status != DroneStatuses.InDelivery)
+                {
+                    throw new StatusIsntInDelivery(Id);
+                }
+                int parcelId = drone.CurrentParcel.Id;
+                IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+                if (parcel.PickedUp != DateTime.MinValue)
+                {
+                    throw new ParcelAlreadyPickedUp(parcelId);
+                }
+                double[] arr = dal.AskForElectricity();
+                double ELecInDelivery = arr[(int)parcel.Weight + 1];
+                Customer c = GetCustomer(parcel.SenderId);
+                double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
+
+
+                DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+                BLDrones.Remove(BLdrone);
+                BLdrone.Battery -= distance / ELecInDelivery;
+                BLdrone.CurrentLocation = c.Address;
+                BLDrones.Add(BLdrone);
+
+                parcel.PickedUp = DateTime.Now;
+                dal.SetParcel(parcel);
             }
-            if(!drone.CurrentParcel.ParcelStatus)
-            {
-
-            }
-            if(parcel.PickedUp != DateTime.MinValue)
-            {
-                throw new ParcelAlreadyPickedUp(parcelId);
-            }
-            double[] arr = dal.AskForElectricity();
-            double ELecInDelivery = arr[(int)parcel.Weight + 1];
-            Customer c = GetCustomer(parcel.SenderId); 
-            double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
-
-
-            DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
-            BLDrones.Remove(BLdrone);
-            BLdrone.Battery -= distance / ELecInDelivery;
-            BLdrone.CurrentLocation = c.Address;
-            BLDrones.Add(BLdrone);
-
-            parcel.PickedUp = DateTime.Now;
-            try { dal.SetParcel(parcel); }
             catch { throw; }
 
 
         }
         public void SupplyParcel(int Id)
         {
-            Drone drone = GetDrone(Id);
-            int parcelId = drone.CurrentParcel.Id;
-            IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
-            if(drone.CurrentParcel.ParcelStatus)
-            { }
-            if (drone.Status != DroneStatuses.InDelivery)
+            try
             {
-                throw new StatusIsntInDelivery(Id);
+                Drone drone = GetDrone(Id);
+                if (drone.Status != DroneStatuses.InDelivery)
+                {
+                    throw new StatusIsntInDelivery(Id);
+                }
+                int parcelId = drone.CurrentParcel.Id;
+                IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+                if (parcel.Delivered != DateTime.MinValue)
+                {
+                    throw new ParcelAlreadySupply(parcelId);
+                }
+                
+
+
+
+                double[] arr = dal.AskForElectricity();
+                double ELecInDelivery = arr[(int)parcel.Weight + 1];
+                Customer c = GetCustomer(parcel.TargetId);
+                double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
+
+
+                DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+                BLDrones.Remove(BLdrone);
+                BLdrone.Battery -= distance / ELecInDelivery;
+                BLdrone.CurrentLocation = c.Address;
+                BLdrone.Status = DroneStatuses.Availible;
+                BLDrones.Add(BLdrone);
+
+                parcel.Delivered = DateTime.Now;
+                dal.SetParcel(parcel);
             }
-            if (parcel.Delivered != DateTime.MinValue)
-            {
-                throw new ParcelAlreadySupply(parcelId);
-            }
-
-
-
-            double[] arr = dal.AskForElectricity();
-            double ELecInDelivery = arr[(int)parcel.Weight + 1];
-            Customer c = GetCustomer(parcel.TargetId);
-            double distance = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, c.Address.Latitude, c.Address.Longitude);
-
-
-            DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
-            BLDrones.Remove(BLdrone);
-            BLdrone.Battery -= distance / ELecInDelivery;
-            BLdrone.CurrentLocation = c.Address;
-            BLdrone.Status = DroneStatuses.Availible;
-            BLDrones.Add(BLdrone);
-
-            parcel.Delivered = DateTime.Now;
-            try { dal.SetParcel(parcel); }
             catch { throw; }
 
         }
