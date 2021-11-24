@@ -73,7 +73,7 @@ namespace IBL
         /// <summary>
         /// returns all drones in data base as BL drones if they're up to the condition in the predicate
         /// </summary>
-        /// <param name="predicate">the condition in order to be returned</param>
+        /// <param name="predicate">the condition in order for the drone to be returned</param>
         /// <returns>all drones in data base as BL drones if they're up to the condition in the predicate</returns>
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
 
@@ -123,27 +123,37 @@ namespace IBL
         /// <param name="id"></param>
         public void SupplyParcel(int id);
 
-        //public IDAL.DO.Drone GetDrone(int Id);
-
-        //public void SetDrone(IDAL.DO.Drone newDrone);
-
-        //public IDAL.DO.Drone RemoveDrone(int Id);
-
-        //public Double[] AskForElectricity();
-
         #endregion
 
         #region Parcels
 
+        /// <summary>
+        /// Adds a parcel to the data base
+        /// </summary>
+        /// <param name="SenderId">the package sender's ID</param>
+        /// <param name="TargetId">the package reciever ID</param>
+        /// <param name="PackageWight">the weight of the package</param>
+        /// <param name="priority">how urgent is getting the package to the target</param>
         public void AddParcel( int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
 
+        /// <summary>
+        /// returns all parcels in data base, as BL parcels
+        /// </summary>
+        /// <returns>All parcels in data base, as BL parcels</returns>
         public IEnumerable<ParcelToList> GetAllParcels();
 
+        /// <summary>
+        /// returns all parcels that have not been assosiated with a drone
+        /// </summary>
+        /// <returns>all parcels that have not been assosiated with a drone</returns>
         public IEnumerable<ParcelToList> GetParcelsWithNoDrone();
 
+        /// <summary>
+        /// returns a parcel with the specified ID from the data base
+        /// </summary>
+        /// <param name="Id">the wanted parcel's ID</param>
+        /// <returns>A parcel with the specified ID from the data base</returns>
         public Parcel GetParcel(int Id);
-
-        //public void SetParcel(IDAL.DO.Parcel newParcel);
 
         //public Parcel RemoveParcel(int Id);
 
@@ -165,14 +175,41 @@ namespace IBL
 
         #region Base Stations
 
+        /// <summary>
+        /// Adds a base station to the data base
+        /// </summary>
+        /// <param name="Id">the base station's ID number</param>
+        /// <param name="Name">The base Station's name</param>
+        /// <param name="StationLocation">The base station's location</param>
+        /// <param name="ChargeSlots">the amount of charge slots that the new base station has</param>
         public void AddBaseStations(int Id, String Name, Location StationLocation, int ChargeSlots);
 
+        /// <summary>
+        /// returns all base stations in the data base as BaseToList
+        /// </summary>
+        /// <returns>All base stations in the data base as BaseStationToList</returns>
         public IEnumerable<BaseStationToList> GetAllBaseStations();
 
+        /// <summary>
+        /// returns all base stations in data base as BaseStationToList if they're up to the condition in the predicate
+        /// </summary>
+        /// <param name="predicate">The condition in order for the base station to be returned</param>
+        /// <returns>All base stations in data base as BaseStationToList if they're up to the condition in the predicate</returns>
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
 
+        /// <summary>
+        /// updates the name and the amount slots for a base station in the data base
+        /// </summary>
+        /// <param name="Id">the wanted base station's ID to update</param>
+        /// <param name="Name">The new name for the Base station</param>
+        /// <param name="ChargeSlots">the new amout of charge slots for the base station</param>
         public void UpdateBaseStation(int Id, string Name, int? ChargeSlots);
 
+        /// <summary>
+        /// gathers all the required information, and returns the base station with the specified ID from data base as a BL BaseStation
+        /// </summary>
+        /// <param name="Id">The wanted base station's ID to return</param>
+        /// <returns>The base station with the specified ID from data base as a BL BaseStation</returns>
         public BaseStation GetBaseStation(int Id);
         
 
