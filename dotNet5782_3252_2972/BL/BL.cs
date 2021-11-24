@@ -578,6 +578,7 @@ namespace BLobject
             dal.AddDroneCharge(Id, BS.Id);
 
         }
+
          public void DisChargeDrone(int Id , float time)
         {
             Drone droneDisCharge;
@@ -594,7 +595,7 @@ namespace BLobject
             {
                 throw new StatusIsntMaintance(Id);
             }
-            double[] a= dal.AskForElectricity();
+            double[] a = dal.AskForElectricity();
           
 
             DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);

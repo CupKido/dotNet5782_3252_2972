@@ -274,7 +274,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: There is no suitable package for the Drone " + DroneId  + "\n" + Message;
+            return "ERROR: There is no suitable package for the Drone " + DroneId;
         }
     }
 
@@ -315,7 +315,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: Parcel " + Id + " already pikced up by the drone" + "\n" + Message;
+            return "ERROR: Parcel " + Id + " already pikced up by the drone";
         }
     }
 
@@ -335,7 +335,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: Parcel " + Id + " already delivered " + "\n" + Message;
+            return "ERROR: Parcel " + Id + " already delivered ";
         }
     }
 }
