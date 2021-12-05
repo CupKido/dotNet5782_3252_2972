@@ -1,0 +1,18 @@
+﻿<Window x:Class="PL.DroneListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="DroneListWindow" Height="450" Width="800">
+    <Grid>
+        <ListView x:Name="DroneList" SelectionChanged="DroneList_Selected" Margin="0,0,236,0"/>
+        <Button x:Name="DronesListReset" Content="Reset" HorizontalAlignment="Left" Margin="680,379,0,0" VerticalAlignment="Top" Click="resetDronesList_click"/>
+        <ComboBox x:Name="MaxWeightBox" SelectionChanged="setMaxWeight_select" IsEditable="True" Text="Select Weight" HorizontalAlignment="Left" Margin="620,68,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="DroneStatusBox" SelectionChanged="setDroneStatus_select" IsEditable="True" Text="Select Status" HorizontalAlignment="Left" Margin="620,115,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="AddDrone_Button" Content="Add Drone" Click="addDrone_click" HorizontalAlignment="Left" Margin="597,379,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="CloseWindow" Content="Close" Click="closeWindow_click" HorizontalAlignment="Left" Margin="731,379,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
