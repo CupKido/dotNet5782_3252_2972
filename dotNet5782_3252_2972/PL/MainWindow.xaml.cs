@@ -23,6 +23,12 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
+            this.Show();
+        }
+        public void showDroneList_click(object sender, RoutedEventArgs e)
+        {
+            DroneListWindow DLW = new DroneListWindow();
+            DLW.Show();
         }
     }
 }
