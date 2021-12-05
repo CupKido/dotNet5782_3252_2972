@@ -75,7 +75,7 @@ namespace IBL
         /// </summary>
         /// <param name="predicate">the condition in order for the drone to be returned</param>
         /// <returns>all drones in data base as BL drones if they're up to the condition in the predicate</returns>
-        public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
+        //public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate);
 
         /// <summary>
         /// gets all the required data and returns the drone with the specified ID
@@ -195,7 +195,9 @@ namespace IBL
         /// </summary>
         /// <param name="predicate">The condition in order for the base station to be returned</param>
         /// <returns>All base stations in data base as BaseStationToList if they're up to the condition in the predicate</returns>
-        public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
+        //public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
+
+        public IEnumerable<BaseStationToList> GetAvailibleBaseStations();
 
         /// <summary>
         /// updates the name and the amount slots for a base station in the data base

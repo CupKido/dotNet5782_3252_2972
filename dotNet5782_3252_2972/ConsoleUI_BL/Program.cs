@@ -542,7 +542,13 @@ namespace ConsoleUI_BL
 
         private static void PrintAvailibleBaseStations(IBL.IBL myBL)
         {
-            foreach(BaseStationToList bs in myBL.GetAllBaseStationsBy(p => p.DroneInChargesList.Count < p.ChargeSlots))
+            //foreach(BaseStationToList bs in myBL.GetAllBaseStationsBy(p => p.DroneInChargesList.Count < p.ChargeSlots))
+            //{
+            //    Console.WriteLine(bs);
+            //}
+            //Console.WriteLine("\n");
+
+            foreach (BaseStationToList bs in myBL.GetAvailibleBaseStations())
             {
                 Console.WriteLine(bs);
             }

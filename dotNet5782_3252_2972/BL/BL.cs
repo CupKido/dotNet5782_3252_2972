@@ -394,6 +394,21 @@ namespace BLobject
                    };
         }
 
+        public IEnumerable<BaseStationToList> GetAvailibleBaseStations()
+        {
+            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+                   let ACS = getAvailibleSlotsForBaseStation(bs)
+                   where ACS > 0
+                   select new BaseStationToList()
+                   {
+                       Id = bs.Id,
+                       Name = bs.Name,
+                       ChargeSlotsAvailible = ACS,
+                       ChargeSlotsTaken = bs.ChargeSlots - ACS
+                   };
+
+        }
+
         #endregion
 
         #region Drones 
@@ -946,7 +961,7 @@ namespace BLobject
             }
 
             bool flag = false;
-            IDAL.DO.Parcel p1 = dal.FirstParcelInList(); //p1 is variable (parcel) we gonna check to connect
+            IDAL.DO.Parcel p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
            
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
@@ -1112,6 +1127,8 @@ namespace BLobject
             catch { throw; }
 
         }
+
+       
 
 
         #endregion

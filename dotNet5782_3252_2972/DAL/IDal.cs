@@ -19,6 +19,8 @@ namespace IDAL
 
         public IEnumerable<Customer> GetAllCustomers();
 
+        public IEnumerable<Customer> GetAllCustomersBy(Predicate<Customer> predicate);
+
         public Customer RemoveCustomer(int Id);
 
         #endregion
@@ -28,6 +30,8 @@ namespace IDAL
         public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight);
 
         public IEnumerable<Drone> GetAllDrones();
+
+        public IEnumerable<Drone> GetAllDronesBy(Predicate<Drone> predicate);
 
         public IDAL.DO.Drone GetDrone(int Id);
 
@@ -44,7 +48,8 @@ namespace IDAL
         public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created);
 
         public IEnumerable<Parcel> GetAllParcels();
-        public Parcel FirstParcelInList();
+
+        public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate);
 
         public IDAL.DO.Parcel GetParcel(int Id);
 
@@ -64,6 +69,8 @@ namespace IDAL
 
         public IEnumerable<DroneCharge> GetAllDroneCharges();
 
+        public IEnumerable<DroneCharge> GetAllDroneChargesBy(Predicate<DroneCharge> predicate);
+
         public DroneCharge RemoveDroneCharge(int DroneId);
 
         #endregion
@@ -72,7 +79,8 @@ namespace IDAL
 
         public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots);
 
-        public IEnumerable<IDAL.DO.BaseStation> GetAllBaseStations();
+        public IEnumerable<BaseStation> GetAllBaseStations();
+        public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
         public IDAL.DO.BaseStation GetBaseStation(int Id);
 
         public void SetBaseStation(BaseStation newBS);

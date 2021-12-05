@@ -74,6 +74,13 @@ namespace DalObject
             return DataSource.Customers;
         }
 
+        public IEnumerable<Customer> GetAllCustomersBy(Predicate<Customer> predicate)
+        {
+            return from Customer c in GetAllCustomers()
+                   where predicate(c)
+                   select c;
+        }
+
         public Customer RemoveCustomer(int Id)
         {
             foreach (Customer customer in DataSource.Customers)
@@ -121,6 +128,13 @@ namespace DalObject
         public IEnumerable<Drone> GetAllDrones()
         {
             return DataSource.Drones;
+        }
+
+        public IEnumerable<Drone> GetAllDronesBy(Predicate<Drone> predicate)
+        {
+            return from Drone d in GetAllDrones()
+                   where predicate(d)
+                   select d;
         }
 
         public Drone GetDrone(int Id)
@@ -221,9 +235,11 @@ namespace DalObject
             return DataSource.Parcels;
         }
 
-        public Parcel FirstParcelInList()
+        public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)
         {
-            return DataSource.Parcels.First();
+            return from Parcel p in GetAllParcels()
+                   where predicate(p)
+                   select p;
         }
 
         public IDAL.DO.Parcel GetParcel(int Id)
@@ -298,6 +314,13 @@ namespace DalObject
         public IEnumerable<BaseStation> GetAllBaseStations()
         {
             return DataSource.BaseStations;
+        }
+
+        public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
+        {
+            return from BaseStation b in GetAllBaseStations()
+                   where predicate(b)
+                   select b;
         }
 
         public IDAL.DO.BaseStation GetBaseStation(int Id)
@@ -394,6 +417,15 @@ namespace DalObject
 
             return DC;
         }
+
+        public IEnumerable<DroneCharge> GetAllDroneChargesBy(Predicate<DroneCharge> predicate)
+        {
+            return from DroneCharge dc in GetAllDroneCharges()
+                   where predicate(dc)
+                   select dc;
+        }
+
+        
 
         #endregion
     }
