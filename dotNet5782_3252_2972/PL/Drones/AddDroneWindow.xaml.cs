@@ -20,17 +20,22 @@ namespace PL
     public partial class AddDroneWindow : Window
     {
         IBL.IBL myBL;
-        
-        public AddDroneWindow(IBL.IBL bl, bool Addition, IBL.BO.DroneToList drone)
+
+        public AddDroneWindow(IBL.IBL bl)
         {
             InitializeComponent();
             myBL = bl;
-            if (Addition && drone == null) { prepareForAddition(); }
-            else { prepareForShow(drone); }
+            
+            prepareForAddition();
+        }
 
 
-            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
-            StartingBSCB.ItemsSource = myBL.GetAllBaseStations();
+        public AddDroneWindow(IBL.IBL bl, IBL.BO.DroneToList drone)
+        {
+            InitializeComponent();
+            myBL = bl;
+            
+            prepareForShow(drone);
         }
 
         private void AddDrone_click(object sender, RoutedEventArgs e)
@@ -76,32 +81,43 @@ namespace PL
         private void prepareForAddition()
         {
             Width = 270;
-            AddDrone.Visibility = Visibility.Visible;
+            AddDrone_Button.Visibility = Visibility.Visible;
             DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
             DroneLocation_TextBox.Visibility = Visibility.Collapsed;
             DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
             DroneBattery_Data.Visibility = Visibility.Collapsed;
             DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
             DroneParcel_Data.Visibility = Visibility.Collapsed;
+
+            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
+            StartingBSCB.ItemsSource = myBL.GetAllBaseStations();
         }
 
         private void prepareForShow(IBL.BO.DroneToList DTL)
         {
             Width = 420;
-            AddDrone.Visibility = Visibility.Collapsed;
-            AddDrone.IsEnabled = false;
+            AddDrone_Button.IsEnabled = false;
+            AddDrone_Button.Visibility = Visibility.Collapsed;
             StartingBSCB.Visibility = Visibility.Collapsed;
             StartingBS_TextBlock.Visibility = Visibility.Collapsed;
 
+            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
+
             IBL.BO.Drone drone = myBL.GetDrone(DTL.Id);
+
             DroneId_TextBox.Text = drone.Id.ToString();
             DroneId_TextBox.IsEnabled = false;
+
             DroneModel_TextBox.Text = drone.Model;
             DroneModel_TextBox.IsEnabled = false;
+
             MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
             MaxWeightCB.IsEnabled = false;
+
             DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
+
             DroneBattery_Data.Text = drone.Battery.ToString();
+
             if(drone.CurrentParcel == null)
             {
                 DroneParcel_TextBlock.Visibility = Visibility.Collapsed;

@@ -63,7 +63,7 @@ namespace PL
 
         private void addDrone_click(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL, true, null);
+            AddDroneWindow ADW = new AddDroneWindow(myBL);
             ADW.Show();
             this.Close();
         }
@@ -88,7 +88,7 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL, false, (IBL.BO.DroneToList)DroneList.SelectedItem);
+            AddDroneWindow ADW = new AddDroneWindow(myBL, (IBL.BO.DroneToList)DroneList.SelectedItem);
             ADW.Show();
         }
     }
