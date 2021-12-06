@@ -471,18 +471,10 @@ namespace BLobject
 
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate)
         {
-            return from Drone d in GetAllDrones()
-                   where predicate(d)
-                   select new DroneToList()
-                   {
-                       Id = d.Id,
-                       Battery = d.Battery,
-                       CurrentLocation = d.CurrentLocation,
-                       Model = d.Model,
-                       Status = d.Status,
-                       MaxWeight = d.MaxWeight,
-                       CarriedParcelId = dal.GetAllParcels().FirstOrDefault(p => p.DroneId == d.Id).Id
-                   };
+            return from DroneToList d in GetAllDrones()
+                   let drone = GetDrone(d.Id)
+                   where predicate(drone)
+                   select d;
         }
 
         public void UpdateDrone(int Id, string Model)

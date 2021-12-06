@@ -36,14 +36,11 @@ namespace PL
             resetDronesList();
             if (MaxWeightBox.SelectedIndex < 0) return;
             IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
-            DroneList.ItemsSource = from IBL.BO.DroneToList d in DroneList.ItemsSource
-                                    where d.MaxWeight == selectedWeight
-                                    select d;
+            DroneList.ItemsSource = myBL.GetAllDronesBy(d => d.MaxWeight == selectedWeight);
+
             if (DroneStatusBox.SelectedIndex < 0) return;
             IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
-            DroneList.ItemsSource = from IBL.BO.DroneToList d in DroneList.ItemsSource
-                                    where d.Status == selectedStatus
-                                    select d;
+            DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
         }
 
         private void setDroneStatus_select(object sender, SelectionChangedEventArgs e)
@@ -51,15 +48,11 @@ namespace PL
             resetDronesList();
             if (DroneStatusBox.SelectedIndex < 0) return;
             IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
-            DroneList.ItemsSource = from IBL.BO.DroneToList d in DroneList.ItemsSource
-                                    where d.Status == selectedStatus
-                                    select d;
+            DroneList.ItemsSource = myBL.GetAllDronesBy(d => d.Status == selectedStatus);
 
             if (MaxWeightBox.SelectedIndex < 0) return;
             IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
-            DroneList.ItemsSource = from IBL.BO.DroneToList d in DroneList.ItemsSource
-                                    where d.MaxWeight == selectedWeight
-                                    select d;
+            DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
         }
 
         private void resetDronesList_click(object sender, RoutedEventArgs e)
@@ -70,7 +63,7 @@ namespace PL
 
         private void addDrone_click(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL);
+            AddDroneWindow ADW = new AddDroneWindow(myBL, true, null);
             ADW.Show();
             this.Close();
         }
@@ -95,7 +88,8 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
-            (new ShowDroneWindow((IBL.BO.DroneToList)DroneList.SelectedItem, myBL)).Show();
+            AddDroneWindow ADW = new AddDroneWindow(myBL, false, (IBL.BO.DroneToList)DroneList.SelectedItem);
+            ADW.Show();
         }
     }
 }

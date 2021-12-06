@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="AddDroneWindow" Height="300" Width="270">
+        Title="AddDroneWindow" Height="300" Width="400">
     <Grid>
         <TextBlock x:Name="DroneId_TextBlock" HorizontalAlignment="Left" Margin="10,37,0,0" Text="ID:" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBox x:Name="DroneId_TextBox" HorizontalAlignment="Left" Margin="130,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
@@ -15,6 +15,12 @@
         <ComboBox x:Name="MaxWeightCB" IsEditable="True" Text="Select Max weight: "  HorizontalAlignment="Left" Margin="130,112,0,0" VerticalAlignment="Top" Width="120" FontSize="11"/>
         <TextBlock x:Name="StartingBS_TextBlock" HorizontalAlignment="Left" Margin="10,154,0,0" Text="Initial Base Sation:" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <ComboBox x:Name="StartingBSCB" IsEditable="True" Text="Select BaseStation: "  HorizontalAlignment="Left" Margin="130,152,0,0" VerticalAlignment="Top" Width="120" FontSize="11"/>
-        <Button x:Name="AddDrone" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" Margin="188,217,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DroneLocation_TextBlock" HorizontalAlignment="Left" Margin="266,36,0,0" Text="Location:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DroneLocation_TextBox" HorizontalAlignment="Left" Margin="266,62,0,0" VerticalAlignment="Top" Width="134" FontSize="11" Height="46"/>
+        <TextBlock x:Name="DroneBattery_TextBlock" HorizontalAlignment="Left" Margin="266,117,0,0" Text="Battery:" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.425,-1.125"/>
+        <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Left" Margin="324,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
+        <Button x:Name="AddDrone" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" Margin="188,190,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DroneParcel_TextBlock" HorizontalAlignment="Left" Margin="266,154,0,0" Text="Current Parcel:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="357,154,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="33"/>
     </Grid>
 </Window>

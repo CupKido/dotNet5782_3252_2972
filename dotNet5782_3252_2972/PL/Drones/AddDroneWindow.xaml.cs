@@ -21,11 +21,14 @@ namespace PL
     {
         IBL.IBL myBL;
         
-        public AddDroneWindow(IBL.IBL bl)
+        public AddDroneWindow(IBL.IBL bl, bool Addition, IBL.BO.DroneToList drone)
         {
             InitializeComponent();
-            
             myBL = bl;
+            if (Addition && drone == null) { prepareForAddition(); }
+            else { prepareForShow(drone); }
+
+
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
             StartingBSCB.ItemsSource = myBL.GetAllBaseStations();
         }
@@ -68,6 +71,46 @@ namespace PL
             }
             (new DroneListWindow(myBL)).Show();
             this.Close();
+        }
+
+        private void prepareForAddition()
+        {
+            Width = 270;
+            AddDrone.Visibility = Visibility.Visible;
+            DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
+            DroneLocation_TextBox.Visibility = Visibility.Collapsed;
+            DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
+            DroneBattery_Data.Visibility = Visibility.Collapsed;
+            DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
+            DroneParcel_Data.Visibility = Visibility.Collapsed;
+        }
+
+        private void prepareForShow(IBL.BO.DroneToList DTL)
+        {
+            Width = 420;
+            AddDrone.Visibility = Visibility.Collapsed;
+            AddDrone.IsEnabled = false;
+            StartingBSCB.Visibility = Visibility.Collapsed;
+            StartingBS_TextBlock.Visibility = Visibility.Collapsed;
+
+            IBL.BO.Drone drone = myBL.GetDrone(DTL.Id);
+            DroneId_TextBox.Text = drone.Id.ToString();
+            DroneId_TextBox.IsEnabled = false;
+            DroneModel_TextBox.Text = drone.Model;
+            DroneModel_TextBox.IsEnabled = false;
+            MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
+            MaxWeightCB.IsEnabled = false;
+            DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
+            DroneBattery_Data.Text = drone.Battery.ToString();
+            if(drone.CurrentParcel == null)
+            {
+                DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
+                DroneParcel_Data.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                DroneParcel_Data.Text = drone.CurrentParcel.Id.ToString();
+            }
         }
     }
 }

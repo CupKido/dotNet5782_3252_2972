@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="DroneListWindow" Height="450" Width="800">
     <Grid>
-        <ListView x:Name="DroneList" SelectionChanged="DroneList_Selected" Margin="0,0,236,0"/>
+        <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,236,0"/>
         <Button x:Name="DronesListReset" Content="Reset" HorizontalAlignment="Left" Margin="680,379,0,0" VerticalAlignment="Top" Click="resetDronesList_click"/>
         <ComboBox x:Name="MaxWeightBox" SelectionChanged="setMaxWeight_select" IsEditable="True" Text="Select Weight" HorizontalAlignment="Left" Margin="620,68,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="DroneStatusBox" SelectionChanged="setDroneStatus_select" IsEditable="True" Text="Select Status" HorizontalAlignment="Left" Margin="620,115,0,0" VerticalAlignment="Top" Width="120"/>
