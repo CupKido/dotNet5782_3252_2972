@@ -33,26 +33,12 @@ namespace PL
 
         private void setMaxWeight_select(object sender, SelectionChangedEventArgs e)
         {
-            resetDronesList();
-            if (MaxWeightBox.SelectedIndex < 0) return;
-            IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
-            DroneList.ItemsSource = myBL.GetAllDronesBy(d => d.MaxWeight == selectedWeight);
-
-            if (DroneStatusBox.SelectedIndex < 0) return;
-            IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
-            DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
+            filterDroneList();
         }
 
         private void setDroneStatus_select(object sender, SelectionChangedEventArgs e)
         {
-            resetDronesList();
-            if (DroneStatusBox.SelectedIndex < 0) return;
-            IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
-            DroneList.ItemsSource = myBL.GetAllDronesBy(d => d.Status == selectedStatus);
-
-            if (MaxWeightBox.SelectedIndex < 0) return;
-            IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
-            DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
+            filterDroneList();
         }
 
         private void resetDronesList_click(object sender, RoutedEventArgs e)
@@ -68,6 +54,8 @@ namespace PL
             ADW.Closed += (s, e) =>
             {
                 resetDronesList();
+                filterDroneList();
+                DroneList.Items.Refresh();
             };
         }
 
@@ -79,7 +67,6 @@ namespace PL
         private void resetDronesList()
         {
             DroneList.ItemsSource = myBL.GetAllDrones();
-            DroneList.Items.Refresh();
         }
 
         private void resetComboBoxes()
@@ -94,6 +81,22 @@ namespace PL
         {
             AddDroneWindow ADW = new AddDroneWindow(myBL, (IBL.BO.DroneToList)DroneList.SelectedItem);
             ADW.Show();
+        }
+
+        private void filterDroneList()
+        {
+            DroneList.ItemsSource = myBL.GetAllDrones();
+            if (DroneStatusBox.SelectedIndex >= 0)
+            {
+                IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
+                DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
+            }
+
+            if (MaxWeightBox.SelectedIndex >= 0)
+            {
+                IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
+                DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
+            }
         }
     }
 }
