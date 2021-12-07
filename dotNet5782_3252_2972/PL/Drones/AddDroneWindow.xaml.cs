@@ -74,7 +74,6 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            (new DroneListWindow(myBL)).Show();
             this.Close();
         }
 

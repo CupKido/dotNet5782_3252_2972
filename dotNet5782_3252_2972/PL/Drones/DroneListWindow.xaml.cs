@@ -20,7 +20,7 @@ namespace PL
     public partial class DroneListWindow : Window
     {
         IBL.IBL myBL;
-        
+
         public DroneListWindow(IBL.IBL bl)
         {
             InitializeComponent();
@@ -65,7 +65,10 @@ namespace PL
         {
             AddDroneWindow ADW = new AddDroneWindow(myBL);
             ADW.Show();
-            this.Close();
+            ADW.Closed += (s, e) =>
+            {
+                resetDronesList();
+            };
         }
 
         private void closeWindow_click(object sender, RoutedEventArgs e)
@@ -76,6 +79,7 @@ namespace PL
         private void resetDronesList()
         {
             DroneList.ItemsSource = myBL.GetAllDrones();
+            DroneList.Items.Refresh();
         }
 
         private void resetComboBoxes()
