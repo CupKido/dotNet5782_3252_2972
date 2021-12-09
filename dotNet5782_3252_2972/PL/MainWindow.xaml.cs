@@ -28,9 +28,16 @@ namespace PL
         }
         public void showDroneList_click(object sender, RoutedEventArgs e)
         {
+           
             DroneListWindow DLW = new DroneListWindow(myBL);
             DLW.Show();
             
         }
+
+        private void close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        
     }
 }

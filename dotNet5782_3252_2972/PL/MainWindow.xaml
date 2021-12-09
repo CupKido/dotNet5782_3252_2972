@@ -5,22 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
         Title="MainWindow" Height="640" Width="800">
-    <Grid Name="MainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="400*"/>
-        </Grid.RowDefinitions>
-        
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions >
-            <Button x:Name="ShowDrones" Height="50" Width="100" Content="Drone List" Click="showDroneList_click" Margin="14,15,86,4"/>
-            
+
+    <Border Background="#235"  CornerRadius="50">
+        <Grid Name="MainGrid">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="400*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions >
+                <Button x:Name="ShowDrones" Height="50" Width="100" Content="Drone List"
+                        Click="showDroneList_click" Margin="14,15,86,4" Background="#025faf" FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="14" Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" RenderTransformOrigin="0.5,0.5"  >
+
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+
+            </Grid>
+            <Button x:Name="close" Content="x" HorizontalAlignment="Left" Margin="750,16,0,0" VerticalAlignment="Top"
+                    Background="#FFEA2121" Width="24" FontWeight="Bold" Click="close_Click"/>
+
         </Grid>
-    </Grid>
+    </Border>
 </Window>
