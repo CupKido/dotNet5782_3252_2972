@@ -19,8 +19,11 @@
         <TextBlock x:Name="DroneLocation_TextBox" HorizontalAlignment="Left" Margin="266,62,0,0" VerticalAlignment="Top" Width="134" FontSize="11" Height="46"/>
         <TextBlock x:Name="DroneBattery_TextBlock" HorizontalAlignment="Left" Margin="266,117,0,0" Text="Battery:" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.425,-1.125"/>
         <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Left" Margin="324,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
-        <Button x:Name="AddDrone_Button" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" Margin="188,190,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="AddDrone_Button" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" Margin="312,197,0,0" VerticalAlignment="Top"/>
         <TextBlock x:Name="DroneParcel_TextBlock" HorizontalAlignment="Left" Margin="266,154,0,0" Text="Current Parcel:" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="357,154,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="33"/>
+        <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" Margin="239,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.201,0.038" Click="Update_Click" Width="54"/>
+        <Button x:Name="Charge_Button" Content="Charge" HorizontalAlignment="Center" Margin="0,197,0,0" VerticalAlignment="Top" Click="Charge_Click"/>
+        <Button x:Name="DisCharge_Button" Content="DisCharge" HorizontalAlignment="Left" Margin="103,197,0,0" VerticalAlignment="Top" Click="DisCharge_Click"/>
     </Grid>
 </Window>
