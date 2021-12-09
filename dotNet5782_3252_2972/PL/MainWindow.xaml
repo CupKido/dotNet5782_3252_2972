@@ -11,7 +11,7 @@
         AllowsTransparency="True"
         Title="MainWindow" Height="640" Width="800">
 
-    <Border Background="#235"  CornerRadius="50">
+    <Border Background="#235"  CornerRadius="70">
         <Grid Name="MainGrid">
 
             <Grid.RowDefinitions>
@@ -26,8 +26,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions >
-                <Button x:Name="ShowDrones" Height="50" Width="100" Content="Drone List"
-                        Click="showDroneList_click" Margin="14,15,86,4" Background="#025faf" FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="14" Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" RenderTransformOrigin="0.5,0.5"  >
+                <Button x:Name="ShowDrones" Height="50" Content="Drone List"
+                        Click="showDroneList_click" Margin="44,21,44,0" Background="#025faf" 
+                        FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="14"
+                        Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" RenderTransformOrigin="0.5,0.5"  >
 
                     <Button.Effect>
                         <DropShadowEffect/>
@@ -35,7 +37,7 @@
                 </Button>
 
             </Grid>
-            <Button x:Name="close" Content="x" HorizontalAlignment="Left" Margin="750,16,0,0" VerticalAlignment="Top"
+            <Button x:Name="close" Content="x" HorizontalAlignment="Left" Margin="734,16,0,0" VerticalAlignment="Top"
                     Background="#FFEA2121" Width="24" FontWeight="Bold" Click="close_Click"/>
 
         </Grid>
