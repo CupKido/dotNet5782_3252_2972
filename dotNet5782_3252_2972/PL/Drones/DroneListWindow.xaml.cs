@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace PL
     public partial class DroneListWindow : Window
     {
         IBL.IBL myBL;
+        bool disallowClosure = true;
 
         public DroneListWindow(IBL.IBL bl)
         {
@@ -53,7 +55,6 @@ namespace PL
             ADW.Show();
             ADW.Closed += (s, e) =>
             {
-                resetDronesList();
                 filterDroneList();
                 DroneList.Items.Refresh();
             };
@@ -61,6 +62,7 @@ namespace PL
 
         private void closeWindow_click(object sender, RoutedEventArgs e)
         {
+            disallowClosure = false;
             this.Close();
         }
 
@@ -97,6 +99,12 @@ namespace PL
                 IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
                 DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = disallowClosure;
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="DroneListWindow" Height="450" Width="800">
+        Title="DroneListWindow" Height="450" Width="800" >
     <Grid>
         <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,236,0"/>
         <Button x:Name="DronesListReset" Content="Reset" HorizontalAlignment="Left" Margin="680,379,0,0" VerticalAlignment="Top" Click="resetDronesList_click"/>
