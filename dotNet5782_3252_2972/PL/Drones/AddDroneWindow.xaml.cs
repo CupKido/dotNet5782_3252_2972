@@ -81,6 +81,9 @@ namespace PL
         {
             Width = 270;
             AddDrone_Button.Visibility = Visibility.Visible;
+            Update_Button.Visibility = Visibility.Collapsed;
+            Charge_Button.Visibility = Visibility.Collapsed;
+            DisCharge_Button.Visibility = Visibility.Collapsed;
             DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
             DroneLocation_TextBox.Visibility = Visibility.Collapsed;
             DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
@@ -109,7 +112,7 @@ namespace PL
             DroneId_TextBox.IsEnabled = false;
 
             DroneModel_TextBox.Text = drone.Model;
-            DroneModel_TextBox.IsEnabled = false;
+            DroneModel_TextBox.IsEnabled = true;
 
             MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
             MaxWeightCB.IsEnabled = false;
@@ -127,6 +130,60 @@ namespace PL
             {
                 DroneParcel_Data.Text = drone.CurrentParcel.Id.ToString();
             }
+        }
+
+        private void Update_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            string DroneModel = DroneModel_TextBox.Text;
+            if (DroneModel_TextBox.Text == "")
+            {
+                MessageBox.Show("Please enter the drone's model", "Empty model value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                myBL.UpdateDrone(DroneId, DroneModel);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
+
+        }
+
+        private void Charge_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            try
+            {
+                myBL.ChargeDrone(DroneId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
+
+        }
+
+        private void DisCharge_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            try
+            {
+                myBL.DisChargeDrone(DroneId,100);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
+
         }
     }
 }

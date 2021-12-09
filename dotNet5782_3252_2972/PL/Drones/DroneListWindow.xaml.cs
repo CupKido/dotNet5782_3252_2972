@@ -83,6 +83,11 @@ namespace PL
         {
             AddDroneWindow ADW = new AddDroneWindow(myBL, (IBL.BO.DroneToList)DroneList.SelectedItem);
             ADW.Show();
+            ADW.Closed += (s, e) =>
+            {
+                filterDroneList();
+                DroneList.Items.Refresh();
+            };
         }
 
         private void filterDroneList()
