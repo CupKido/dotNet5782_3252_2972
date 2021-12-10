@@ -117,9 +117,9 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            
+
             <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" 
-                    Margin="180,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    Margin="230,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="Update_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -128,7 +128,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-    
+
 
 
             <Button x:Name="Charge_Button" Content="Charge" HorizontalAlignment="Left" 
@@ -143,7 +143,7 @@
             </Button>
 
             <Button x:Name="DisCharge_Button" Content="DisCharge" HorizontalAlignment="Left" 
-                    Margin="100,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="70" FontFamily="Elephant"
+                    Margin="90,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="70" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="DisCharge_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -152,7 +152,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-           
+
             <Button x:Name="Supply_Button" Content="Supply parcel" HorizontalAlignment="Left" 
                     Margin="1,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="33" Width="83" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="Supply_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
@@ -163,7 +163,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-           
+
 
             <Button x:Name="Attribution_Button"  Content="Attribution parcel" HorizontalAlignment="Left" 
                     Margin="90,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="33" Width="110" FontFamily="Elephant"
@@ -175,8 +175,8 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            
-           
+
+
 
             <Button x:Name="PickUp_Button"  Content="PickUp parcel" HorizontalAlignment="Left" 
                     Margin="205,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="33" Width="95" FontFamily="Elephant"
@@ -190,7 +190,7 @@
             </Button>
 
             <Button x:Name="Close_Button" Content="close" HorizontalAlignment="Left" 
-                    Margin="247,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    Margin="300,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="Close_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -199,6 +199,18 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
+            
+            <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="165,0,0,0"  Grid.Row="2"
+                 TextWrapping="Wrap" VerticalAlignment="Center" Width="50" Height="22" FontFamily="Bauhaus 93"
+                     ToolTip="Enter Time in Charge (Minutes)">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                        <GradientStop Color="Azure"/>
+                        <GradientStop Color="Chocolate" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+         
         </Grid>
     </Border>
 

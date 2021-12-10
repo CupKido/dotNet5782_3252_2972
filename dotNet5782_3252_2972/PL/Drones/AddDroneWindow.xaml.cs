@@ -91,6 +91,7 @@ namespace PL
             Supply_Button.Visibility = Visibility.Collapsed;
             Update_Button.Visibility = Visibility.Collapsed;
             Charge_Button.Visibility = Visibility.Collapsed;
+            TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
             DisCharge_Button.Visibility = Visibility.Collapsed;
             DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
             DroneLocation_TextBox.Visibility = Visibility.Collapsed;
@@ -213,10 +214,17 @@ namespace PL
 
         private void DisCharge_Click(object sender, RoutedEventArgs e)
         {
+            
             int DroneId = int.Parse(DroneId_TextBox.Text);
+            if (TimeInCharge_TextBox.Text == "")
+            {
+                MessageBox.Show("Please enter the time drone " + DroneId +" was in charge", "Empty Time in charge", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            float time = float.Parse(TimeInCharge_TextBox.Text);
             try
             {
-                myBL.DisChargeDrone(DroneId,100);
+                myBL.DisChargeDrone(DroneId,time);
             }
             catch (Exception ex)
             {
