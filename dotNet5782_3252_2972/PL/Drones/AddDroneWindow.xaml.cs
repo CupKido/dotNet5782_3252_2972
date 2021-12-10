@@ -81,6 +81,9 @@ namespace PL
         {
             Width = 270;
             AddDrone_Button.Visibility = Visibility.Visible;
+            Attribution_Button.Visibility = Visibility.Collapsed;
+            PickUp_Button.Visibility = Visibility.Collapsed;
+            Supply_Button.Visibility = Visibility.Collapsed;
             Update_Button.Visibility = Visibility.Collapsed;
             Charge_Button.Visibility = Visibility.Collapsed;
             DisCharge_Button.Visibility = Visibility.Collapsed;
@@ -106,6 +109,37 @@ namespace PL
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
 
             IBL.BO.Drone drone = myBL.GetDrone(DTL.Id);
+
+            IBL.BO.DroneStatuses status = drone.Status;
+            //int parcelId = drone.CurrentParcel.Id;
+           // IBL.BO.Parcel p = myBL.GetParcel(parcelId);
+            
+            if ((int)status == 0)
+            {
+                PickUp_Button.Visibility = Visibility.Collapsed;
+                Supply_Button.Visibility = Visibility.Collapsed;
+            }
+            if ((int)status == 1)
+            {
+                Attribution_Button.Visibility = Visibility.Collapsed;
+                PickUp_Button.Visibility = Visibility.Collapsed;
+                Supply_Button.Visibility = Visibility.Collapsed;
+            }
+            if ((int)status == 2)
+            {
+                int parcelId = drone.CurrentParcel.Id;
+                IBL.BO.Parcel p = myBL.GetParcel(parcelId);
+                Attribution_Button.Visibility = Visibility.Collapsed;
+                if(p.PickedUp==null || p.PickedUp ==DateTime.MinValue )
+                {
+                    Supply_Button.Visibility = Visibility.Collapsed;
+                }
+                else 
+                {
+                    PickUp_Button.Visibility = Visibility.Collapsed;
+                }
+
+            }
 
             DroneId_TextBox.Text = drone.Id.ToString();
             DroneId_TextBox.IsEnabled = false;
@@ -183,6 +217,51 @@ namespace PL
             }
             this.Close();
 
+        }
+
+        private void Supply_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            try
+            {
+                myBL.SupplyParcel(DroneId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
+        }
+
+        private void Attribution_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            try
+            {
+                myBL.AttributionParcelToDrone(DroneId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
+        }
+
+        private void PickUp_Click(object sender, RoutedEventArgs e)
+        {
+            int DroneId = int.Parse(DroneId_TextBox.Text);
+            try
+            {
+                myBL.PickUpParcelByDrone(DroneId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.Close();
         }
     }
 }
