@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
+
 
 namespace PL
 {
@@ -20,6 +22,7 @@ namespace PL
     public partial class AddDroneWindow : Window
     {
         IBL.IBL myBL;
+        bool disallowClosure = true;
 
         public AddDroneWindow(IBL.IBL bl)
         {
@@ -269,6 +272,17 @@ namespace PL
         private void MaxWeightCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            disallowClosure = false;
+            this.Close();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            e.Cancel = disallowClosure;
         }
     }
 }
