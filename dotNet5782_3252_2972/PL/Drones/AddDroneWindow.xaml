@@ -123,8 +123,15 @@
                 Height="34" Width="110" RenderTransformOrigin="0.513,0.613" Background="#FFCB5454" FontFamily="Aharoni"/>
             <Button x:Name="PickUp_Button" Content="PickUp parcel" HorizontalAlignment="Left" Margin="208,11,0,0" 
                 Grid.Row="1" VerticalAlignment="Top" Click="PickUp_Click"  Height="34" Width="81" RenderTransformOrigin="0.586,0.555" Background="#FFCB5454" FontFamily="Aharoni"/>
-            <Button x:Name="Close_Button" Content="close" HorizontalAlignment="Left" Margin="262,0,0,7" Grid.Row="2" VerticalAlignment="Bottom" Height="33" Width="56" FontFamily="Elephant"
-                    FontWeight="Bold" FontSize="11" Background="#FFF40C0C" Click="Close_Click"/>
+            <Button x:Name="Close_Button" Content="close" HorizontalAlignment="Left" Margin="247,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    FontWeight="Bold" FontSize="11" Click="Close_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#FFF00F0F" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
         </Grid>
     </Border>
 

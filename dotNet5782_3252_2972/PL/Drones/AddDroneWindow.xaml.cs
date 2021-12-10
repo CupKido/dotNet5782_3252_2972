@@ -78,6 +78,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
         }
 
@@ -188,6 +189,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
 
         }
@@ -204,6 +206,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
 
         }
@@ -220,6 +223,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
 
         }
@@ -236,6 +240,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
         }
 
@@ -251,6 +256,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
         }
 
@@ -266,6 +272,7 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            disallowClosure = false;
             this.Close();
         }
 
