@@ -23,6 +23,7 @@ namespace PL
 
         public AddDroneWindow(IBL.IBL bl)
         {
+
             InitializeComponent();
             myBL = bl;
             
@@ -263,6 +264,11 @@ namespace PL
                 return;
             }
             this.Close();
+        }
+
+        private void MaxWeightCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

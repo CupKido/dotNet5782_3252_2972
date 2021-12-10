@@ -6,56 +6,126 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="AddDroneWindow" Height="300" Width="500">
-    <Grid Margin="10,0,0,0" HorizontalAlignment="Left" Width="500" RenderTransformOrigin="0.5,0.5">
-        <Grid.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform Angle="-0.15"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </Grid.RenderTransform>
+    <!--
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="47*"/>
-            <RowDefinition Height="24*"/>
+            <RowDefinition Height="25">
+            </RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="DroneId_TextBlock" HorizontalAlignment="Left" Margin="10,37,0,0"
-                   Text="ID:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="14"/>
-        <TextBox x:Name="DroneId_TextBox" HorizontalAlignment="Left" Margin="130,36,0,0" 
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <TextBlock x:Name="DroneModel_TextBlock" HorizontalAlignment="Left" Margin="10,74,0,0" 
-                   Text="Model:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="37"/>
-        <TextBox x:Name="DroneModel_TextBox" HorizontalAlignment="Left" Margin="130,72,0,0" 
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18"/>
-        <TextBlock x:Name="DroneMaxWeight_TextBlock" HorizontalAlignment="Left" Margin="10,114,0,0" 
-                   Text="Max Weight:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="66"/>
-        <ComboBox x:Name="MaxWeightCB" IsEditable="True" Text="Select Max weight: "  HorizontalAlignment="Left" 
-                  Margin="130,112,0,0" VerticalAlignment="Top" Width="120" FontSize="11" Height="21"/>
-        <TextBlock x:Name="StartingBS_TextBlock" HorizontalAlignment="Left" Margin="10,154,0,0" 
-                   Text="Initial Base Sation:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="96"/>
-        <ComboBox x:Name="StartingBSCB" IsEditable="True" Text="Select BaseStation: "  
-                  HorizontalAlignment="Left" Margin="130,152,0,0" VerticalAlignment="Top" Width="120"
-                  FontSize="11" Height="21"/>
-        <TextBlock x:Name="DroneLocation_TextBlock" HorizontalAlignment="Left" Margin="266,36,0,0" 
-                   Text="Location:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="48"/>
-        <TextBlock x:Name="DroneLocation_TextBox" HorizontalAlignment="Left" Margin="266,62,0,0" 
-                   VerticalAlignment="Top" Width="134" FontSize="11" Height="46"/>
-        <TextBlock x:Name="DroneBattery_TextBlock" HorizontalAlignment="Left" Margin="266,117,0,0" 
-                   Text="Battery:" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.425,-1.125" Height="16" Width="40"/>
-        <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Left" Margin="324,117,0,0" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Width="66" Height="16"/>
-        <Button x:Name="AddDrone_Button" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" 
-                Margin="324,16,0,0" VerticalAlignment="Top" Grid.Row="1" Height="20" Width="62"/>
-        <TextBlock x:Name="DroneParcel_TextBlock" HorizontalAlignment="Left" Margin="266,154,0,0" 
-                   Text="Current Parcel:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="77"/>
-        <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="357,154,0,0"  TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Width="33" Height="16"/>
-        <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" Margin="247,16,0,0" 
-                VerticalAlignment="Top" RenderTransformOrigin="0.201,0.038" Click="Update_Click" Width="54" Grid.Row="1" Height="20"/>
-        <Button x:Name="Charge_Button" Content="Charge" HorizontalAlignment="Left" Margin="189,18,0,0" VerticalAlignment="Top" Click="Charge_Click" Grid.Row="1" Height="20" Width="42" RenderTransformOrigin="-0.13,0.652"/>
-        <Button x:Name="DisCharge_Button" Content="DisCharge" HorizontalAlignment="Left" Margin="112,19,0,0" VerticalAlignment="Top" Click="DisCharge_Click" Grid.Row="1" Height="20" Width="58"/>
-        <Button x:Name="Supply_Button" Content="Supply parcel" HorizontalAlignment="Left" Margin="55,19,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Supply_Click"/>
-        <Button x:Name="Attribution_Button" Content="Attribution parcel" HorizontalAlignment="Left" Margin="73,61,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Attribution_Click"/>
-        <Button x:Name="PickUp_Button" Content="PickUp parcel" HorizontalAlignment="Left" Margin="150,60,0,0" Grid.Row="1" VerticalAlignment="Top" Click="PickUp_Click"/>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background ="#6666" Grid.ColumnSpan="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+
     </Grid>
+     -->
+
+    <Border Background="#FF6B2350"  CornerRadius="10">
+        <Grid Margin="10,0,0,0" HorizontalAlignment="Left" Width="500" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.15"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="191*"/>
+                <RowDefinition Height="49*"/>
+                <RowDefinition Height="44*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="DroneId_TextBlock" HorizontalAlignment="Left" Margin="10,37,0,0"
+                   Text="ID:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="33" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+            <TextBox x:Name="DroneId_TextBox" HorizontalAlignment="Left" Margin="130,36,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                        <GradientStop Color="Azure"/>
+                        <GradientStop Color="Chocolate" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+            <TextBlock x:Name="DroneModel_TextBlock" HorizontalAlignment="Left" Margin="10,74,0,0" 
+                   Text="Model:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="37" FontFamily="Ink Free" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="DroneModel_TextBox" HorizontalAlignment="Left" Margin="130,72,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                        <GradientStop Color="Azure"/>
+                        <GradientStop Color="Chocolate" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+            <TextBlock x:Name="DroneMaxWeight_TextBlock" HorizontalAlignment="Left" Margin="10,114,0,0" 
+                   Text="Max Weight:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="78" FontFamily="Ink Free" FontSize="14" FontWeight="Bold"/>
+            <ComboBox x:Name="MaxWeightCB" IsEditable="True" Text="Select Max weight: "  HorizontalAlignment="Left" 
+                  Margin="130,112,0,0" VerticalAlignment="Top" Width="120" FontSize="11" Height="21" Foreground="#FFD01B1B" SelectionChanged="MaxWeightCB_SelectionChanged" FontFamily="Bauhaus 93">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="#FFFF9090" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+            </ComboBox>
+            <TextBlock x:Name="StartingBS_TextBlock" HorizontalAlignment="Left" Margin="10,154,0,0" 
+                   Text="Initial Base Sation:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="96" FontSize="14" FontFamily="Ink Free" FontWeight="Bold"/>
+            <ComboBox x:Name="StartingBSCB" IsEditable="True" Text="Select BaseStation: "  
+                  HorizontalAlignment="Left" Margin="130,152,0,0" VerticalAlignment="Top" Width="120"
+                  FontSize="11" Height="21" Foreground="#FFD01B1B" FontFamily="Bauhaus 93">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="#FFFF9090" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+            </ComboBox>
+            <TextBlock x:Name="DroneLocation_TextBlock" HorizontalAlignment="Left" Margin="266,36,0,0" 
+                   Text="Location:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="95" FontFamily="Ink Free" FontSize="14" FontWeight="Bold"/>
+            <TextBlock x:Name="DroneLocation_TextBox" HorizontalAlignment="Left" Margin="266,62,0,0" 
+                   VerticalAlignment="Top" Width="134" FontSize="11" Height="46" FontFamily="Bauhaus 93"/>
+            <TextBlock x:Name="DroneBattery_TextBlock" HorizontalAlignment="Left" Margin="266,117,0,0" 
+                   Text="Battery:" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.425,-1.125" Height="16" Width="72" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+            <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Left" Margin="339,118,0,0" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="66" Height="16" FontFamily="Bauhaus 93"/>
+            <Button x:Name="AddDrone_Button" Content="Add Drone" Click="AddDrone_click" HorizontalAlignment="Left" 
+                Margin="209,10,0,0" VerticalAlignment="Top" Grid.Row="1" Height="34" Width="75" RenderTransformOrigin="0.205,0.467" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <TextBlock x:Name="DroneParcel_TextBlock" HorizontalAlignment="Left" Margin="266,154,0,0" 
+                   Text="Current Parcel:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+            <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="376,154,0,0"  TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="33" Height="16" RenderTransformOrigin="0.897,0.567" FontFamily="Bauhaus 93"/>
+            <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" Margin="166,0,0,0" 
+                VerticalAlignment="Center" RenderTransformOrigin="0.201,0.038" Click="Update_Click" 
+                 Height="34" Width="75" Grid.Row="2" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <Button x:Name="Charge_Button" Content="Charge" HorizontalAlignment="Left" 
+                Margin="4,0,0,0" VerticalAlignment="Center" Click="Charge_Click" Grid.Row="2"   Height="34" Width="75"
+                RenderTransformOrigin="-0.13,0.652" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <Button x:Name="DisCharge_Button" Content="DisCharge" HorizontalAlignment="Left" Margin="86,0,0,0" 
+                VerticalAlignment="Center" Click="DisCharge_Click" Grid.Row="2" Height="34" Width="75" RenderTransformOrigin="0.114,0.583" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <Button x:Name="Supply_Button" Content="Supply parcel" HorizontalAlignment="Left" Margin="2,9,0,0" 
+                Grid.Row="1" VerticalAlignment="Top" Click="Supply_Click" Height="34" Width="85" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <Button x:Name="Attribution_Button" Content="Attribution parcel" HorizontalAlignment="Left" 
+                Margin="91,10,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Attribution_Click"
+                Height="34" Width="110" RenderTransformOrigin="0.513,0.613" Background="#FFCB5454" FontFamily="Aharoni"/>
+            <Button x:Name="PickUp_Button" Content="PickUp parcel" HorizontalAlignment="Left" Margin="244,0,0,0" 
+                Grid.Row="2" VerticalAlignment="Center" Click="PickUp_Click"  Height="34" Width="81" RenderTransformOrigin="0.586,0.555" Background="#FFCB5454" FontFamily="Aharoni"/>
+        </Grid>
+    </Border>
+
+
+
 </Window>
