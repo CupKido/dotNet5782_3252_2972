@@ -67,7 +67,7 @@ namespace PL
 
             try
             {
-                myBL.AddDrone(DroneId, DroneModel_TextBox.Text, (IBL.BO.WeightCategories)MaxWeightCB.SelectedItem, ((IBL.BO.BaseStationToList)StartingBSCB.SelectedItem).Id);
+                myBL.AddDrone(DroneId, DroneModel_TextBox.Text, (IBL.BO.WeightCategories)MaxWeightCB.SelectedItem, (int)StartingBSCB.SelectedItem);
             }
             catch(Exception ex)
             {
@@ -95,7 +95,8 @@ namespace PL
             DroneParcel_Data.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
-            StartingBSCB.ItemsSource = myBL.GetAllBaseStations();
+            StartingBSCB.ItemsSource = from IBL.BO.BaseStationToList BS in myBL.GetAllBaseStations()
+                                       select BS.Id;
         }
 
         private void prepareForShow(IBL.BO.DroneToList DTL)
