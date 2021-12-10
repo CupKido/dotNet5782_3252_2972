@@ -254,7 +254,7 @@ namespace IBL.BO
 
         public override string ToString()
         {
-            return "ERROR: Drone " + DroneId + " is not in Maintance Status " + "\n" + Message;
+            return "ERROR: Drone " + DroneId + " is not in Maintance Status " + "\n";// + Message;
         }
     }
 
