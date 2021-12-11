@@ -163,7 +163,7 @@ namespace DalObject
                                     parcel.Delivered = DateTime.Now;
                                 }
                             }
-                            takenDroneP = Parcels.FirstOrDefault(p => p.DroneId == parcel.DroneId && p.Delivered == DateTime.MinValue);
+                            takenDroneP = Parcels.FirstOrDefault(p => p.DroneId == parcel.DroneId && p.Delivered == null);
                         } while (takenDroneP.Value.Id != 0 && parcel.Weight > Drones.FirstOrDefault(d => d.Id == parcel.DroneId).MaxWeight && times <= 3);
                         if(times == 4)
                         {
