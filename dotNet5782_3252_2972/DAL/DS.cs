@@ -168,9 +168,9 @@ namespace DalObject
                         if(times == 4)
                         {
                             parcel.DroneId = 0;
-                            parcel.scheduled = DateTime.MinValue;
-                            parcel.PickedUp = DateTime.MinValue;
-                            parcel.Delivered = DateTime.MinValue;
+                            parcel.scheduled = null;
+                            parcel.PickedUp = null;
+                            parcel.Delivered = null;
                         }
                         break;
                 }

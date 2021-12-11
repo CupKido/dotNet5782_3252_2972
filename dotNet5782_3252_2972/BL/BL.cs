@@ -38,7 +38,7 @@ namespace BLobject
                 if (p.DroneId != 0)
                 {
                     IDAL.DO.Drone PDrone = dal.GetDrone(p.DroneId);
-                    if (p.Delivered == DateTime.MinValue)
+                    if (p.Delivered == null)
                     {
 
                         DroneToList newD = new DroneToList();
@@ -52,7 +52,7 @@ namespace BLobject
                         IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
                         IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
 
-                        if (p.PickedUp == DateTime.MinValue)
+                        if (p.PickedUp == null)
                         {
                             BaseStation closestToSender = closestBaseStation(sender.Longitude, sender.Latitude);
                             BaseStation closestToTarget = closestBaseStation(target.Longitude, target.Latitude);
@@ -92,7 +92,7 @@ namespace BLobject
                         BLDrones.Add(newD);
                         DalDronesList.Remove(PDrone);
                     }
-                    else if (p.Delivered != DateTime.MinValue)
+                    else if (p.Delivered != null)
                     {
                         SatisfiedCustomers.Add(dal.GetCustomer(p.TargetId));
                     }
@@ -528,7 +528,7 @@ namespace BLobject
                 CurrentParcel = new ParcelInDelivery()
                 {
                     Id = p.Id,
-                    ParcelStatus = ((p.PickedUp != DateTime.MinValue) ? true : false),
+                    ParcelStatus = ((p.PickedUp != null) ? true : false),
                     PickUp = sender.Address,
                     Drop = target.Address,
                     DeliveryDistance = getDistanceFromLatLonInKm(sender.Address.Latitude, sender.Address.Longitude, target.Address.Latitude, target.Address.Longitude),
@@ -698,7 +698,7 @@ namespace BLobject
             int sum = 0;
             foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.TargetId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                if (p.TargetId == c.Id && p.Delivered != null && p.PickedUp != null)
                 {
                     sum++;
                 }
@@ -711,7 +711,7 @@ namespace BLobject
             int sum = 0;
             foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.TargetId == c.Id && p.Delivered == DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                if (p.TargetId == c.Id && p.Delivered == null && p.PickedUp != null)
                 {
                     sum++;
                 }
@@ -724,7 +724,7 @@ namespace BLobject
             int sum = 0;
             foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.SenderId == c.Id && p.Delivered == DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                if (p.SenderId == c.Id && p.Delivered == null && p.PickedUp != null)
                 {
                     sum++;
                 }
@@ -737,7 +737,7 @@ namespace BLobject
             int sum = 0;
             foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.SenderId == c.Id && p.Delivered != DateTime.MinValue && p.PickedUp != DateTime.MinValue)
+                if (p.SenderId == c.Id && p.Delivered != null && p.PickedUp != null)
                 {
                     sum++;
                 }
@@ -907,15 +907,15 @@ namespace BLobject
 
         private ParcelStatuses getParcelStatus(IDAL.DO.Parcel p)
         {
-            if (p.Delivered != DateTime.MinValue)
+            if (p.Delivered != null)
             {
                 return ParcelStatuses.Delivered;
             }
-            else if (p.PickedUp != DateTime.MinValue)
+            else if (p.PickedUp != null)
             {
                 return ParcelStatuses.PickedUp;
             }
-            else if (p.scheduled != DateTime.MinValue)
+            else if (p.scheduled != null)
             {
                 return ParcelStatuses.Associated;
             }
@@ -958,7 +958,7 @@ namespace BLobject
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
             {
-                if(((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled!=DateTime.MinValue)
+                if(((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled!= null)
                 {
                     continue;
                 }
@@ -1058,7 +1058,7 @@ namespace BLobject
                 }
                 int parcelId = drone.CurrentParcel.Id;
                 IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
-                if (parcel.PickedUp != DateTime.MinValue)
+                if (parcel.PickedUp != null)
                 {
                     throw new ParcelAlreadyPickedUp(parcelId);
                 }
@@ -1092,7 +1092,7 @@ namespace BLobject
                 }
                 int parcelId = drone.CurrentParcel.Id;
                 IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
-                if (parcel.Delivered != DateTime.MinValue)
+                if (parcel.Delivered != null)
                 {
                     throw new ParcelAlreadySupply(parcelId);
                 }
