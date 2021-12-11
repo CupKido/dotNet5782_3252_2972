@@ -93,7 +93,7 @@
             </Button>
 
             <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" 
-                    Margin="230,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant" ToolTip="first change model in the box"
+                    Margin="150,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant" ToolTip="first change model in the box"
                     FontWeight="Bold" FontSize="11" Click="Update_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -117,7 +117,7 @@
             </Button>
 
             <Button x:Name="DisCharge_Button" Content="DisCharge" HorizontalAlignment="Left" 
-                    Margin="90,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="70" FontFamily="Elephant"
+                    Margin="5,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="70" FontFamily="Elephant"
                    ToolTip="Enter Time" FontWeight="Bold" FontSize="11" Click="DisCharge_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -164,7 +164,7 @@
             </Button>
 
             <Button x:Name="Close_Button" Content="close" HorizontalAlignment="Left" 
-                    Margin="300,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    Margin="240,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="Close_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -174,7 +174,7 @@
                 </Button.Background>
             </Button>
             
-            <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="170,0,0,0"  Grid.Row="2"
+            <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="85,0,0,0"  Grid.Row="2"
                  TextWrapping="Wrap" VerticalAlignment="Center" Width="50" Height="22" FontFamily="Bauhaus 93"
                      ToolTip="Enter Time in Charge (Minutes)">
                 <TextBox.Background>

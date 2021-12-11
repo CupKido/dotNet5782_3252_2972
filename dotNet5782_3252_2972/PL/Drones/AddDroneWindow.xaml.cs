@@ -125,19 +125,25 @@ namespace PL
             {
                 PickUp_Button.Visibility = Visibility.Collapsed;
                 Supply_Button.Visibility = Visibility.Collapsed;
+                TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
+                DisCharge_Button.Visibility = Visibility.Collapsed;
             }
             if ((int)status == 1)
             {
                 Attribution_Button.Visibility = Visibility.Collapsed;
                 PickUp_Button.Visibility = Visibility.Collapsed;
                 Supply_Button.Visibility = Visibility.Collapsed;
+                Charge_Button.Visibility = Visibility.Collapsed;
             }
             if ((int)status == 2)
             {
                 int parcelId = drone.CurrentParcel.Id;
                 IBL.BO.Parcel p = myBL.GetParcel(parcelId);
+                TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
+                DisCharge_Button.Visibility = Visibility.Collapsed;
                 Attribution_Button.Visibility = Visibility.Collapsed;
-                if(p.PickedUp==null || p.PickedUp ==DateTime.MinValue )
+                Charge_Button.Visibility = Visibility.Collapsed;
+                if (p.PickedUp==null || p.PickedUp ==DateTime.MinValue )
                 {
                     Supply_Button.Visibility = Visibility.Collapsed;
                 }
