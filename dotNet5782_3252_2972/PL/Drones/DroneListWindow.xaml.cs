@@ -112,5 +112,10 @@ namespace PL
             base.OnClosing(e);
             e.Cancel = disallowClosure;
         }
+
+        private void DroneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

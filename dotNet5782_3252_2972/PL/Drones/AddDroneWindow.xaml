@@ -200,7 +200,7 @@
                 </Button.Background>
             </Button>
             
-            <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="165,0,0,0"  Grid.Row="2"
+            <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="170,0,0,0"  Grid.Row="2"
                  TextWrapping="Wrap" VerticalAlignment="Center" Width="50" Height="22" FontFamily="Bauhaus 93"
                      ToolTip="Enter Time in Charge (Minutes)">
                 <TextBox.Background>
