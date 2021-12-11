@@ -119,7 +119,7 @@
             </Button>
 
             <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" 
-                    Margin="230,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    Margin="230,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant" ToolTip="first change model in the box"
                     FontWeight="Bold" FontSize="11" Click="Update_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
