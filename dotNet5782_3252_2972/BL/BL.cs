@@ -61,8 +61,8 @@ namespace BLobject
                                 Latitude = closestToSender.StationLocation.Latitude,
                                 Longitude = closestToSender.StationLocation.Longitude
                             };
-                            
-                            
+
+
                             newD.Battery =
                                 getDistanceFromLatLonInKm(closestToSender.StationLocation.Latitude, closestToSender.StationLocation.Longitude, sender.Latitude, sender.Longitude) / AvailbleElec + //to sender
                                 getDistanceFromLatLonInKm(sender.Latitude, sender.Longitude, target.Latitude, target.Longitude) / arr[(int)p.Weight + 1] + //to target
@@ -90,7 +90,7 @@ namespace BLobject
                             newD.Battery = r.Next((int)newD.Battery, 99) + 1;
                         }
                         BLDrones.Add(newD);
-                        DalDronesList.Remove(PDrone);
+                        DalDronesList.RemoveAll(d => d.Id == PDrone.Id);
                     }
                     else if (p.Delivered != null)
                     {
@@ -116,7 +116,7 @@ namespace BLobject
                                 IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
                                 BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
                                 double percentToStation = getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec;
-                                if(percentToStation >= 100)
+                                if (percentToStation >= 100)
                                 {
                                     newD.Battery = 100;
                                 }
@@ -161,7 +161,9 @@ namespace BLobject
                         }
                         break;
                 }
+
                 BLDrones.Add(newD);
+
 
             }
 
@@ -356,26 +358,26 @@ namespace BLobject
             {
                 lastBS = dal.GetBaseStation(Id);
             }
-            catch(IDAL.DO.ItemNotFoundException ex)
+            catch (IDAL.DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Base Station with specified ID was not found", ex);
             }
 
-            if(ChargeSlots < 1)
+            if (ChargeSlots < 1)
             {
                 throw new NegetiveNumberException((int)ChargeSlots, "Charge Slots number cannot be negetive!");
             }
 
-            if(GetDronesInBaseStation(lastBS).Count() > ChargeSlots)
+            if (GetDronesInBaseStation(lastBS).Count() > ChargeSlots)
             {
                 throw new OutOfRangeException((int)ChargeSlots, "Too many drones in base station num: " + lastBS.Id);
             }
 
-            if(Name != "")
+            if (Name != "")
             {
                 lastBS.Name = Name;
             }
-            if(ChargeSlots != null)
+            if (ChargeSlots != null)
             {
                 lastBS.ChargeSlots = (int)ChargeSlots;
             }
@@ -415,7 +417,7 @@ namespace BLobject
 
         public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId)
         {
-            if(Id<1)
+            if (Id < 1)
             {
                 throw new NegetiveNumberException(Id, "Drone Id can not be negative number or zero");
             }
@@ -423,7 +425,7 @@ namespace BLobject
             {
                 throw new NegetiveNumberException(Id, "Base Station Id can not be negative number or zero");
             }
-            if ((int)MaxWeight < 0|| (int)MaxWeight >2)
+            if ((int)MaxWeight < 0 || (int)MaxWeight > 2)
             {
                 throw new OutOfRangeException(Id, "Maxweight has to be 1 or 2 or 3 only");
             }
@@ -435,7 +437,7 @@ namespace BLobject
                 BLDrones.Add(new DroneToList()
                 {
                     Id = Id,
-                    Battery = r.Next(20,41),
+                    Battery = r.Next(20, 41),
                     MaxWeight = MaxWeight,
                     Model = Model,
                     Status = DroneStatuses.Maintenance,
@@ -480,13 +482,13 @@ namespace BLobject
         public void UpdateDrone(int Id, string Model)
         {
             IDAL.DO.Drone lastDrone;
-            
+
             try
             {
-            lastDrone = dal.GetDrone(Id);
-            
+                lastDrone = dal.GetDrone(Id);
+
             }
-            catch(IDAL.DO.ItemNotFoundException ex)
+            catch (IDAL.DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Drone with specified ID was not found", ex);
             }
@@ -500,7 +502,7 @@ namespace BLobject
 
         public Drone GetDrone(int Id)
         {
-            DroneToList  d = BLDrones.FirstOrDefault(p => p.Id == Id);
+            DroneToList d = BLDrones.FirstOrDefault(p => p.Id == Id);
             if (d == null)
             {
                 throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
@@ -552,14 +554,14 @@ namespace BLobject
             Drone droneToCharge;
             try
             {
-            droneToCharge = GetDrone(Id);
+                droneToCharge = GetDrone(Id);
             }
-            catch(ItemNotFoundException ex)
+            catch (ItemNotFoundException ex)
             {
                 throw;
             }
 
-            if(droneToCharge.Status != DroneStatuses.Availible)
+            if (droneToCharge.Status != DroneStatuses.Availible)
             {
                 throw new DroneIsntAvailibleException(Id);
             }
@@ -573,7 +575,7 @@ namespace BLobject
 
             double distanceToBS = getDistanceFromLatLonInKm(droneToCharge.CurrentLocation.Latitude, droneToCharge.CurrentLocation.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
 
-            if(droneToCharge.Battery < distanceToBS / AvailbleElec)
+            if (droneToCharge.Battery < distanceToBS / AvailbleElec)
             {
                 throw new NotEnoughDroneBatteryException(Id);
             }
@@ -586,7 +588,7 @@ namespace BLobject
 
         }
 
-         public void DisChargeDrone(int Id , float time)
+        public void DisChargeDrone(int Id, float time)
         {
             Drone droneDisCharge;
             try
@@ -603,12 +605,12 @@ namespace BLobject
                 throw new StatusIsntMaintance(Id);
             }
             double[] a = dal.AskForElectricity();
-          
+
 
             DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
             BLDrones.Remove(dToUpdate);
             dToUpdate.Status = DroneStatuses.Availible;
-            dToUpdate.Battery += a[4] * (time/60);   // change to time base 60 minutes
+            dToUpdate.Battery += a[4] * (time / 60);   // change to time base 60 minutes
             if (dToUpdate.Battery > 100)
             {
                 dToUpdate.Battery = 100;
@@ -618,7 +620,7 @@ namespace BLobject
 
 
 
-         }
+        }
 
         #endregion
 
@@ -626,11 +628,11 @@ namespace BLobject
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
         {
-            if (Id < 1 )
+            if (Id < 1)
             {
                 throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
             }
-            if(Phone.Length != 10)
+            if (Phone.Length != 10)
             {
                 throw new InvalidNumberLengthException(Phone.Length);
             }
@@ -759,12 +761,12 @@ namespace BLobject
                 throw new ItemNotFoundException("Customer with specified ID was not found", ex);
             }
 
-            if(name != "")
+            if (name != "")
             {
                 lastCustomer.Name = name;
             }
 
-            if(phone != "")
+            if (phone != "")
             {
                 lastCustomer.Phone = phone;
             }
@@ -820,15 +822,15 @@ namespace BLobject
         public IEnumerable<ParcelToList> GetAllParcels()
         {
             List<ParcelToList> PTL = (from IDAL.DO.Parcel p in dal.GetAllParcels()
-                                            select new ParcelToList()
-                                            {
-                                                Id = p.Id,
-                                                Priority = (Priorities)p.Priority,
-                                                Weight = (WeightCategories)p.Weight,
-                                                Status = getParcelStatus(p),
-                                                SenderName = dal.GetCustomer(p.SenderId).Name,
-                                                TargetName = dal.GetCustomer(p.TargetId).Name,
-                                            }).ToList();
+                                      select new ParcelToList()
+                                      {
+                                          Id = p.Id,
+                                          Priority = (Priorities)p.Priority,
+                                          Weight = (WeightCategories)p.Weight,
+                                          Status = getParcelStatus(p),
+                                          SenderName = dal.GetCustomer(p.SenderId).Name,
+                                          TargetName = dal.GetCustomer(p.TargetId).Name,
+                                      }).ToList();
             PTL.Sort();
             return PTL;
         }
@@ -839,7 +841,7 @@ namespace BLobject
             {
                 dal.GetCustomer(SenderId);
             }
-            catch(IDAL.DO.ItemNotFoundException ex)
+            catch (IDAL.DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Sender could not be found!", ex);
             }
@@ -862,7 +864,7 @@ namespace BLobject
             DateTime created = DateTime.Now;
             try
             {
-                dal.AddParcel (runningNumForParcels, SenderId,  TargetId, PackageWight, priority , created);
+                dal.AddParcel(runningNumForParcels, SenderId, TargetId, PackageWight, priority, created);
                 runningNumForParcels++;
             }
             catch (IDAL.DO.ItemAlreadyExistsException ex)
@@ -949,16 +951,16 @@ namespace BLobject
             Drone d = GetDrone(id);
             if (d.Status != DroneStatuses.Availible)
             {
-                throw new DroneIsBusy(id) ;
+                throw new DroneIsBusy(id);
             }
 
             bool flag = false;
             IDAL.DO.Parcel p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
-           
+
 
             foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
             {
-                if(((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled!= null)
+                if (((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled != null)
                 {
                     continue;
                 }
@@ -973,15 +975,15 @@ namespace BLobject
                 //distance delivery
                 double distanceDelivery = getDistanceFromLatLonInKm(Target.Address.Latitude, Target.Address.Longitude, c2.Address.Latitude, c1.Address.Longitude);
                 //distance to base station
-                BaseStation BS = closestBaseStation(Target.Address.Longitude , Target.Address.Latitude);
+                BaseStation BS = closestBaseStation(Target.Address.Longitude, Target.Address.Latitude);
                 double distanceToBs = getDistanceFromLatLonInKm(Target.Address.Latitude, Target.Address.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
 
-           
+
 
                 double[] arr = dal.AskForElectricity();
                 double ELecInDelivery = arr[(int)p1.Weight + 1];
 
-                if (d.Battery < distanceP2 / AvailbleElec + distanceDelivery / ELecInDelivery +  distanceToBs / AvailbleElec)
+                if (d.Battery < distanceP2 / AvailbleElec + distanceDelivery / ELecInDelivery + distanceToBs / AvailbleElec)
                 {
                     continue;
                 }
@@ -1001,32 +1003,32 @@ namespace BLobject
                 {
                     continue;
                 }
-                if ((int)p2.Weight > (int)p1.Priority) 
+                if ((int)p2.Weight > (int)p1.Priority)
                 {
                     flag = true;
                     p1 = p2;
                     continue;
                 }
-                if ((int)p2.Weight < (int)p1.Priority) 
+                if ((int)p2.Weight < (int)p1.Priority)
                 {
                     continue;
                 }
 
-                if (distanceP2< distanceP1)
+                if (distanceP2 < distanceP1)
                 {
                     flag = true;
                     p1 = p2;
                     continue;
                 }
                 flag = true;
-         
 
-               
+
+
             }
-            if(flag) // to meke condition if didnt finnd parcels at all
+            if (flag) // to meke condition if didnt finnd parcels at all
             {
-                
-                
+
+
                 DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == id);
                 BLDrones.Remove(BLdrone);
                 BLdrone.Status = (DroneStatuses)2;
@@ -1096,7 +1098,7 @@ namespace BLobject
                 {
                     throw new ParcelAlreadySupply(parcelId);
                 }
-                
+
 
 
 
@@ -1120,7 +1122,7 @@ namespace BLobject
 
         }
 
-       
+
 
 
         #endregion

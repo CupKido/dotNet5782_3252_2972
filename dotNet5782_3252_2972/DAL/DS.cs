@@ -121,6 +121,9 @@ namespace DalObject
             DateTime start = new DateTime(2020, 1, 1);
             int range = (DateTime.Today - start).Days;
 
+            List<int> DronesId = (from IDAL.DO.Drone DId in Drones
+                                  select DId.Id).ToList();
+
             for (int i = 0; i < 10; i++)
             {
                 IDAL.DO.Parcel parcel = new IDAL.DO.Parcel();
@@ -139,6 +142,7 @@ namespace DalObject
                 parcel.Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
                 parcel.Requested = start.AddDays(r.Next(range));
 
+                
                 switch (r.Next(4))
                 {
                     case 0:
@@ -153,7 +157,8 @@ namespace DalObject
                         do
                         {
                             times++;
-                            parcel.DroneId = Drones[r.Next(Drones.Count)].Id;
+                            parcel.DroneId = DronesId[r.Next(DronesId.Count)];
+                            DronesId.Remove(parcel.DroneId);
                             parcel.scheduled = DateTime.Now;
                             if(r.Next(2) == 1)
                             {

@@ -106,7 +106,7 @@ namespace PL
                 DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
             }
         }
-
+       
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
