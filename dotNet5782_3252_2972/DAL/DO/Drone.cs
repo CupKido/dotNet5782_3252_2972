@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IDAL.DO
+namespace DO
 {
     public struct Drone
     {
         public int Id { get; set; }
         public String Model { get; set; }
-        public IDAL.DO.WeightCategories MaxWeight { get; set; }
+        public DO.WeightCategories MaxWeight { get; set; }
         //public IDAL.DO.DroneStatuses Status { get; set; }
         //public double Battery { get; set; }
 

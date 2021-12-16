@@ -7,11 +7,11 @@ namespace DalObject
   
     public class DataSource
     {
-        internal static List<IDAL.DO.Drone> Drones = new List<IDAL.DO.Drone>();
-        internal static List<IDAL.DO.Customer> Customers = new List<IDAL.DO.Customer>();
-        internal static List<IDAL.DO.Parcel> Parcels = new List<IDAL.DO.Parcel>();
-        internal static List<IDAL.DO.BaseStation> BaseStations = new List<IDAL.DO.BaseStation>();
-        internal static List<IDAL.DO.DroneCharge> DroneCharges = new List<IDAL.DO.DroneCharge>();
+        internal static List<DO.Drone> Drones = new List<DO.Drone>();
+        internal static List<DO.Customer> Customers = new List<DO.Customer>();
+        internal static List<DO.Parcel> Parcels = new List<DO.Parcel>();
+        internal static List<DO.BaseStation> BaseStations = new List<DO.BaseStation>();
+        internal static List<DO.DroneCharge> DroneCharges = new List<DO.DroneCharge>();
 
         internal class Config
         {
@@ -30,12 +30,12 @@ namespace DalObject
             //5 Drones initializer
             for (int i = 0; i < 10; i++)
             {
-                IDAL.DO.Drone drone = new IDAL.DO.Drone();
+                DO.Drone drone = new DO.Drone();
                 drone.Id = i + 1;
                 //drone.Battery = r.Next(25, 100) + r.NextDouble();
 
 
-                drone.MaxWeight = (IDAL.DO.WeightCategories)r.Next(0, 3); //IDAL.DO.WeightCategories.Heavy;
+                drone.MaxWeight = (DO.WeightCategories)r.Next(0, 3); //IDAL.DO.WeightCategories.Heavy;
 
 
                 switch (r.Next(1, 4))
@@ -57,7 +57,7 @@ namespace DalObject
             //2 Base Stations initializer
             for (int i = 0; i < 2; i++)
             {
-                IDAL.DO.BaseStation BS = new IDAL.DO.BaseStation();
+                DO.BaseStation BS = new DO.BaseStation();
                 BS.Id = i + 1;
                 BS.Latitude = r.Next(0, 10) + r.NextDouble();
                 BS.Longitude = r.Next(0, 10) + r.NextDouble();
@@ -78,7 +78,7 @@ namespace DalObject
 
             for (int i = 0; i < 10; i++)
             {
-                IDAL.DO.Customer customer = new IDAL.DO.Customer();
+                DO.Customer customer = new DO.Customer();
                 customer.Id = i + 1;
                 customer.Latitude = r.Next(5, 10) + r.NextDouble();
                 customer.Longitude = r.Next(5, 10) + r.NextDouble();
@@ -121,12 +121,12 @@ namespace DalObject
             DateTime start = new DateTime(2020, 1, 1);
             int range = (DateTime.Today - start).Days;
 
-            List<int> DronesId = (from IDAL.DO.Drone DId in Drones
+            List<int> DronesId = (from DO.Drone DId in Drones
                                   select DId.Id).ToList();
 
             for (int i = 0; i < 10; i++)
             {
-                IDAL.DO.Parcel parcel = new IDAL.DO.Parcel();
+                DO.Parcel parcel = new DO.Parcel();
                 parcel.Id = Parcels.Count + 1;
                 bool flag = true;
                 while (flag)
@@ -138,8 +138,8 @@ namespace DalObject
                         flag = false;
                     }
                 }
-                parcel.Priority = (IDAL.DO.Priorities)r.Next(0, 3);
-                parcel.Weight = (IDAL.DO.WeightCategories)r.Next(0, 3);
+                parcel.Priority = (DO.Priorities)r.Next(0, 3);
+                parcel.Weight = (DO.WeightCategories)r.Next(0, 3);
                 parcel.Requested = start.AddDays(r.Next(range));
 
                 
@@ -152,7 +152,7 @@ namespace DalObject
                     case 1:
                     case 2:
                     case 3:
-                        IDAL.DO.Parcel? takenDroneP;
+                        DO.Parcel? takenDroneP;
                         int times = 0;
                         do
                         {

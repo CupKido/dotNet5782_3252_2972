@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IDAL.DO;
+using DO;
 
-namespace IDAL
+namespace DalApi
 {
     public interface IDal
     {
@@ -27,17 +27,17 @@ namespace IDAL
 
         #region Drones
 
-        public void AddDrone(int Id, String Model, IDAL.DO.WeightCategories MaxWeight);
+        public void AddDrone(int Id, String Model, DO.WeightCategories MaxWeight);
 
         public IEnumerable<Drone> GetAllDrones();
 
         public IEnumerable<Drone> GetAllDronesBy(Predicate<Drone> predicate);
 
-        public IDAL.DO.Drone GetDrone(int Id);
+        public DO.Drone GetDrone(int Id);
 
-        public void SetDrone(IDAL.DO.Drone newDrone);
+        public void SetDrone(DO.Drone newDrone);
 
-        public IDAL.DO.Drone RemoveDrone(int Id);
+        public DO.Drone RemoveDrone(int Id);
 
         public Double[] AskForElectricity();
 
@@ -45,15 +45,15 @@ namespace IDAL
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created);
+        public void AddParcel(int Id, int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created);
 
         public IEnumerable<Parcel> GetAllParcels();
 
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate);
 
-        public IDAL.DO.Parcel GetParcel(int Id);
+        public DO.Parcel GetParcel(int Id);
 
-        public void SetParcel(IDAL.DO.Parcel newParcel);
+        public void SetParcel(DO.Parcel newParcel);
 
         public Parcel RemoveParcel(int Id);
 
@@ -81,7 +81,7 @@ namespace IDAL
 
         public IEnumerable<BaseStation> GetAllBaseStations();
         public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate);
-        public IDAL.DO.BaseStation GetBaseStation(int Id);
+        public DO.BaseStation GetBaseStation(int Id);
 
         public void SetBaseStation(BaseStation newBS);
 

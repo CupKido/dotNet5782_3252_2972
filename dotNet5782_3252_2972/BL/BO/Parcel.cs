@@ -7,8 +7,8 @@ namespace IBL.BO
         public int Id { get; set; }
         public CustomerInParcel Sender { get; set; }
         public CustomerInParcel Target { get; set; }
-        public IDAL.DO.WeightCategories Weight { get; set; }
-        public IDAL.DO.Priorities Priority { get; set; }
+        public DO.WeightCategories Weight { get; set; }
+        public DO.Priorities Priority { get; set; }
         public int DroneId { get; set; }
         // public DroneInParcel droneInParcel {get; set ;}
         public DateTime? Requested = null;

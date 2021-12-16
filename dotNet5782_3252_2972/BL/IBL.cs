@@ -134,7 +134,7 @@ namespace IBL
         /// <param name="TargetId">the package reciever ID</param>
         /// <param name="PackageWight">the weight of the package</param>
         /// <param name="priority">how urgent is getting the package to the target</param>
-        public void AddParcel( int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority);
+        public void AddParcel( int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority);
 
         /// <summary>
         /// returns all parcels in data base, as BL parcels

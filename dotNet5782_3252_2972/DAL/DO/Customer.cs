@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace IDAL.DO
+namespace DO
 {
     public struct Customer
     {

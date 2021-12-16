@@ -1,5 +1,6 @@
-﻿using IDAL.DO;
+﻿using DO;
 using System;
+
 
 namespace ConsoleUI
 {
@@ -8,7 +9,7 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             DateTime d;
-            IDAL.IDal DO = new DalObject.DalObject();
+            DalApi.IDal DO = new DalObject.DalObject();
             bool flag = true;
             int MenuChoice;
             do
@@ -19,7 +20,7 @@ namespace ConsoleUI
                 Console.WriteLine("3 to view an Object");
                 Console.WriteLine("4 to view a list of Objects");
                 Console.WriteLine("0 to Exit");
-                MenuChoice = int.Parse(Console.ReadLine());
+                while (!int.TryParse(Console.ReadLine(), out MenuChoice)) { }
                 switch (MenuChoice)
                 {
 
@@ -190,7 +191,7 @@ namespace ConsoleUI
                                     break;
                                 case 2:
                                     {
-                                        foreach (IDAL.DO.Drone drone in DO.GetAllDrones())
+                                        foreach (DO.Drone drone in DO.GetAllDrones())
                                         {
                                             Console.WriteLine(drone + "\n");
                                         }
@@ -200,7 +201,7 @@ namespace ConsoleUI
                                 case 3:
                                     {
 
-                                        foreach (IDAL.DO.Customer customer in DO.GetAllCustomers())
+                                        foreach (DO.Customer customer in DO.GetAllCustomers())
                                         {
                                             Console.WriteLine(customer + "\n");
                                         }
@@ -209,7 +210,7 @@ namespace ConsoleUI
 
                                 case 4:
                                     {
-                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        foreach (DO.Parcel parcel in DO.GetAllParcels())
                                         {
                                             Console.WriteLine(parcel + "\n");
                                         }
@@ -218,7 +219,7 @@ namespace ConsoleUI
 
                                 case 5:
                                     {
-                                        foreach (IDAL.DO.Parcel parcel in DO.GetAllParcels())
+                                        foreach (DO.Parcel parcel in DO.GetAllParcels())
                                         {
                                         
                                             if(parcel.DroneId == 0)
@@ -234,10 +235,10 @@ namespace ConsoleUI
                                 case 6:
                                     {
                                         int ACS = 0; //Availible Charge Slots
-                                        foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+                                        foreach (DO.BaseStation baseStation in DO.GetAllBaseStations())
                                         {
                                             ACS = baseStation.ChargeSlots;
-                                            foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                                            foreach (DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
                                             {
                                                 if (droneCharge.BaseStationId == baseStation.Id)
                                                     ACS -= 1;
@@ -274,7 +275,7 @@ namespace ConsoleUI
 
         }
 
-        private static void PrintParcel(IDAL.IDal DO)
+        private static void PrintParcel(DalApi.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -292,7 +293,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void PrintCustomer(IDAL.IDal DO)
+        private static void PrintCustomer(DalApi.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -310,7 +311,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void PrintBaseStation(IDAL.IDal DO)
+        private static void PrintBaseStation(DalApi.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -328,10 +329,10 @@ namespace ConsoleUI
             }
         }
 
-        private static void DisChargeDrone(IDAL.IDal DO)
+        private static void DisChargeDrone(DalApi.IDal DO)
         {
             Console.WriteLine("\nPlease Enter the Drone's ID: ");
-            IDAL.DO.Drone drone;
+            DO.Drone drone;
             try
             {
                 drone = DO.GetDrone(int.Parse(Console.ReadLine()));
@@ -347,10 +348,10 @@ namespace ConsoleUI
             Console.WriteLine(drone + "\n");
         }
 
-        private static void ChargeDrone(IDAL.IDal DO)
+        private static void ChargeDrone(DalApi.IDal DO)
         {
             Console.WriteLine("\nPlease Enter the Drone's ID: ");
-            IDAL.DO.Drone drone;
+            DO.Drone drone;
             try
             {
                 drone = DO.GetDrone(int.Parse(Console.ReadLine()));
@@ -365,7 +366,7 @@ namespace ConsoleUI
             PrintAvailibleStations(DO);
 
             Console.WriteLine("Please Enter the selected Base Station's ID: ");
-            IDAL.DO.BaseStation baseStation;
+            DO.BaseStation baseStation;
             try
             {
                 baseStation = DO.GetBaseStation(int.Parse(Console.ReadLine()));
@@ -385,12 +386,12 @@ namespace ConsoleUI
             Console.WriteLine("Drone {0} is Being Charged at Base Station {1}!\n", drone.Id, baseStation.Id);
         }
 
-        private static void CustomerUpdate(IDAL.IDal DO)
+        private static void CustomerUpdate(DalApi.IDal DO)
         {
             Console.WriteLine("\nEnter ID:");
             int Id = int.Parse(Console.ReadLine());
 
-            IDAL.DO.Customer customer;
+            DO.Customer customer;
             try
             {
                 customer = DO.GetCustomer(Id);
@@ -422,7 +423,7 @@ namespace ConsoleUI
             Console.WriteLine("\nCustomer {0} {1} is now updated!\n", customer.Name, customer.Id);
         }
 
-        private static void PrintDrone(IDAL.IDal DO)
+        private static void PrintDrone(DalApi.IDal DO)
         {
             Console.WriteLine("Enter ID:");
             int Id;
@@ -440,12 +441,12 @@ namespace ConsoleUI
             }
         }
 
-        private static void DeliverPackage(IDAL.IDal DO)
+        private static void DeliverPackage(DalApi.IDal DO)
         {
             Console.WriteLine("\nEnter Package ID:");
             int Id = int.Parse(Console.ReadLine());
 
-            IDAL.DO.Parcel parcel;
+            DO.Parcel parcel;
             try
             {
                 parcel = DO.GetParcel(Id);
@@ -464,7 +465,7 @@ namespace ConsoleUI
 
             Console.WriteLine(parcel);
 
-            IDAL.DO.Drone drone;
+            DO.Drone drone;
             try
             {
                 drone = DO.GetDrone(parcel.DroneId);
@@ -496,12 +497,12 @@ namespace ConsoleUI
             Console.WriteLine("Drone {0} has Delivered the Package {1}", drone.Id, parcel.Id);
         }
 
-        private static void PickPackage(IDAL.IDal DO)
+        private static void PickPackage(DalApi.IDal DO)
         {
             Console.WriteLine("\nEnter Package ID:");
             int Id = int.Parse(Console.ReadLine());
 
-            IDAL.DO.Parcel parcel;
+            DO.Parcel parcel;
             try
             {
                 parcel = DO.GetParcel(Id);
@@ -519,7 +520,7 @@ namespace ConsoleUI
                 return;
             }
 
-            IDAL.DO.Drone drone;
+            DO.Drone drone;
             try
             {
                 drone = DO.GetDrone(parcel.DroneId);
@@ -551,7 +552,7 @@ namespace ConsoleUI
             Console.WriteLine("Drone {0} has Picked Up the Package {1}", drone.Id, parcel.Id);
         }
 
-        private static void DroneForPackage(IDAL.IDal DO)
+        private static void DroneForPackage(DalApi.IDal DO)
         {
             {
                 Console.WriteLine("\nEnter Package ID:");
@@ -560,7 +561,7 @@ namespace ConsoleUI
                 {
                     Console.WriteLine("Error: please insert a number");
                 }
-                IDAL.DO.Parcel parcel;
+                DO.Parcel parcel;
                 try
                 {
                     parcel = DO.GetParcel(Id);
@@ -574,7 +575,7 @@ namespace ConsoleUI
 
                 Console.WriteLine("Enter Drone's ID:");
                 Id = int.Parse(Console.ReadLine());
-                IDAL.DO.Drone drone;
+                DO.Drone drone;
                 try
                 {
                     drone = DO.GetDrone(Id);
@@ -599,7 +600,7 @@ namespace ConsoleUI
             }
         }
 
-        private static void AddParcel(IDAL.IDal DO)
+        private static void AddParcel(DalApi.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -622,7 +623,7 @@ namespace ConsoleUI
 
             Console.WriteLine("Please Enter a number for PackageWight:   Light = 0, Intermediate = 1, Heavy = 2 ");
             int num = int.Parse(Console.ReadLine());
-            IDAL.DO.WeightCategories PackageWight = (WeightCategories) num;
+            DO.WeightCategories PackageWight = (WeightCategories) num;
 
             if (num < 0 || num > 2)
             {
@@ -633,7 +634,7 @@ namespace ConsoleUI
 
             Console.WriteLine("Please Enter a number for priority:   Regular = 0, Fast = 1, Emergency = 2 ");
             num = int.Parse(Console.ReadLine());
-            IDAL.DO.Priorities priority = (Priorities)num;
+            DO.Priorities priority = (Priorities)num;
 
             if (num < 0 || num>2)
             {
@@ -655,7 +656,7 @@ namespace ConsoleUI
             Console.WriteLine("Package Added!");
         }
 
-        private static void AddBaseStation(IDAL.IDal DO) 
+        private static void AddBaseStation(DalApi.IDal DO) 
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -701,7 +702,7 @@ namespace ConsoleUI
             Console.WriteLine("BaseStation Added!");
         }
 
-        private static void AddCustomer(IDAL.IDal DO)
+        private static void AddCustomer(DalApi.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -746,7 +747,7 @@ namespace ConsoleUI
             Console.WriteLine("Customer Added!");
         }
 
-        private static void AddDrone(IDAL.IDal DO)
+        private static void AddDrone(DalApi.IDal DO)
         {
             Console.WriteLine("Please Enter New ID: ");
             int Id = int.Parse(Console.ReadLine());
@@ -766,7 +767,7 @@ namespace ConsoleUI
 
             Console.WriteLine("Please Enter number for MaxWeight: Light = 0, Intermediate = 1,  Heavy = 2 ");
             int max = int.Parse(Console.ReadLine());
-            IDAL.DO.WeightCategories MaxWeight = (WeightCategories)max;
+            DO.WeightCategories MaxWeight = (WeightCategories)max;
 
             if(max<0 || max>2)
             {
@@ -786,13 +787,13 @@ namespace ConsoleUI
             Console.WriteLine("Drone Added!");
         }
 
-        static void PrintAvailibleStations(IDAL.IDal DO)
+        static void PrintAvailibleStations(DalApi.IDal DO)
         {
             int ACS = 0; //Availible Charge Slots
-            foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+            foreach (DO.BaseStation baseStation in DO.GetAllBaseStations())
             {
                 ACS = baseStation.ChargeSlots;
-                foreach (IDAL.DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
+                foreach (DO.DroneCharge droneCharge in DO.GetAllDroneCharges())
                 {
                     if (droneCharge.BaseStationId == baseStation.Id)
                         ACS -= 1;
@@ -806,9 +807,9 @@ namespace ConsoleUI
             }
         }
 
-        static void PrintBaseStations(IDAL.IDal DO)
+        static void PrintBaseStations(DalApi.IDal DO)
         {
-            foreach (IDAL.DO.BaseStation baseStation in DO.GetAllBaseStations())
+            foreach (DO.BaseStation baseStation in DO.GetAllBaseStations())
             {
                 Console.WriteLine(baseStation + "\n");
             }

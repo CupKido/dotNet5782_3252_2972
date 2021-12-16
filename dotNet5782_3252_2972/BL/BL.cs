@@ -8,7 +8,7 @@ namespace BLobject
     public partial class BL : IBL.IBL
     {
 
-        public IDAL.IDal dal; //with dal we have access to data source
+        public DalApi.IDal dal; //with dal we have access to data source
         List<DroneToList> BLDrones = new List<DroneToList>();
         public Double AvailbleElec { get; set; }
         public Double LightElec { get; set; }
@@ -30,17 +30,17 @@ namespace BLobject
             IntermediateElec = arr[2];
             HeavyElec = arr[3];
             ChargePerHours = arr[4];
-            List<IDAL.DO.Customer> SatisfiedCustomers = new List<IDAL.DO.Customer>();
-            List<IDAL.DO.Drone> DalDronesList = dal.GetAllDrones().ToList();
+            List<DO.Customer> SatisfiedCustomers = new List<DO.Customer>();
+            List<DO.Drone> DalDronesList = dal.GetAllDrones().ToList();
 
             Random r = new Random();
 
             //if in delivery
-            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (DO.Parcel p in dal.GetAllParcels())
             {
                 if (p.DroneId != 0)
                 {
-                    IDAL.DO.Drone PDrone = dal.GetDrone(p.DroneId);
+                    DO.Drone PDrone = dal.GetDrone(p.DroneId);
                     if (p.Delivered == null)
                     {
 
@@ -52,8 +52,8 @@ namespace BLobject
                         newD.Model = PDrone.Model;
                         newD.CarriedParcelId = p.Id;
 
-                        IDAL.DO.Customer sender = dal.GetCustomer(p.SenderId);
-                        IDAL.DO.Customer target = dal.GetCustomer(p.TargetId);
+                        DO.Customer sender = dal.GetCustomer(p.SenderId);
+                        DO.Customer target = dal.GetCustomer(p.TargetId);
 
                         if (p.PickedUp == null)
                         {
@@ -103,7 +103,7 @@ namespace BLobject
             }
 
             //if not in delivery
-            foreach (IDAL.DO.Drone d in DalDronesList)
+            foreach (DO.Drone d in DalDronesList)
             {
                 DroneToList newD = new DroneToList();
                 newD.Id = d.Id;
@@ -116,7 +116,7 @@ namespace BLobject
                             newD.Status = DroneStatuses.Availible;
                             if (SatisfiedCustomers.Count != 0)
                             {
-                                IDAL.DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
+                                DO.Customer SC = SatisfiedCustomers[r.Next(SatisfiedCustomers.Count)];
                                 BaseStation bs = closestBaseStation(SC.Longitude, SC.Latitude);
                                 double percentToStation = getDistanceFromLatLonInKm(SC.Latitude, SC.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude) / (double)AvailbleElec;
                                 if (percentToStation >= 100)
@@ -134,7 +134,7 @@ namespace BLobject
                             {
                                 if (dal.GetAllBaseStations().ToList().Count != 0)
                                 {
-                                    IDAL.DO.BaseStation randomBS = dal.GetAllBaseStations().ToList()[r.Next(dal.GetAllBaseStations().ToList().Count)];
+                                    DO.BaseStation randomBS = dal.GetAllBaseStations().ToList()[r.Next(dal.GetAllBaseStations().ToList().Count)];
                                     newD.CurrentLocation = new Location()
                                     {
                                         Latitude = randomBS.Latitude,
@@ -196,7 +196,7 @@ namespace BLobject
 
             List<BaseStation> availibleStation = new List<BaseStation>();
 
-            foreach (IDAL.DO.BaseStation baseStation in dal.GetAllBaseStations())
+            foreach (DO.BaseStation baseStation in dal.GetAllBaseStations())
             {
                 if (getAvailibleSlotsForBaseStation(baseStation) != 0)
                 {
@@ -221,7 +221,7 @@ namespace BLobject
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
         {
             int ACS = baseStation.ChargeSlots;
-            foreach (IDAL.DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
+            foreach (DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
             {
                 if (droneCharge.BaseStationId == baseStation.Id)
                     ACS -= 1;
@@ -229,10 +229,10 @@ namespace BLobject
             return ACS;
         } //returns amount of availible slots in station
 
-        private int getAvailibleSlotsForBaseStation(IDAL.DO.BaseStation baseStation)
+        private int getAvailibleSlotsForBaseStation(DO.BaseStation baseStation)
         {
             int ACS = baseStation.ChargeSlots;
-            foreach (IDAL.DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
+            foreach (DO.DroneCharge droneCharge in dal.GetAllDroneCharges())
             {
                 if (droneCharge.BaseStationId == baseStation.Id)
                     ACS -= 1;
@@ -243,10 +243,10 @@ namespace BLobject
         private BaseStation closestBaseStation(double longitude, double latitude)
         {
             //need to throw exception if there are no BaseStation
-            IDAL.DO.BaseStation closest = dal.GetAllBaseStations().ToList()[0];
+            DO.BaseStation closest = dal.GetAllBaseStations().ToList()[0];
             double Mindistance = getDistanceFromLatLonIncoords(latitude, longitude, closest.Latitude, closest.Longitude);
             double currentDis;
-            foreach (IDAL.DO.BaseStation bs in dal.GetAllBaseStations())
+            foreach (DO.BaseStation bs in dal.GetAllBaseStations())
             {
                 currentDis = getDistanceFromLatLonIncoords(latitude, longitude, bs.Latitude, bs.Longitude);
                 if (currentDis < Mindistance)
@@ -307,7 +307,7 @@ namespace BLobject
             {
                 dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
             }
-            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            catch (DO.ItemAlreadyExistsException ex)
             {
                 throw;
             }
@@ -316,7 +316,7 @@ namespace BLobject
 
         public IEnumerable<BaseStationToList> GetAllBaseStations()
         {
-            List<BaseStationToList> AllBaseStations = (from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+            List<BaseStationToList> AllBaseStations = (from DO.BaseStation bs in dal.GetAllBaseStations()
                                                        let ACS = getAvailibleSlotsForBaseStation(bs)
                                                        select new BaseStationToList()
                                                        {
@@ -331,7 +331,7 @@ namespace BLobject
 
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
         {
-            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+            return from DO.BaseStation bs in dal.GetAllBaseStations()
                    where predicate(GetBaseStation(bs.Id))
                    let ACS = getAvailibleSlotsForBaseStation(bs)
                    select new BaseStationToList()
@@ -346,7 +346,7 @@ namespace BLobject
 
         public BaseStation GetBaseStation(int Id)
         {
-            IDAL.DO.BaseStation bs;
+            DO.BaseStation bs;
             try
             {
                 bs = dal.GetBaseStation(Id);
@@ -364,7 +364,7 @@ namespace BLobject
 
                 };
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw;
             }
@@ -372,12 +372,12 @@ namespace BLobject
 
         public void UpdateBaseStation(int Id, string Name, int? ChargeSlots)
         {
-            IDAL.DO.BaseStation lastBS;
+            DO.BaseStation lastBS;
             try
             {
                 lastBS = dal.GetBaseStation(Id);
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Base Station with specified ID was not found", ex);
             }
@@ -404,9 +404,9 @@ namespace BLobject
             dal.SetBaseStation(lastBS);
         }
 
-        private IEnumerable<DroneInCharge> GetDronesInBaseStation(IDAL.DO.BaseStation bs)
+        private IEnumerable<DroneInCharge> GetDronesInBaseStation(DO.BaseStation bs)
         {
-            return from IDAL.DO.DroneCharge DC in dal.GetAllDroneCharges()
+            return from DO.DroneCharge DC in dal.GetAllDroneCharges()
                    where DC.BaseStationId == bs.Id
                    select new DroneInCharge()
                    {
@@ -417,7 +417,7 @@ namespace BLobject
 
         public IEnumerable<BaseStationToList> GetAvailibleBaseStations()
         {
-            return from IDAL.DO.BaseStation bs in dal.GetAllBaseStations()
+            return from DO.BaseStation bs in dal.GetAllBaseStations()
                    let ACS = getAvailibleSlotsForBaseStation(bs)
                    where ACS > 0
                    select new BaseStationToList()
@@ -451,8 +451,8 @@ namespace BLobject
             try
             {
                 Random r = new Random();
-                IDAL.DO.BaseStation bs = dal.GetBaseStation(stationId);
-                dal.AddDrone(Id, Model, (IDAL.DO.WeightCategories)MaxWeight);
+                DO.BaseStation bs = dal.GetBaseStation(stationId);
+                dal.AddDrone(Id, Model, (DO.WeightCategories)MaxWeight);
                 BLDrones.Add(new DroneToList()
                 {
                     Id = Id,
@@ -469,11 +469,11 @@ namespace BLobject
                 });
                 dal.AddDroneCharge(Id, stationId);
             }
-            catch (IDAL.DO.ItemNotFoundException ex) //base station not found
+            catch (DO.ItemNotFoundException ex) //base station not found
             {
                 throw;
             }
-            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            catch (DO.ItemAlreadyExistsException ex)
             {
                 throw;
             }
@@ -500,14 +500,14 @@ namespace BLobject
 
         public void UpdateDrone(int Id, string Model)
         {
-            IDAL.DO.Drone lastDrone;
+            DO.Drone lastDrone;
 
             try
             {
                 lastDrone = dal.GetDrone(Id);
 
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Drone with specified ID was not found", ex);
             }
@@ -524,7 +524,7 @@ namespace BLobject
             DroneToList d = BLDrones.FirstOrDefault(p => p.Id == Id);
             if (d == null)
             {
-                throw new IDAL.DO.ItemNotFoundException(Id, "Drone Not Found!");
+                throw new DO.ItemNotFoundException(Id, "Drone Not Found!");
             }
             if (d.CarriedParcelId == 0)
             {
@@ -659,7 +659,7 @@ namespace BLobject
             {
                 dal.AddCustomer(Id, Name, Phone, Longitude, Latitude);
             }
-            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            catch (DO.ItemAlreadyExistsException ex)
             {
                 throw new ItemAlreadyExistsException(Id, ex.Message, ex);
             }
@@ -667,7 +667,7 @@ namespace BLobject
 
         public IEnumerable<CustomerToList> GetAllCustomers()
         {
-            List<CustomerToList> CTL = (from IDAL.DO.Customer c in dal.GetAllCustomers()
+            List<CustomerToList> CTL = (from DO.Customer c in dal.GetAllCustomers()
                                         select new CustomerToList()
                                         {
                                             Id = c.Id,
@@ -687,7 +687,7 @@ namespace BLobject
         {
             try
             {
-                IDAL.DO.Customer c = dal.GetCustomer(Id);
+                DO.Customer c = dal.GetCustomer(Id);
 
                 return new Customer()
                 {
@@ -703,7 +703,7 @@ namespace BLobject
                     ToThisCustomer = getToThisCustomer(c),
                 };
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw;
             }
@@ -714,10 +714,10 @@ namespace BLobject
 
         }
 
-        private int getRecieved(IDAL.DO.Customer c)
+        private int getRecieved(DO.Customer c)
         {
             int sum = 0;
-            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (DO.Parcel p in dal.GetAllParcels())
             {
                 if (p.TargetId == c.Id && p.Delivered != null && p.PickedUp != null)
                 {
@@ -727,10 +727,10 @@ namespace BLobject
             return sum;
         }
 
-        private int getOnTheWay(IDAL.DO.Customer c)
+        private int getOnTheWay(DO.Customer c)
         {
             int sum = 0;
-            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (DO.Parcel p in dal.GetAllParcels())
             {
                 if (p.TargetId == c.Id && p.Delivered == null && p.PickedUp != null)
                 {
@@ -740,10 +740,10 @@ namespace BLobject
             return sum;
         }
 
-        private int getSentAndNotDelivered(IDAL.DO.Customer c)
+        private int getSentAndNotDelivered(DO.Customer c)
         {
             int sum = 0;
-            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (DO.Parcel p in dal.GetAllParcels())
             {
                 if (p.SenderId == c.Id && p.Delivered == null && p.PickedUp != null)
                 {
@@ -753,10 +753,10 @@ namespace BLobject
             return sum;
         }
 
-        private int getSentAndDelivered(IDAL.DO.Customer c)
+        private int getSentAndDelivered(DO.Customer c)
         {
             int sum = 0;
-            foreach (IDAL.DO.Parcel p in dal.GetAllParcels())
+            foreach (DO.Parcel p in dal.GetAllParcels())
             {
                 if (p.SenderId == c.Id && p.Delivered != null && p.PickedUp != null)
                 {
@@ -768,14 +768,14 @@ namespace BLobject
 
         public void UpdateCustomer(int Id, string name, string phone)
         {
-            IDAL.DO.Customer lastCustomer;
+            DO.Customer lastCustomer;
 
             try
             {
                 lastCustomer = dal.GetCustomer(Id);
 
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Customer with specified ID was not found", ex);
             }
@@ -794,9 +794,9 @@ namespace BLobject
 
         }
 
-        private List<ParcelInCustomer> getToThisCustomer(IDAL.DO.Customer c)
+        private List<ParcelInCustomer> getToThisCustomer(DO.Customer c)
         {
-            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+            return (from DO.Parcel p in dal.GetAllParcels()
                     where p.TargetId == c.Id
                     let sender = dal.GetCustomer(p.SenderId)
                     select new ParcelInCustomer()
@@ -814,9 +814,9 @@ namespace BLobject
                     }).ToList();
         }
 
-        private List<ParcelInCustomer> getFromeThisCustomer(IDAL.DO.Customer c)
+        private List<ParcelInCustomer> getFromeThisCustomer(DO.Customer c)
         {
-            return (from IDAL.DO.Parcel p in dal.GetAllParcels()
+            return (from DO.Parcel p in dal.GetAllParcels()
                     where p.SenderId == c.Id
                     let target = dal.GetCustomer(p.TargetId)
                     select new ParcelInCustomer()
@@ -840,7 +840,7 @@ namespace BLobject
 
         public IEnumerable<ParcelToList> GetAllParcels()
         {
-            List<ParcelToList> PTL = (from IDAL.DO.Parcel p in dal.GetAllParcels()
+            List<ParcelToList> PTL = (from DO.Parcel p in dal.GetAllParcels()
                                       select new ParcelToList()
                                       {
                                           Id = p.Id,
@@ -854,13 +854,13 @@ namespace BLobject
             return PTL;
         }
 
-        public void AddParcel(int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority)
+        public void AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority)
         {
             try
             {
                 dal.GetCustomer(SenderId);
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Sender could not be found!", ex);
             }
@@ -868,7 +868,7 @@ namespace BLobject
             {
                 dal.GetCustomer(SenderId);
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw new ItemNotFoundException("Sender could not be found!", ex);
             }
@@ -886,7 +886,7 @@ namespace BLobject
                 dal.AddParcel(runningNumForParcels, SenderId, TargetId, PackageWight, priority, created);
                 runningNumForParcels++;
             }
-            catch (IDAL.DO.ItemAlreadyExistsException ex)
+            catch (DO.ItemAlreadyExistsException ex)
             {
                 throw;
             }
@@ -897,7 +897,7 @@ namespace BLobject
         {
             try
             {
-                IDAL.DO.Parcel p = dal.GetParcel(Id);
+                DO.Parcel p = dal.GetParcel(Id);
                 Customer sender = GetCustomer(p.SenderId);
                 Customer target = GetCustomer(p.TargetId);
                 return new Parcel()
@@ -914,7 +914,7 @@ namespace BLobject
                     Delivered = p.Delivered
                 };
             }
-            catch (IDAL.DO.ItemNotFoundException ex)
+            catch (DO.ItemNotFoundException ex)
             {
                 throw;
             }
@@ -926,7 +926,7 @@ namespace BLobject
 
         }
 
-        private ParcelStatuses getParcelStatus(IDAL.DO.Parcel p)
+        private ParcelStatuses getParcelStatus(DO.Parcel p)
         {
             if (p.Delivered != null)
             {
@@ -948,7 +948,7 @@ namespace BLobject
 
         public IEnumerable<ParcelToList> GetParcelsWithNoDrone()
         {
-            List<ParcelToList> PTL = (from IDAL.DO.Parcel p in dal.GetAllParcels()
+            List<ParcelToList> PTL = (from DO.Parcel p in dal.GetAllParcels()
                                       where p.DroneId == 0
                                       select new ParcelToList()
                                       {
@@ -966,7 +966,7 @@ namespace BLobject
         public void AttributionParcelToDrone(int id)
         {
 
-            IDAL.DO.Drone drone = dal.GetDrone(id);
+            DO.Drone drone = dal.GetDrone(id);
             Drone d = GetDrone(id);
             if (d.Status != DroneStatuses.Availible)
             {
@@ -974,10 +974,10 @@ namespace BLobject
             }
 
             bool flag = false;
-            IDAL.DO.Parcel p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
+            DO.Parcel p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
 
 
-            foreach (IDAL.DO.Parcel p2 in dal.GetAllParcels())
+            foreach (DO.Parcel p2 in dal.GetAllParcels())
             {
                 if (((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled != null)
                 {
@@ -1078,7 +1078,7 @@ namespace BLobject
                     throw new StatusIsntInDelivery(Id);
                 }
                 int parcelId = drone.CurrentParcel.Id;
-                IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+                DO.Parcel parcel = dal.GetParcel(parcelId);
                 if (parcel.PickedUp != null)
                 {
                     throw new ParcelAlreadyPickedUp(parcelId);
@@ -1112,7 +1112,7 @@ namespace BLobject
                     throw new StatusIsntInDelivery(Id);
                 }
                 int parcelId = drone.CurrentParcel.Id;
-                IDAL.DO.Parcel parcel = dal.GetParcel(parcelId);
+                DO.Parcel parcel = dal.GetParcel(parcelId);
                 if (parcel.Delivered != null)
                 {
                     throw new ParcelAlreadySupply(parcelId);
