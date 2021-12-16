@@ -16,7 +16,7 @@ namespace BLobject
         public Double HeavyElec { get; set; }
         public Double ChargePerHours { get; set; }
         private static int runningNumForParcels { get; set; }
-        static BL instance=null;
+        internal static BL instance=null;
         private static object locker = new object();
 
         private BL()
