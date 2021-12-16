@@ -9,7 +9,8 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             DateTime d;
-            DalApi.IDal DO = new DalObject.DalObject();
+           // DalApi.IDal DO = new DalObject.DalObject();
+            DalApi.IDal DO = DalFactory.GetDal("List");
             bool flag = true;
             int MenuChoice;
             do

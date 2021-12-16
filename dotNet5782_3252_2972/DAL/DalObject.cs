@@ -7,7 +7,7 @@ using DO;
 
 namespace DalObject
 {
-    public class DalObject : DalApi.IDal
+    internal class DalObject : DalApi.IDal
     {
 
         public DalObject()
