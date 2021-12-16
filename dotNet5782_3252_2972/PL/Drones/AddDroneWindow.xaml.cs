@@ -21,10 +21,10 @@ namespace PL
     /// </summary>
     public partial class AddDroneWindow : Window
     {
-        IBL.IBL myBL;
+        BlApi.IBL myBL;
         bool disallowClosure = true;
 
-        public AddDroneWindow(IBL.IBL bl)
+        public AddDroneWindow(BlApi.IBL bl)
         {
 
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace PL
         }
 
 
-        public AddDroneWindow(IBL.IBL bl, IBL.BO.DroneToList drone)
+        public AddDroneWindow(BlApi.IBL bl, BO.DroneToList drone)
         {
             InitializeComponent();
             myBL = bl;
@@ -71,7 +71,7 @@ namespace PL
 
             try
             {
-                myBL.AddDrone(DroneId, DroneModel_TextBox.Text, (IBL.BO.WeightCategories)MaxWeightCB.SelectedItem, (int)StartingBSCB.SelectedItem);
+                myBL.AddDrone(DroneId, DroneModel_TextBox.Text, (BO.WeightCategories)MaxWeightCB.SelectedItem, (int)StartingBSCB.SelectedItem);
             }
             catch(Exception ex)
             {
@@ -100,12 +100,12 @@ namespace PL
             DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
             DroneParcel_Data.Visibility = Visibility.Collapsed;
 
-            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
-            StartingBSCB.ItemsSource = from IBL.BO.BaseStationToList BS in myBL.GetAllBaseStations()
+            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
+            StartingBSCB.ItemsSource = from BO.BaseStationToList BS in myBL.GetAllBaseStations()
                                        select BS.Id;
         }
 
-        private void prepareForShow(IBL.BO.DroneToList DTL)
+        private void prepareForShow(BO.DroneToList DTL)
         {
             Width = 420;
             AddDrone_Button.IsEnabled = false;
@@ -113,11 +113,11 @@ namespace PL
             StartingBSCB.Visibility = Visibility.Collapsed;
             StartingBS_TextBlock.Visibility = Visibility.Collapsed;
 
-            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
+            MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
-            IBL.BO.Drone drone = myBL.GetDrone(DTL.Id);
+            BO.Drone drone = myBL.GetDrone(DTL.Id);
 
-            IBL.BO.DroneStatuses status = drone.Status;
+            BO.DroneStatuses status = drone.Status;
             //int parcelId = drone.CurrentParcel.Id;
            // IBL.BO.Parcel p = myBL.GetParcel(parcelId);
             
@@ -138,7 +138,7 @@ namespace PL
             if ((int)status == 2)
             {
                 int parcelId = drone.CurrentParcel.Id;
-                IBL.BO.Parcel p = myBL.GetParcel(parcelId);
+                BO.Parcel p = myBL.GetParcel(parcelId);
                 TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
                 DisCharge_Button.Visibility = Visibility.Collapsed;
                 Attribution_Button.Visibility = Visibility.Collapsed;

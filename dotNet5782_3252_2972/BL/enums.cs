@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IBL.BO
+namespace BO
 {
     public enum WeightCategories { Light, Intermediate, Heavy }
     public enum DroneStatuses { Availible, Maintenance, InDelivery }

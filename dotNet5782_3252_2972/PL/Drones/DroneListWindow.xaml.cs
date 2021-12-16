@@ -21,17 +21,17 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
-        IBL.IBL myBL;
+        BlApi.IBL myBL;
         bool disallowClosure = true;
 
-        public DroneListWindow(IBL.IBL bl)
+        public DroneListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
             myBL = bl;
             resetDronesList();
             resetComboBoxes();
-            MaxWeightBox.ItemsSource = Enum.GetValues(typeof(IBL.BO.WeightCategories));
-            DroneStatusBox.ItemsSource = Enum.GetValues(typeof(IBL.BO.DroneStatuses));
+            MaxWeightBox.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
+            DroneStatusBox.ItemsSource = Enum.GetValues(typeof(BO.DroneStatuses));
         }
 
         private void setMaxWeight_select(object sender, SelectionChangedEventArgs e)
@@ -82,7 +82,7 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL, (IBL.BO.DroneToList)DroneList.SelectedItem);
+            AddDroneWindow ADW = new AddDroneWindow(myBL, (BO.DroneToList)DroneList.SelectedItem);
             ADW.Show();
             ADW.Closed += (s, e) =>
             {
@@ -96,14 +96,14 @@ namespace PL
             DroneList.ItemsSource = myBL.GetAllDrones();
             if (DroneStatusBox.SelectedIndex >= 0)
             {
-                IBL.BO.DroneStatuses selectedStatus = (IBL.BO.DroneStatuses)DroneStatusBox.SelectedItem;
-                DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
+                BO.DroneStatuses selectedStatus = (BO.DroneStatuses)DroneStatusBox.SelectedItem;
+                DroneList.ItemsSource = ((IEnumerable<BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
             }
 
             if (MaxWeightBox.SelectedIndex >= 0)
             {
-                IBL.BO.WeightCategories selectedWeight = (IBL.BO.WeightCategories)MaxWeightBox.SelectedItem;
-                DroneList.ItemsSource = ((IEnumerable<IBL.BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
+                BO.WeightCategories selectedWeight = (BO.WeightCategories)MaxWeightBox.SelectedItem;
+                DroneList.ItemsSource = ((IEnumerable<BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
             }
         }
        

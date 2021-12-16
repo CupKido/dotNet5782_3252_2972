@@ -1,4 +1,4 @@
-﻿using IBL.BO;
+﻿using BO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using DAL;
 
 namespace BLobject
 {
-    public partial class BL : IBL.IBL
+    public partial class BL : BlApi.IBL // IBL.IBL
     {
 
         public DalApi.IDal dal; //with dal we have access to data source
@@ -651,7 +651,7 @@ namespace BLobject
         {
             if (Id < 1)
             {
-                throw new IBL.BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
+                throw new BO.NegetiveNumberException(Id, "Id can not be negative number or zero");
             }
             if (Phone.Length != 10)
             {

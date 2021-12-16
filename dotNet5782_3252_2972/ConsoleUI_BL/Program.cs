@@ -1,6 +1,6 @@
 ﻿using System;
 using BLobject;
-using IBL.BO;
+using BO;
 using System.Linq;
 
 namespace ConsoleUI_BL
@@ -10,7 +10,7 @@ namespace ConsoleUI_BL
         static void Main(string[] args)
         {
             //IBL.IBL myBL = new BLobject.BL();
-            IBL.IBL myBL = BLobject.BL.GetInstance();
+            BlApi.IBL myBL = BLobject.BL.GetInstance();
             bool Exit = false;
             int MenuChoice;
 
@@ -250,7 +250,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void printUnassociatedPackages(IBL.IBL myBL)
+        private static void printUnassociatedPackages(BlApi.IBL myBL)
         {
             foreach(ParcelToList ptl in myBL.GetParcelsWithNoDrone())
             {
@@ -259,7 +259,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void sendDroneToCharging(IBL.IBL myBL)
+        private static void sendDroneToCharging(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -277,7 +277,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void DisChargeDrone(IBL.IBL myBL)
+        private static void DisChargeDrone(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -301,7 +301,7 @@ namespace ConsoleUI_BL
             }
 
         }
-        private static void updateCustomer(IBL.IBL myBL)
+        private static void updateCustomer(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -329,7 +329,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void updateBaseStation(IBL.IBL myBL)
+        private static void updateBaseStation(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -368,7 +368,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void updateDronePodel(IBL.IBL myBL)
+        private static void updateDronePodel(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -390,7 +390,7 @@ namespace ConsoleUI_BL
             
         }
 
-        private static void AddCustomer(IBL.IBL myBL)
+        private static void AddCustomer(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -431,7 +431,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void printParcels(IBL.IBL myBL)
+        private static void printParcels(BlApi.IBL myBL)
         {
             foreach (ParcelToList p in myBL.GetAllParcels())
             {
@@ -440,7 +440,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void PrintParcel(IBL.IBL myBL)
+        private static void PrintParcel(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -457,7 +457,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void PrintCustomer(IBL.IBL myBL)
+        private static void PrintCustomer(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -474,7 +474,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void printCustomers(IBL.IBL myBL)
+        private static void printCustomers(BlApi.IBL myBL)
         {
             foreach(CustomerToList c in myBL.GetAllCustomers())
             {
@@ -483,7 +483,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void PrintDrone(IBL.IBL myBL)
+        private static void PrintDrone(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -499,7 +499,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void PrintDrones(IBL.IBL myBL)
+        private static void PrintDrones(BlApi.IBL myBL)
         {
             foreach(DroneToList d in myBL.GetAllDrones())
             {
@@ -508,7 +508,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void AddDrone(IBL.IBL myBL)
+        private static void AddDrone(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -541,7 +541,7 @@ namespace ConsoleUI_BL
             
         }
 
-        private static void PrintAvailibleBaseStations(IBL.IBL myBL)
+        private static void PrintAvailibleBaseStations(BlApi.IBL myBL)
         {
             //foreach(BaseStationToList bs in myBL.GetAllBaseStationsBy(p => p.DroneInChargesList.Count < p.ChargeSlots))
             //{
@@ -556,7 +556,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void PrintBaseStation(IBL.IBL myBL)
+        private static void PrintBaseStation(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -574,7 +574,7 @@ namespace ConsoleUI_BL
 
         }
 
-        private static void PrintBaseStations(IBL.IBL myBL)
+        private static void PrintBaseStations(BlApi.IBL myBL)
         {
             foreach(BaseStationToList bs in myBL.GetAllBaseStations())
             {
@@ -583,7 +583,7 @@ namespace ConsoleUI_BL
             Console.WriteLine("\n");
         }
 
-        private static void AddBaseStation(IBL.IBL myBL)
+        private static void AddBaseStation(BlApi.IBL myBL)
         {
             int BSId;
             String BSName;
@@ -621,7 +621,7 @@ namespace ConsoleUI_BL
                 Console.WriteLine(ex);
             }
         }
-        private static void AddParcel(IBL.IBL myBL)
+        private static void AddParcel(BlApi.IBL myBL)
         {
             
             int BSSenderId;
@@ -662,7 +662,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        private static void AttributionParcelToDrone(IBL.IBL myBL)
+        private static void AttributionParcelToDrone(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -681,7 +681,7 @@ namespace ConsoleUI_BL
 
         }
 
-        private static void PickUpParcelByDrone(IBL.IBL myBL)
+        private static void PickUpParcelByDrone(BlApi.IBL myBL)
         {
             int Id;
             do
@@ -698,7 +698,7 @@ namespace ConsoleUI_BL
 
             }
         }
-         private static void SupplyParcel(IBL.IBL myBL)
+         private static void SupplyParcel(BlApi.IBL myBL)
          {
             int Id;
             do

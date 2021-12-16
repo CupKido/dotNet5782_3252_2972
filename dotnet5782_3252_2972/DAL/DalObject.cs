@@ -3,16 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IDAL.DO;
+using DO;
+using DAL;
 
 namespace DalObject
 {
-    public class DalObject : IDAL.IDal
+    internal class DalObject : DalApi.IDal
     {
-
-        public DalObject()
+        internal static DalObject instance = null;
+        private static object locker = new object();
+        private DalObject()
         {
             DataSource.Initialize();
+        }
+        public static DalObject GetInstance()
+        {
+
+            if (instance == null)
+            {
+                lock (locker)
+                {
+                    if (instance == null)
+                    {
+                        instance = new DalObject();
+                    }
+                }
+            }
+            return instance;
         }
 
         #region Customers
@@ -184,7 +201,7 @@ namespace DalObject
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, IDAL.DO.WeightCategories PackageWight, IDAL.DO.Priorities priority, DateTime created)
+        public void AddParcel(int Id, int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created)
         {
             try
             {
@@ -242,7 +259,7 @@ namespace DalObject
                    select p;
         }
 
-        public IDAL.DO.Parcel GetParcel(int Id)
+        public DO.Parcel GetParcel(int Id)
         {
             foreach (Parcel parcel in DataSource.Parcels)
             {
@@ -323,7 +340,7 @@ namespace DalObject
                    select b;
         }
 
-        public IDAL.DO.BaseStation GetBaseStation(int Id)
+        public DO.BaseStation GetBaseStation(int Id)
         {
             foreach (BaseStation baseStation in DataSource.BaseStations)
             {
