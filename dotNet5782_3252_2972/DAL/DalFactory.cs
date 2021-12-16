@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DO
+namespace DAL
 {
     public static class DalFactory
     {
@@ -13,7 +13,7 @@ namespace DO
             
             switch(typeDl)
             {
-                case "List": return new DalObject.DalObject(); // DalApi.IDal.instance;
+                case "List": return DalObject.DalObject.GetInstance(); // DalApi.IDal.instance;
                 // case "XML":return DLXML.instance;
                 default: return null;
             }

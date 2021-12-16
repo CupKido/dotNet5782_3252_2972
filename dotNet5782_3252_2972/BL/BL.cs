@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DAL;
+
 
 namespace BLobject
 {
@@ -21,7 +23,7 @@ namespace BLobject
 
         private BL()
         {
-            dal = new DalObject.DalObject();
+            dal = DalFactory.GetDal("List"); 
 
             runningNumForParcels = dal.GetAllParcels().Count() + 1;
             double[] arr = dal.AskForElectricity();

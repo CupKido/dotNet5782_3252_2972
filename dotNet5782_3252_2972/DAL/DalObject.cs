@@ -4,15 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DO;
+using DAL;
 
 namespace DalObject
 {
     internal class DalObject : DalApi.IDal
     {
-
-        public DalObject()
+        internal static DalObject instance = null;
+        private static object locker = new object();
+        private DalObject()
         {
             DataSource.Initialize();
+        }
+        public static DalObject GetInstance()
+        {
+
+            if (instance == null)
+            {
+                lock (locker)
+                {
+                    if (instance == null)
+                    {
+                        instance = new DalObject();
+                    }
+                }
+            }
+            return instance;
         }
 
         #region Customers
