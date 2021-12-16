@@ -16,7 +16,10 @@ namespace BLobject
         public Double HeavyElec { get; set; }
         public Double ChargePerHours { get; set; }
         private static int runningNumForParcels { get; set; }
-        public BL()
+        static BL instance=null;
+        private static object locker = new object();
+
+        private BL()
         {
             dal = new DalObject.DalObject();
 
@@ -172,6 +175,22 @@ namespace BLobject
 
         }
 
+         public static BL GetInstance()
+        {
+         
+            if (instance == null)
+            {
+                lock (locker)
+                {
+                    if (instance == null)
+                    {
+                        instance = new BL();
+                    }
+                }
+            }
+            return instance;
+        }
+
         private void sendToMaitenance(DroneToList newD)
         {
 
@@ -198,7 +217,7 @@ namespace BLobject
             dal.AddDroneCharge(newD.Id, bs.Id);
 
         }
-
+       
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
         {
             int ACS = baseStation.ChargeSlots;

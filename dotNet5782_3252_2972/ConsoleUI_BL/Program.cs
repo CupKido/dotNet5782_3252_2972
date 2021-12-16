@@ -9,7 +9,8 @@ namespace ConsoleUI_BL
     {
         static void Main(string[] args)
         {
-            IBL.IBL myBL = new BLobject.BL();
+            //IBL.IBL myBL = new BLobject.BL();
+            IBL.IBL myBL = BLobject.BL.GetInstance();
             bool Exit = false;
             int MenuChoice;
 
