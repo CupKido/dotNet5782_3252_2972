@@ -319,17 +319,16 @@ namespace BLobject
 
         public IEnumerable<BaseStationToList> GetAllBaseStations()
         {
-            List<BaseStationToList> AllBaseStations = (from DO.BaseStation bs in dal.GetAllBaseStations()
-                                                       let ACS = getAvailibleSlotsForBaseStation(bs)
-                                                       select new BaseStationToList()
-                                                       {
-                                                           Id = bs.Id,
-                                                           Name = bs.Name,
-                                                           ChargeSlotsAvailible = ACS,
-                                                           ChargeSlotsTaken = bs.ChargeSlots - ACS
-                                                       }).ToList();
-            AllBaseStations.Sort();
-            return AllBaseStations;
+            return (from DO.BaseStation bs in dal.GetAllBaseStations()
+                    let ACS = getAvailibleSlotsForBaseStation(bs)
+                    select new BaseStationToList()
+                    {
+                        Id = bs.Id,
+                        Name = bs.Name,
+                        ChargeSlotsAvailible = ACS,
+                        ChargeSlotsTaken = bs.ChargeSlots - ACS
+                    }).OrderBy(BSTL => BSTL.Id);
+           
         }
 
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
@@ -468,7 +467,7 @@ namespace BLobject
                         Latitude = bs.Latitude,
                         Longitude = bs.Longitude
                     },
-                    CarriedParcelId = 0
+                    CarriedParcelId = null
                 });
                 dal.AddDroneCharge(Id, stationId);
             }
@@ -529,7 +528,7 @@ namespace BLobject
             {
                 throw new DO.ItemNotFoundException(Id, "Drone Not Found!");
             }
-            if (d.CarriedParcelId == 0)
+            if (d.CarriedParcelId == null)
             {
                 return new Drone()
                 {
@@ -542,7 +541,7 @@ namespace BLobject
                 };
             }
 
-            Parcel p = GetParcel(d.CarriedParcelId);
+            Parcel p = GetParcel((int)d.CarriedParcelId);
             Customer sender = GetCustomer(p.Sender.Id);
             Customer target = GetCustomer(p.Target.Id);
             return new Drone()
@@ -670,7 +669,7 @@ namespace BLobject
 
         public IEnumerable<CustomerToList> GetAllCustomers()
         {
-            List<CustomerToList> CTL = (from DO.Customer c in dal.GetAllCustomers()
+            return (from DO.Customer c in dal.GetAllCustomers()
                                         select new CustomerToList()
                                         {
                                             Id = c.Id,
@@ -681,9 +680,8 @@ namespace BLobject
                                             OnTheWay = getOnTheWay(c),
                                             Recieved = getRecieved(c)
                                             //need to create private funcs for others params
-                                        }).ToList();
-            CTL.Sort();
-            return CTL;
+                                        }).OrderBy(CTL => CTL.Id);
+            
         }
 
         public Customer GetCustomer(int Id)
@@ -843,7 +841,7 @@ namespace BLobject
 
         public IEnumerable<ParcelToList> GetAllParcels()
         {
-            List<ParcelToList> PTL = (from DO.Parcel p in dal.GetAllParcels()
+            return (from DO.Parcel p in dal.GetAllParcels()
                                       select new ParcelToList()
                                       {
                                           Id = p.Id,
@@ -852,9 +850,8 @@ namespace BLobject
                                           Status = getParcelStatus(p),
                                           SenderName = dal.GetCustomer(p.SenderId).Name,
                                           TargetName = dal.GetCustomer(p.TargetId).Name,
-                                      }).ToList();
-            PTL.Sort();
-            return PTL;
+                                      }).OrderBy(PTL => PTL.Id);
+           
         }
 
         public void AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority)

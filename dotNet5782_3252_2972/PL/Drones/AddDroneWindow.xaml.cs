@@ -23,7 +23,7 @@ namespace PL
     {
         BlApi.IBL myBL;
         bool disallowClosure = true;
-
+        
         public AddDroneWindow(BlApi.IBL bl)
         {
 
@@ -44,6 +44,7 @@ namespace PL
 
         private void AddDrone_click(object sender, RoutedEventArgs e)
         {
+            
             int DroneId;
             if(!int.TryParse(DroneId_TextBox.Text, out DroneId))
             {
@@ -84,21 +85,22 @@ namespace PL
 
         private void prepareForAddition()
         {
+            MainGrid.DataContext = false;
             Width = 270;
             AddDrone_Button.Visibility = Visibility.Visible;
-            Attribution_Button.Visibility = Visibility.Collapsed;
-            PickUp_Button.Visibility = Visibility.Collapsed;
-            Supply_Button.Visibility = Visibility.Collapsed;
-            Update_Button.Visibility = Visibility.Collapsed;
+            //Attribution_Button.Visibility = Visibility.Collapsed;
+            //PickUp_Button.Visibility = Visibility.Collapsed;
+            //Supply_Button.Visibility = Visibility.Collapsed;
+            //Update_Button.Visibility = Visibility.Collapsed;
             Charge_Button.Visibility = Visibility.Collapsed;
             TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
             DisCharge_Button.Visibility = Visibility.Collapsed;
-            DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
-            DroneLocation_TextBox.Visibility = Visibility.Collapsed;
-            DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
-            DroneBattery_Data.Visibility = Visibility.Collapsed;
-            DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
-            DroneParcel_Data.Visibility = Visibility.Collapsed;
+            //DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
+            //DroneLocation_TextBox.Visibility = Visibility.Collapsed;
+            //DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
+            //DroneBattery_Data.Visibility = Visibility.Collapsed;
+            //DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
+            //DroneParcel_Data.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
             StartingBSCB.ItemsSource = from BO.BaseStationToList BS in myBL.GetAllBaseStations()
@@ -107,6 +109,7 @@ namespace PL
 
         private void prepareForShow(BO.DroneToList DTL)
         {
+            MainGrid.DataContext = true;
             Width = 420;
             AddDrone_Button.IsEnabled = false;
             AddDrone_Button.Visibility = Visibility.Collapsed;
