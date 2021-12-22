@@ -5,14 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="DroneListWindow" Height="450" Width="800" >
+        Title="DroneListWindow" Height="450" Width="800" 
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" >
     <Border Background="#2265">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,10,0" FontFamily="Arial Narrow" SelectionChanged="DroneList_SelectionChanged" FontWeight="Bold">
+            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,10,0" FontFamily="Arial Narrow" SelectionChanged="DroneList_SelectionChanged" FontWeight="Bold" DataContext="{Binding DronesCollection, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding}" > 
+                <ListView.View>
+                    <GridView>
+
+                        <GridViewColumn Width="40" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="50" Header="Model" DisplayMemberBinding="{Binding Model}"/>
+                        <GridViewColumn Width="60" Header="Max weight" DisplayMemberBinding="{Binding MaxWeight}"/>
+                        <GridViewColumn Width="40" Header="Battery" DisplayMemberBinding="{Binding Battery}"/>
+                        <GridViewColumn Width="60" Header="Status" DisplayMemberBinding="{Binding Status}"/>
+                        <GridViewColumn Width="75" Header="Longitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLong}"/>
+                        <GridViewColumn Width="75" Header="Latitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLati}"/>
+                        <GridViewColumn Width="65" Header="CarriedParcel" DisplayMemberBinding="{Binding CarriedParcelId}"/>
+
+                    </GridView>
+                </ListView.View>
                 <ListView.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black"/>
@@ -20,6 +35,7 @@
                         <GradientStop Color="#FFACC2C5" Offset="0"/>
                     </LinearGradientBrush>
                 </ListView.Background>
+                
             </ListView>
 
             <ComboBox x:Name="MaxWeightBox" SelectionChanged="setMaxWeight_select" IsEditable="True" Text="Select Weight"

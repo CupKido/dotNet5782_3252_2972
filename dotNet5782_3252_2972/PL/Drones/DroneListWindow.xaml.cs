@@ -12,7 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.Collections.ObjectModel;
+using BlApi;
 
 namespace PL
 {
@@ -21,17 +22,34 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
-        BlApi.IBL myBL;
+        BlApi.IBL myBL = BlFactory.GetBL();
         bool disallowClosure = true;
+        private ObservableCollection<BO.DroneToList> _dronesCollection = new ObservableCollection<BO.DroneToList>();
+        public ObservableCollection<BO.DroneToList> DronesCollection
+        {
+            get
+            {
+                return _dronesCollection;
+            }
+            set
+            {
+                _dronesCollection = value;
+                
+            }
+        }
 
-        public DroneListWindow(BlApi.IBL bl)
+
+        public DroneListWindow()
         {
             InitializeComponent();
-            myBL = bl;
             resetDronesList();
-            resetComboBoxes();
+            DroneList.DataContext = _dronesCollection;
             MaxWeightBox.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
             DroneStatusBox.ItemsSource = Enum.GetValues(typeof(BO.DroneStatuses));
+            resetComboBoxes();
+            this.DataContext = this;
+            //DroneList.ItemsSource = DronesCollection;
+
         }
 
         private void setMaxWeight_select(object sender, SelectionChangedEventArgs e)
@@ -56,8 +74,9 @@ namespace PL
             ADW.Show();
             ADW.Closed += (s, e) =>
             {
+                resetDronesList();
                 filterDroneList();
-                DroneList.Items.Refresh();
+                
             };
         }
 
@@ -69,7 +88,16 @@ namespace PL
 
         private void resetDronesList()
         {
-            DroneList.ItemsSource = myBL.GetAllDrones();
+            if(DronesCollection != null)
+            {
+                DronesCollection.Clear();
+            }
+            myBL.GetAllDrones().Distinct().ToList().ForEach(i => DronesCollection.Add(i));
+            //foreach (BO.DroneToList DTL in myBL.GetAllDrones())
+            //{
+            //    DronesCollection.Add(DTL);
+            //}
+            //DronesCollection = new ObservableCollection<BO.DroneToList>(myBL.GetAllDrones());
         }
 
         private void resetComboBoxes()
@@ -83,30 +111,31 @@ namespace PL
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
             AddDroneWindow ADW = new AddDroneWindow(myBL, (BO.DroneToList)DroneList.SelectedItem);
-            ADW.Show();
             ADW.Closed += (s, e) =>
             {
                 filterDroneList();
-                DroneList.Items.Refresh();
+                resetDronesList();
             };
+            ADW.Show();
+            
         }
 
         private void filterDroneList()
         {
-            DroneList.ItemsSource = myBL.GetAllDrones();
+            resetDronesList();
             if (DroneStatusBox.SelectedIndex >= 0)
             {
                 BO.DroneStatuses selectedStatus = (BO.DroneStatuses)DroneStatusBox.SelectedItem;
-                DroneList.ItemsSource = ((IEnumerable<BO.DroneToList>)DroneList.ItemsSource).Where(d => d.Status == selectedStatus);
+                insertToDroneCollection((new ObservableCollection<BO.DroneToList>(DronesCollection.Where(d => d.Status == selectedStatus))));
             }
 
             if (MaxWeightBox.SelectedIndex >= 0)
             {
                 BO.WeightCategories selectedWeight = (BO.WeightCategories)MaxWeightBox.SelectedItem;
-                DroneList.ItemsSource = ((IEnumerable<BO.DroneToList>)DroneList.ItemsSource).Where(d => d.MaxWeight == selectedWeight);
+                insertToDroneCollection(new ObservableCollection<BO.DroneToList>(DronesCollection.Where(d => d.MaxWeight == selectedWeight)));
             }
         }
-       
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -117,5 +146,12 @@ namespace PL
         {
 
         }
+
+        private void insertToDroneCollection(IEnumerable<BO.DroneToList> enu)
+        {
+            DronesCollection.Clear();
+            enu.Distinct().ToList().ForEach(i => DronesCollection.Add(i));
+        }
     }
+    
 }

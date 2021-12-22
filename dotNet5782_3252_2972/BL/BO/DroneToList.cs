@@ -20,7 +20,7 @@ namespace BO
 
         public Location CurrentLocation { get; set; }
 
-        public int CarriedParcelId { get; set; }
+        public int? CarriedParcelId { get; set; }
 
         public int CompareTo(object obj)
         {
