@@ -19,10 +19,6 @@ namespace PL.PO
             set
             {
                 Id = value;
-                if(Id != 0)
-                {
-                    
-                }
             }
         }
         public String Name { get; set; }

@@ -22,17 +22,22 @@ namespace PL
     public partial class MainWindow : Window
     {
         BlApi.IBL myBL = BlFactory.GetBL();
+        
         public MainWindow()
         {
             InitializeComponent();
+            Main.Content = new DroneListPage();
             this.Show();
+            
         }
         public void showDroneList_click(object sender, RoutedEventArgs e)
         {
-           
-            DroneListWindow DLW = new DroneListWindow();
-            DLW.Show();
-            
+            Main.Content = new DroneListPage();
+        }
+
+        private void showCustomersList_click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new CustomersListPage();
         }
 
         private void close_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,19 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using BlApi;
+
 
 namespace PL
 {
-    /// <summary>
-    /// Interaction logic for DroneListWindow.xaml
-    /// </summary>
-    public partial class DroneListWindow : Window
+
+    public partial class DroneListPage : Page
     {
         BlApi.IBL myBL = BlFactory.GetBL();
-        bool disallowClosure = true;
         private ObservableCollection<BO.DroneToList> _dronesCollection = new ObservableCollection<BO.DroneToList>();
         public ObservableCollection<BO.DroneToList> DronesCollection
         {
@@ -34,12 +33,11 @@ namespace PL
             set
             {
                 _dronesCollection = value;
-                
+
             }
         }
 
-
-        public DroneListWindow()
+        public DroneListPage()
         {
             InitializeComponent();
             resetDronesList();
@@ -48,8 +46,6 @@ namespace PL
             DroneStatusBox.ItemsSource = Enum.GetValues(typeof(BO.DroneStatuses));
             resetComboBoxes();
             this.DataContext = this;
-            //DroneList.ItemsSource = DronesCollection;
-
         }
 
         private void setMaxWeight_select(object sender, SelectionChangedEventArgs e)
@@ -76,19 +72,19 @@ namespace PL
             {
                 resetDronesList();
                 filterDroneList();
-                
+
             };
         }
 
-        private void closeWindow_click(object sender, RoutedEventArgs e)
-        {
-            disallowClosure = false;
-            this.Close();
-        }
+        //private void closeWindow_click(object sender, RoutedEventArgs e)
+        //{
+        //    disallowClosure = false;
+        //    this.Close();
+        //}
 
         private void resetDronesList()
         {
-            if(DronesCollection != null)
+            if (DronesCollection != null)
             {
                 DronesCollection.Clear();
             }
@@ -117,7 +113,7 @@ namespace PL
                 resetDronesList();
             };
             ADW.Show();
-            
+
         }
 
         private void filterDroneList()
@@ -136,22 +132,15 @@ namespace PL
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = disallowClosure;
-        }
-
-        private void DroneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
+        //protected override void OnClosing(CancelEventArgs e)
+        //{
+        //    base.OnClosing(e);
+        //    e.Cancel = disallowClosure;
+        //}
         private void insertToDroneCollection(IEnumerable<BO.DroneToList> enu)
         {
             DronesCollection.Clear();
             enu.Distinct().ToList().ForEach(i => DronesCollection.Add(i));
         }
     }
-    
 }

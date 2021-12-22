@@ -36,10 +36,21 @@
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
+                <Button x:Name="ShowCustomers" Content="Customer List"
+                        Click="showCustomersList_click" Margin="161,21,127,-30" Background="#025faf" 
+                        FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="14"
+                        Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" 
+                        RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.ColumnSpan="2" >
 
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
             </Grid>
+            <Frame x:Name="Main" Margin="0,40,0,72" Width="800" Grid.Row="1" NavigationUIVisibility="Hidden"/>
             <Button x:Name="close" Content="x" HorizontalAlignment="Left" Margin="734,16,0,0" VerticalAlignment="Top"
                     Background="#FFEA2121" Width="24" FontWeight="Bold" Click="close_Click" Height="20"/>
+
 
 
         </Grid>
