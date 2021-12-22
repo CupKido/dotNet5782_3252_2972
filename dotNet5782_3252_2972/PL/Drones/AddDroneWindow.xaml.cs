@@ -86,7 +86,7 @@ namespace PL
         private void prepareForAddition()
         {
             MainGrid.DataContext = false;
-            Width = 270;
+            Width = 300;
             AddDrone_Button.Visibility = Visibility.Visible;
             //Attribution_Button.Visibility = Visibility.Collapsed;
             //PickUp_Button.Visibility = Visibility.Collapsed;

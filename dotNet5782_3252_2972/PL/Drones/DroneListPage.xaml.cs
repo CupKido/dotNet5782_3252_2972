@@ -64,6 +64,20 @@ namespace PL
             resetComboBoxes();
         }
 
+        private void deleteSelected_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myBL.DeleteDrone(((BO.DroneToList)DroneList.SelectedItem).Id);
+            }
+            catch
+            {
+                //TODO
+            }
+            resetDronesList();
+            filterDroneList();
+        }
+
         private void addDrone_click(object sender, RoutedEventArgs e)
         {
             AddDroneWindow ADW = new AddDroneWindow(myBL);

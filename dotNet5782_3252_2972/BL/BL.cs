@@ -570,6 +570,20 @@ namespace BLobject
             };
         }
 
+        public void DeleteDrone(int Id)
+        {
+            try
+            {
+                dal.RemoveDrone(Id);
+                BLDrones.RemoveAll(d => d.Id == Id);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
         public void ChargeDrone(int Id)
         {
             Drone droneToCharge;

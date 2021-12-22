@@ -51,11 +51,6 @@ namespace PL
                 CustomersCollection.Clear();
             }
             myBL.GetAllCustomers().Distinct().ToList().ForEach(i => CustomersCollection.Add(i));
-            //foreach (BO.DroneToList DTL in myBL.GetAllDrones())
-            //{
-            //    DronesCollection.Add(DTL);
-            //}
-            //DronesCollection = new ObservableCollection<BO.DroneToList>(myBL.GetAllDrones());
         }
 
         private void CustomerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)

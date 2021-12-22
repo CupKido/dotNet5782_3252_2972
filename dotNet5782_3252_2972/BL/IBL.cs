@@ -92,6 +92,7 @@ namespace BlApi
         /// <param name="Model">the model the new drone will be as</param>
         public void UpdateDrone(int Id, string Model);
 
+        public void DeleteDrone(int Id);
 
         /// <summary>
         /// sends a drone to get charged in the nearest base station

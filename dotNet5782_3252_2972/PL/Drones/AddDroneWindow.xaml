@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL" xmlns:local1="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         mc:Ignorable="d"
         Title="AddDroneWindow" Height="300" Width="500">
-   
+
 
     <Border Background="#FF6B2350"  CornerRadius="10">
         <Grid x:Name="MainGrid" Margin="10,0,0,0" HorizontalAlignment="Left" Width="500" RenderTransformOrigin="0.5,0.5">
@@ -190,7 +190,7 @@
             </Button>
 
             <Button x:Name="Close_Button" Content="close" HorizontalAlignment="Left" 
-                    Margin="240,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    Margin="213,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="Close_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -199,7 +199,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            
+
             <TextBox x:Name="TimeInCharge_TextBox" HorizontalAlignment="Left" Margin="85,0,0,0"  Grid.Row="2"
                  TextWrapping="Wrap" VerticalAlignment="Center" Width="50" Height="22" FontFamily="Bauhaus 93"
                      ToolTip="Enter Time in Charge (Minutes)">
@@ -210,7 +210,7 @@
                     </LinearGradientBrush>
                 </TextBox.Background>
             </TextBox>
-         
+
         </Grid>
     </Border>
 
