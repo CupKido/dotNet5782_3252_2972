@@ -85,7 +85,7 @@ namespace PL
 
         private void prepareForAddition()
         {
-            Addition = false;
+            AdditionChBox.IsChecked = false;
             Width = 300;
             AddDrone_Button.Visibility = Visibility.Visible;
             //Attribution_Button.Visibility = Visibility.Collapsed;
@@ -109,9 +109,9 @@ namespace PL
 
         private void prepareForShow(BO.DroneToList DTL)
         {
-            Addition = true;
+            AdditionChBox.IsChecked = true;
             Width = 420;
-            AddDrone_Button.IsEnabled = false;
+            AddDrone_Button.Visibility = Visibility.Collapsed;
             //AddDrone_Button.Visibility = Visibility.Collapsed;
             //StartingBSCB.Visibility = Visibility.Collapsed;
             //StartingBS_TextBlock.Visibility = Visibility.Collapsed;

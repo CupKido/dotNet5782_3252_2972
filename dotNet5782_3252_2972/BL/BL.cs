@@ -1057,6 +1057,10 @@ namespace BLobject
                 {
                     continue;
                 }
+                if(p1.DroneId != 0)
+                {
+                    continue;
+                }
                 if (d.Battery < distanceP1 / AvailbleElec + distanceDelivery / ELecInDelivery + distanceToBs / AvailbleElec)
                 {
                     flag = true;
@@ -1184,6 +1188,7 @@ namespace BLobject
                 BLdrone.Battery -= distance / ELecInDelivery;
                 BLdrone.CurrentLocation = c.Address;
                 BLdrone.Status = DroneStatuses.Availible;
+                BLdrone.CarriedParcelId = null;
                 BLDrones.Add(BLdrone);
 
                 parcel.Delivered = DateTime.Now;
