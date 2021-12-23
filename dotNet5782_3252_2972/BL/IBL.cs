@@ -49,7 +49,11 @@ namespace BlApi
 
         public IEnumerable<CustomerToList> GetAllCustomers();
 
+
+        public void DeleteCustomer(int Id);
         //public Customer RemoveCustomer(int Id);
+
+
 
         #endregion
 
@@ -156,6 +160,8 @@ namespace BlApi
         /// <param name="Id">the wanted parcel's ID</param>
         /// <returns>A parcel with the specified ID from the data base</returns>
         public Parcel GetParcel(int Id);
+
+        public void DeleteParcel(int Id);
 
         //public Parcel RemoveParcel(int Id);
 

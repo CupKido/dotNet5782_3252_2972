@@ -46,6 +46,7 @@ namespace PL
             DroneStatusBox.ItemsSource = Enum.GetValues(typeof(BO.DroneStatuses));
             resetComboBoxes();
             this.DataContext = this;
+            DeleteDrone.IsEnabled = false;
         }
 
         private void setMaxWeight_select(object sender, SelectionChangedEventArgs e)
@@ -76,6 +77,7 @@ namespace PL
             }
             resetDronesList();
             filterDroneList();
+            DeleteDrone.IsEnabled = false;
         }
 
         private void addDrone_click(object sender, RoutedEventArgs e)
@@ -155,6 +157,11 @@ namespace PL
         {
             DronesCollection.Clear();
             enu.Distinct().ToList().ForEach(i => DronesCollection.Add(i));
+        }
+
+        private void DroneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DeleteDrone.IsEnabled = true;
         }
     }
 }

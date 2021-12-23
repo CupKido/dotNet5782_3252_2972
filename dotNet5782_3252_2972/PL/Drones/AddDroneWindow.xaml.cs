@@ -23,7 +23,7 @@ namespace PL
     {
         BlApi.IBL myBL;
         bool disallowClosure = true;
-        
+        bool Addition;
         public AddDroneWindow(BlApi.IBL bl)
         {
 
@@ -85,16 +85,16 @@ namespace PL
 
         private void prepareForAddition()
         {
-            MainGrid.DataContext = false;
+            Addition = false;
             Width = 300;
             AddDrone_Button.Visibility = Visibility.Visible;
             //Attribution_Button.Visibility = Visibility.Collapsed;
             //PickUp_Button.Visibility = Visibility.Collapsed;
             //Supply_Button.Visibility = Visibility.Collapsed;
             //Update_Button.Visibility = Visibility.Collapsed;
-            Charge_Button.Visibility = Visibility.Collapsed;
-            TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
-            DisCharge_Button.Visibility = Visibility.Collapsed;
+            //Charge_Button.Visibility = Visibility.Collapsed;
+            //TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
+            //DisCharge_Button.Visibility = Visibility.Collapsed;
             //DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
             //DroneLocation_TextBox.Visibility = Visibility.Collapsed;
             //DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
@@ -109,12 +109,12 @@ namespace PL
 
         private void prepareForShow(BO.DroneToList DTL)
         {
-            MainGrid.DataContext = true;
+            Addition = true;
             Width = 420;
             AddDrone_Button.IsEnabled = false;
-            AddDrone_Button.Visibility = Visibility.Collapsed;
-            StartingBSCB.Visibility = Visibility.Collapsed;
-            StartingBS_TextBlock.Visibility = Visibility.Collapsed;
+            //AddDrone_Button.Visibility = Visibility.Collapsed;
+            //StartingBSCB.Visibility = Visibility.Collapsed;
+            //StartingBS_TextBlock.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
@@ -122,7 +122,7 @@ namespace PL
 
             BO.DroneStatuses status = drone.Status;
             //int parcelId = drone.CurrentParcel.Id;
-           // IBL.BO.Parcel p = myBL.GetParcel(parcelId);
+            //IBL.BO.Parcel p = myBL.GetParcel(parcelId);
             
             if ((int)status == 0)
             {
@@ -202,6 +202,20 @@ namespace PL
             disallowClosure = false;
             this.Close();
 
+        }
+
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myBL.DeleteDrone(int.Parse(DroneId_TextBox.Text));
+            }
+            catch
+            {
+                //TODO
+            }
+            disallowClosure = false;
+            this.Close();
         }
 
         private void Charge_Click(object sender, RoutedEventArgs e)

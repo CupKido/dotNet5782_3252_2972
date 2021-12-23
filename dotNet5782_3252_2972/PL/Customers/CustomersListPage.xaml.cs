@@ -42,6 +42,7 @@ namespace PL
             resetCustomersList();
             CustomerList.DataContext = _customersCollection;
             this.DataContext = this;
+            DeleteCustomer.IsEnabled = false;
         }
 
         private void resetCustomersList()
@@ -51,6 +52,20 @@ namespace PL
                 CustomersCollection.Clear();
             }
             myBL.GetAllCustomers().Distinct().ToList().ForEach(i => CustomersCollection.Add(i));
+        }
+
+        private void deleteSelected_click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                myBL.DeleteCustomer(((BO.CustomerToList)CustomerList.SelectedItem).Id);
+            }
+            catch
+            {
+                //TODO
+            }
+            resetCustomersList();
+            DeleteCustomer.IsEnabled = false;
         }
 
         private void CustomerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -66,6 +81,11 @@ namespace PL
         private void addCustomer_click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DeleteCustomer.IsEnabled = true;
         }
 
     }

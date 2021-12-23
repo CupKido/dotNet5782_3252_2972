@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BlApi;
+using PL.BaseStation;
+using PL.Parcel;
 
 namespace PL
 {
@@ -32,18 +34,31 @@ namespace PL
         }
         public void showDroneList_click(object sender, RoutedEventArgs e)
         {
+            Main.Content = null;
             Main.Content = new DroneListPage();
         }
 
         private void showCustomersList_click(object sender, RoutedEventArgs e)
         {
+            Main.Content = null;
             Main.Content = new CustomersListPage();
+        }
+
+        private void showParcelsList_click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = null;
+            Main.Content = new ParcelListPage();
         }
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-        
+
+        private void ShowBaseStations_Click(object sender, RoutedEventArgs e)
+        {
+            Main.Content = null;
+            Main.Content = new BaseStationListPage();
+        }
     }
 }

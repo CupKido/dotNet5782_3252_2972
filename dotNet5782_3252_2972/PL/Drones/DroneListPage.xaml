@@ -15,18 +15,30 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,10,0" FontFamily="Arial Narrow" FontWeight="Bold" DataContext="{Binding DronesCollection, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding}" >
+            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" SelectionChanged="DroneList_SelectionChanged"  Margin="0,0,10,0" FontFamily="Arial Narrow" FontWeight="Bold" DataContext="{Binding DronesCollection, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding}" >
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
 
-                        <GridViewColumn Width="40" Header="ID" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Width="50" Header="Model" DisplayMemberBinding="{Binding Model}"/>
+                        <GridViewColumn Width="35" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="70" Header="Model" DisplayMemberBinding="{Binding Model}"/>
                         <GridViewColumn Width="60" Header="Max weight" DisplayMemberBinding="{Binding MaxWeight}"/>
                         <GridViewColumn Width="40" Header="Battery" DisplayMemberBinding="{Binding Battery}"/>
+                        <GridViewColumn Width="60" Header="BatteryPB">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ProgressBar Value="{Binding Path=BatteryPB, Mode=OneWay}" Minimum="0" Maximum="100"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Width="60" Header="Status" DisplayMemberBinding="{Binding Status}"/>
                         <GridViewColumn Width="75" Header="Longitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLong}"/>
                         <GridViewColumn Width="75" Header="Latitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLati}"/>
-                        <GridViewColumn Width="65" Header="CarriedParcel" DisplayMemberBinding="{Binding CarriedParcelId}"/>
+                        <GridViewColumn Width="70" Header="Carried Parcel" DisplayMemberBinding="{Binding CarriedParcelId}"/>
 
                     </GridView>
                 </ListView.View>

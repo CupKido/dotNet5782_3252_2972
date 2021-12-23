@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace PL.PO
 {
-    public class User
+    class DroneToList
     {
-        public String UserName { get; set; }
-        public int Id { get; set; }
     }
 }

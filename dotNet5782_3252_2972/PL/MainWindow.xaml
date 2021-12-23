@@ -46,6 +46,29 @@
                         <DropShadowEffect/>
                     </Button.Effect>
                 </Button>
+
+                <Button x:Name="ShowParcels" Content="Parcel List"
+                        Click="showParcelsList_click" Margin="78,21,10,-30" Background="#025faf" 
+                        FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="14"
+                        Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" 
+                        RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.Column="1" >
+
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+
+                <Button x:Name="ShowBaseStations" Content="BaseStations List"
+                        Click="ShowBaseStations_Click" Margin="195,21,93,-30" Background="#025faf" 
+                        FontFamily="Showcard Gothic" FontWeight="UltraBold" FontStyle="Italic" FontSize="11"
+                        Foreground="#FF6C1414" BorderBrush="#FF493232" OpacityMask="#FFE59494" 
+                        RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.Column="1" Grid.ColumnSpan="2" >
+
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+
             </Grid>
             <Frame x:Name="Main" Margin="0,40,0,72" Width="800" Grid.Row="1" NavigationUIVisibility="Hidden"/>
             <Button x:Name="close" Content="x" HorizontalAlignment="Left" Margin="734,16,0,0" VerticalAlignment="Top"

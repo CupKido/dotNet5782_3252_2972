@@ -809,6 +809,18 @@ namespace BLobject
 
         }
 
+        public void DeleteCustomer(int Id)
+        {
+            try
+            {
+                dal.RemoveCustomer(Id);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         private List<ParcelInCustomer> getToThisCustomer(DO.Customer c)
         {
             return (from DO.Parcel p in dal.GetAllParcels()
@@ -977,6 +989,31 @@ namespace BLobject
             return PTL;
         }
 
+        public void DeleteParcel(int Id)
+        {
+            try
+            {
+                Parcel p = GetParcel(Id);
+                dal.RemoveParcel(Id);
+                if(p.DroneId != 0)
+                {
+                    DroneToList tempDrone = BLDrones.First(d => d.Id == p.DroneId);
+                    if(tempDrone.Status == DroneStatuses.InDelivery)
+                    {
+                        BLDrones.Remove(tempDrone);
+                        tempDrone.Status = DroneStatuses.Availible;
+                        tempDrone.CarriedParcelId = null;
+                        BLDrones.Add(tempDrone);
+                    }
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void AttributionParcelToDrone(int id)
         {
 
@@ -1116,6 +1153,7 @@ namespace BLobject
 
 
         }
+
         public void SupplyParcel(int Id)
         {
             try

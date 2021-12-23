@@ -144,7 +144,7 @@ namespace PL
 
         private void DroneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            
         }
 
         private void insertToDroneCollection(IEnumerable<BO.DroneToList> enu)
