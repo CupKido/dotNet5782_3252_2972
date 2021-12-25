@@ -9,6 +9,7 @@
 
     <Window.Resources>
         <local:BoolVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:IfNot0VisibilityConverter x:Key="IfNot0ToVisibilityConverter"/>
     </Window.Resources>
 
     <Border Background="#FF6B2350"  CornerRadius="10">
@@ -208,6 +209,18 @@
                     Margin="273,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="delete_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                    >
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Violet"/>
+                        <GradientStop Color="Yellow" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="ShowCarriedParcel_Button" Content="Show Parcel" HorizontalAlignment="Left" 
+                    Margin="330,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
+                    FontWeight="Bold" FontSize="11" Click="ShowCarriedParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
+                    Visibility="{Binding Path=ParcelId, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                     >
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

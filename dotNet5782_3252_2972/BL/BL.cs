@@ -880,7 +880,7 @@ namespace BLobject
            
         }
 
-        public void AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority)
+        public void AddParcel(int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority)
         {
             try
             {
@@ -909,7 +909,7 @@ namespace BLobject
             DateTime created = DateTime.Now;
             try
             {
-                dal.AddParcel(runningNumForParcels, SenderId, TargetId, PackageWight, priority, created);
+                dal.AddParcel(runningNumForParcels, SenderId, TargetId, (DO.WeightCategories)PackageWight, (DO.Priorities)priority, created);
                 runningNumForParcels++;
             }
             catch (DO.ItemAlreadyExistsException ex)

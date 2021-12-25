@@ -304,5 +304,13 @@ namespace PL
             base.OnClosing(e);
             e.Cancel = disallowClosure;
         }
+
+        private void ShowCarriedParcel_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Parcel.ShowParcelWindow SPW = new Parcel.ShowParcelWindow(int.Parse(DroneParcel_Data.Text));
+            SPW.Show();
+            disallowClosure = false;
+            this.Close();
+        }
     }
 }

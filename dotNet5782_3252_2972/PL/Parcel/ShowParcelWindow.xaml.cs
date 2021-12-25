@@ -24,8 +24,9 @@ namespace PL.Parcel
         public ShowParcelWindow()
         {
             InitializeComponent();
-            WeightCB.DataContext = Enum.GetValues(typeof(BO.WeightCategories));
-            PriorityCB.DataContext = Enum.GetValues(typeof(BO.Priorities));
+            this.Width = 270;
+            WeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
+            PriorityCB.ItemsSource = Enum.GetValues(typeof(BO.Priorities));
         }
 
         public ShowParcelWindow(int ParcelId)
@@ -39,7 +40,40 @@ namespace PL.Parcel
 
         private void AddParcel_Button_Click(object sender, RoutedEventArgs e)
         {
+            int SenderId;
+            try
+            {
+                SenderId = int.Parse(SenderId_TextBox.Text);
+            }
+            catch
+            {
+                //TODO
+                return;
+            }
 
+            int TargetId;
+            try
+            {
+                TargetId = int.Parse(TargetId_TextBox.Text);
+            }
+            catch
+            {
+                //TODO
+                return;
+            }
+
+            if (WeightCB.SelectedIndex == -1) return;
+            if (PriorityCB.SelectedIndex == -1) return;
+
+            try
+            {
+            myBL.AddParcel(SenderId, TargetId, (BO.WeightCategories)WeightCB.SelectedItem, (BO.Priorities)PriorityCB.SelectedItem);
+            }
+            catch
+            {
+
+            }
+            this.Close();
         }
     }
 }
