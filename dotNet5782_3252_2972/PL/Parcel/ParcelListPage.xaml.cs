@@ -43,7 +43,6 @@ namespace PL.Parcel
             resetParcelsList();
             ParcelList.DataContext = ParcelsCollection;
             this.DataContext = this;
-            DeleteParcel.IsEnabled = false;
         }
 
         private void resetParcelsList()
@@ -57,7 +56,13 @@ namespace PL.Parcel
 
         private void ParcelList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (ParcelList.SelectedItem == null) return;
+            ShowParcelWindow SPW = new ShowParcelWindow((ParcelList.SelectedItem as BO.ParcelToList).Id);
+            SPW.Closed += (s, e) =>
+            {
+                resetParcelsList();
+            };
+            SPW.Show();
         }
 
         private void ParcelsListReset_Click(object sender, RoutedEventArgs e)
@@ -76,17 +81,18 @@ namespace PL.Parcel
                 //TODO
             }
             resetParcelsList();
-            DeleteParcel.IsEnabled = false;
         }
 
         private void AddParcel_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowParcelWindow SPW = new ShowParcelWindow();
+            SPW.Closed += (s, e) =>
+            {
+                resetParcelsList();
+            };
+            SPW.Show();
         }
 
-        private void ParcelList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DeleteParcel.IsEnabled = true;
-        }
+        
     }
 }

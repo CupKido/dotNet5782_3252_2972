@@ -23,7 +23,7 @@ namespace PL
     {
         BlApi.IBL myBL;
         bool disallowClosure = true;
-        bool Addition;
+
         public AddDroneWindow(BlApi.IBL bl)
         {
 
@@ -88,19 +88,6 @@ namespace PL
             AdditionChBox.IsChecked = false;
             Width = 300;
             AddDrone_Button.Visibility = Visibility.Visible;
-            //Attribution_Button.Visibility = Visibility.Collapsed;
-            //PickUp_Button.Visibility = Visibility.Collapsed;
-            //Supply_Button.Visibility = Visibility.Collapsed;
-            //Update_Button.Visibility = Visibility.Collapsed;
-            //Charge_Button.Visibility = Visibility.Collapsed;
-            //TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
-            //DisCharge_Button.Visibility = Visibility.Collapsed;
-            //DroneLocation_TextBlock.Visibility = Visibility.Collapsed;
-            //DroneLocation_TextBox.Visibility = Visibility.Collapsed;
-            //DroneBattery_TextBlock.Visibility = Visibility.Collapsed;
-            //DroneBattery_Data.Visibility = Visibility.Collapsed;
-            //DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
-            //DroneParcel_Data.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
             StartingBSCB.ItemsSource = from BO.BaseStationToList BS in myBL.GetAllBaseStations()
@@ -112,17 +99,12 @@ namespace PL
             AdditionChBox.IsChecked = true;
             Width = 420;
             AddDrone_Button.Visibility = Visibility.Collapsed;
-            //AddDrone_Button.Visibility = Visibility.Collapsed;
-            //StartingBSCB.Visibility = Visibility.Collapsed;
-            //StartingBS_TextBlock.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
             BO.Drone drone = myBL.GetDrone(DTL.Id);
 
             BO.DroneStatuses status = drone.Status;
-            //int parcelId = drone.CurrentParcel.Id;
-            //IBL.BO.Parcel p = myBL.GetParcel(parcelId);
             
             if ((int)status == 0)
             {

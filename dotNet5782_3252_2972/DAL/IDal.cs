@@ -61,7 +61,7 @@ namespace DalApi
 
         #region Drone Charges
 
-        public void AddDroneCharge(int DroneId, int BaseStationId);
+        public void AddDroneCharge(int DroneId, int BaseStationId, DateTime started);
 
         public DroneCharge GetDroneCharge(int DroneId);
 

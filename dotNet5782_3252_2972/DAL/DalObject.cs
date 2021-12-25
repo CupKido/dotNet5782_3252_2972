@@ -382,7 +382,7 @@ namespace DalObject
 
         #region Drone Charges
 
-        public void AddDroneCharge(int DroneId, int BaseStationId)
+        public void AddDroneCharge(int DroneId, int BaseStationId, DateTime started)
         {
             try
             {
@@ -398,6 +398,7 @@ namespace DalObject
 
             droneCharge.DroneId = DroneId;
             droneCharge.BaseStationId = BaseStationId;
+            droneCharge.Started = started;
 
             DataSource.DroneCharges.Add(droneCharge);
             

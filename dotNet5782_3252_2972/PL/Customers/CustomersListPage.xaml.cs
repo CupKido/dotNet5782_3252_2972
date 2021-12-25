@@ -42,7 +42,6 @@ namespace PL
             resetCustomersList();
             CustomerList.DataContext = _customersCollection;
             this.DataContext = this;
-            DeleteCustomer.IsEnabled = false;
         }
 
         private void resetCustomersList()
@@ -65,7 +64,6 @@ namespace PL
                 //TODO
             }
             resetCustomersList();
-            DeleteCustomer.IsEnabled = false;
         }
 
         private void CustomerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -81,11 +79,6 @@ namespace PL
         private void addCustomer_click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DeleteCustomer.IsEnabled = true;
         }
 
     }

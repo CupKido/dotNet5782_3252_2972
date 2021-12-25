@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
+using System.Windows.Media;
 
 namespace PL
 {
@@ -14,7 +15,7 @@ namespace PL
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if((bool)value == true)
+            if ((bool)value == true)
             {
                 return Visibility.Visible;
             }
@@ -42,6 +43,52 @@ namespace PL
             {
                 return false;
             }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class ColorByPercentageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((Double)value > 70)
+            {
+                return Brushes.Green;
+            }
+            else if ((Double)value > 50)
+            {
+                return Brushes.GreenYellow;
+            }
+            else if ((Double)value > 20)
+            {
+                return Brushes.Yellow;
+            }
+            else if ((Double)value > 10)
+            {
+                return Brushes.Red;
+            }
+            else
+            {
+                return Brushes.DarkRed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
+    internal class IntByEnumConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (int)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

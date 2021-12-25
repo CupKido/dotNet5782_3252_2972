@@ -13,6 +13,8 @@ namespace DO
         public int DroneId { get; set; }
         public int BaseStationId { get; set; }
 
+        public DateTime Started { get; set; }
+
         public override string ToString()
         {
             return base.ToString();

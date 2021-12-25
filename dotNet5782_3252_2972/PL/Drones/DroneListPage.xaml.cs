@@ -159,9 +159,5 @@ namespace PL
             enu.Distinct().ToList().ForEach(i => DronesCollection.Add(i));
         }
 
-        private void DroneList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
     }
 }

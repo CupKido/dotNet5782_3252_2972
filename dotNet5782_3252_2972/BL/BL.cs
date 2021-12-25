@@ -217,7 +217,7 @@ namespace BLobject
                 Latitude = bs.StationLocation.Latitude,
                 Longitude = bs.StationLocation.Longitude
             };
-            dal.AddDroneCharge(newD.Id, bs.Id);
+            dal.AddDroneCharge(newD.Id, bs.Id, DateTime.Now);
 
         }
        
@@ -469,7 +469,7 @@ namespace BLobject
                     },
                     CarriedParcelId = null
                 });
-                dal.AddDroneCharge(Id, stationId);
+                dal.AddDroneCharge(Id, stationId, DateTime.Now);
             }
             catch (DO.ItemNotFoundException ex) //base station not found
             {
@@ -619,7 +619,7 @@ namespace BLobject
             BLDrones.Remove(dToUpdate);
             dToUpdate.Status = DroneStatuses.Maintenance;
             BLDrones.Add(dToUpdate);
-            dal.AddDroneCharge(Id, BS.Id);
+            dal.AddDroneCharge(Id, BS.Id, DateTime.Now);
 
         }
 

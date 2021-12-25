@@ -43,7 +43,6 @@ namespace PL.BaseStation
             resetBaseStationList();
             BaseStationList.DataContext = BaseStationCollection;
             this.DataContext = this;
-            DeleteBaseStation.IsEnabled = false;
         }
 
         private void resetBaseStationList()
@@ -65,14 +64,9 @@ namespace PL.BaseStation
 
         }
 
-        private void BaseStationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DeleteBaseStation.IsEnabled = true;
-        }
-
         private void DeleteBaseStation_Click(object sender, RoutedEventArgs e)
         {
-            DeleteBaseStation.IsEnabled = false;
+            
         }
 
         private void AddBaseStation_Click(object sender, RoutedEventArgs e)

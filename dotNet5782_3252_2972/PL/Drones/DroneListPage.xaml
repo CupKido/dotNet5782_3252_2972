@@ -11,6 +11,7 @@
 
     <Page.Resources>
         <local:AllowDeleteConverter x:Key="AllowToDeleteConverter" />
+        <local:ColorByPercentageConverter x:Key="PercentageToColorConverter" />
     </Page.Resources>
     
     <Border Background="#2265">
@@ -19,7 +20,7 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" SelectionChanged="DroneList_SelectionChanged"  Margin="0,0,10,0" FontFamily="Arial Narrow" FontWeight="Bold" DataContext="{Binding DronesCollection, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding}" >
+            <ListView x:Name="DroneList" MouseDoubleClick="DroneList_Selected" Margin="0,0,10,0" FontFamily="Arial Narrow" FontWeight="Bold" DataContext="{Binding DronesCollection, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding}" >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -28,18 +29,19 @@
                 <ListView.View>
                     <GridView>
 
-                        <GridViewColumn Width="35" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Width="25" Header="ID" DisplayMemberBinding="{Binding Id}"/>
                         <GridViewColumn Width="70" Header="Model" DisplayMemberBinding="{Binding Model}"/>
-                        <GridViewColumn Width="60" Header="Max weight" DisplayMemberBinding="{Binding MaxWeight}"/>
-                        <GridViewColumn Width="40" Header="Battery" DisplayMemberBinding="{Binding Battery, StringFormat=N2}"/>
+                        <GridViewColumn Width="65" Header="Max weight" DisplayMemberBinding="{Binding MaxWeight}"/>
+                        <!--<GridViewColumn Width="40" Header="Battery" DisplayMemberBinding="{Binding Battery, StringFormat=N2}"/>-->
                         <GridViewColumn Width="60" Header="BatteryPB">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ProgressBar Value="{Binding Path=BatteryPB, Mode=OneWay}" Minimum="0" Maximum="100"/>
+                                    <ProgressBar Value="{Binding Path=Battery, Mode=OneWay}" Minimum="0" Maximum="100" Width="55" Height="15" 
+                                                 Foreground="{Binding Path=Battery, Mode=OneWay, Converter={StaticResource PercentageToColorConverter}}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="60" Header="Status" DisplayMemberBinding="{Binding Status}"/>
+                        <GridViewColumn Width="70" Header="Status" DisplayMemberBinding="{Binding Status}"/>
                         <GridViewColumn Width="75" Header="Longitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLong}"/>
                         <GridViewColumn Width="75" Header="Latitude" DisplayMemberBinding="{Binding CurrentLocation.GetInFormLati}"/>
                         <GridViewColumn Width="70" Header="Carried Parcel" DisplayMemberBinding="{Binding CarriedParcelId}"/>
