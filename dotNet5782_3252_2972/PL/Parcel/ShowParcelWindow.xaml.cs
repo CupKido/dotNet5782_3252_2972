@@ -37,7 +37,9 @@ namespace PL.Parcel
             this.DataContext = myBL.GetParcel(ParcelId);
         }
 
-        
+        private void AddParcel_Button_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }
