@@ -99,11 +99,11 @@ namespace PL
             AdditionChBox.IsChecked = true;
             Width = 420;
             AddDrone_Button.Visibility = Visibility.Collapsed;
-
+            
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
             BO.Drone drone = myBL.GetDrone(DTL.Id);
-
+            this.DataContext = drone;
             BO.DroneStatuses status = drone.Status;
             
             if ((int)status == 0)
