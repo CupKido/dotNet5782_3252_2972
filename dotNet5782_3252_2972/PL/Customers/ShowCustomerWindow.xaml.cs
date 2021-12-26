@@ -31,8 +31,10 @@ namespace PL.Customers
         public ShowCustomerWindow(int CustomerId)
         {
             InitializeComponent();
-            this.DataContext = myBL.GetCustomer(CustomerId);
-
+            BO.Customer c = myBL.GetCustomer(CustomerId);
+            this.DataContext = c;
+            ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
+            GoingParcelsList.ItemsSource = c.FromThisCustomer;
         }
 
         public void CloseWindow()

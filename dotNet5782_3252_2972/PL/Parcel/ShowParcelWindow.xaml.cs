@@ -81,7 +81,7 @@ namespace PL.Parcel
             }
             try
             {
-            myBL.AddParcel(SenderId, TargetId, (BO.WeightCategories)WeightCB.SelectedItem, (BO.Priorities)PriorityCB.SelectedItem);
+                ParcelId_TextBox.Text = myBL.AddParcel(SenderId, TargetId, (BO.WeightCategories)WeightCB.SelectedItem, (BO.Priorities)PriorityCB.SelectedItem).ToString();
             }
             catch(Exception ex)
             {
@@ -132,6 +132,20 @@ namespace PL.Parcel
         {
             AddDroneWindow ADW = new AddDroneWindow(int.Parse(DroneId_TextBox.Text));
             ADW.Show();
+            CloseWindow();
+        }
+
+        private void ShowTarget_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Customers.ShowCustomerWindow SCW = new Customers.ShowCustomerWindow(int.Parse(SenderId_TextBox.Text));
+            SCW.Show();
+            CloseWindow();
+        }
+
+        private void ShowSender_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Customers.ShowCustomerWindow SCW = new Customers.ShowCustomerWindow(int.Parse(TargetId_TextBox.Text));
+            SCW.Show();
             CloseWindow();
         }
     }

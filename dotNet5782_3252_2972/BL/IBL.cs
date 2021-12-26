@@ -129,6 +129,8 @@ namespace BlApi
         /// <param name="id"></param>
         public void SupplyParcel(int id);
 
+        public DroneToList TurnDroneToList(Drone drone);
+
         #endregion
 
         #region Parcels
@@ -140,7 +142,7 @@ namespace BlApi
         /// <param name="TargetId">the package reciever ID</param>
         /// <param name="PackageWight">the weight of the package</param>
         /// <param name="priority">how urgent is getting the package to the target</param>
-        public void AddParcel( int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority);
+        public int AddParcel( int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority);
 
         /// <summary>
         /// returns all parcels in data base, as BL parcels
@@ -162,6 +164,8 @@ namespace BlApi
         public Parcel GetParcel(int Id);
 
         public void DeleteParcel(int Id);
+
+        public ParcelToList TurnParcelToList(Parcel parcel);
 
         //public Parcel RemoveParcel(int Id);
 

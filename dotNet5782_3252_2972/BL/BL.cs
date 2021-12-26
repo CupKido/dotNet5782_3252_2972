@@ -454,6 +454,10 @@ namespace BLobject
             {
                 Random r = new Random();
                 DO.BaseStation bs = dal.GetBaseStation(stationId);
+                if(getAvailibleSlotsForBaseStation(GetBaseStation(bs.Id)) <= 0)
+                {
+                    throw new Exception("No Availible slot in Base Station num: " + bs.Id);
+                }
                 dal.AddDrone(Id, Model, (DO.WeightCategories)MaxWeight);
                 BLDrones.Add(new DroneToList()
                 {
@@ -582,6 +586,20 @@ namespace BLobject
                 throw;
             }
 
+        }
+
+        public DroneToList TurnDroneToList(Drone drone)
+        {
+            return new DroneToList()
+            {
+                Id = drone.Id,
+                Battery = drone.Battery,
+                Status = drone.Status,
+                CurrentLocation = drone.CurrentLocation,
+                CarriedParcelId = drone.CurrentParcel.Id,
+                MaxWeight = drone.MaxWeight,
+                Model = drone.Model
+            };
         }
 
         public void ChargeDrone(int Id)
@@ -875,12 +893,12 @@ namespace BLobject
                                           Weight = (WeightCategories)p.Weight,
                                           Status = getParcelStatus(p),
                                           SenderName = dal.GetCustomer(p.SenderId).Name,
-                                          TargetName = dal.GetCustomer(p.TargetId).Name,
+                                          TargetName = dal.GetCustomer(p.TargetId).Name
                                       }).OrderBy(PTL => PTL.Id);
            
         }
 
-        public void AddParcel(int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority)
+        public int AddParcel(int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority)
         {
             try
             {
@@ -907,16 +925,18 @@ namespace BLobject
                 throw new OutOfRangeException((int)priority, "Priority has to be between 1 to 3 only");
             }
             DateTime created = DateTime.Now;
+            int res = 0;
             try
             {
                 dal.AddParcel(runningNumForParcels, SenderId, TargetId, (DO.WeightCategories)PackageWight, (DO.Priorities)priority, created);
+                res = runningNumForParcels;
                 runningNumForParcels++;
             }
             catch (DO.ItemAlreadyExistsException ex)
             {
                 throw;
             }
-
+            return res;
         }
 
         public Parcel GetParcel(int Id)
@@ -953,6 +973,26 @@ namespace BLobject
         }
 
         private ParcelStatuses getParcelStatus(DO.Parcel p)
+        {
+            if (p.Delivered != null)
+            {
+                return ParcelStatuses.Delivered;
+            }
+            else if (p.PickedUp != null)
+            {
+                return ParcelStatuses.PickedUp;
+            }
+            else if (p.scheduled != null)
+            {
+                return ParcelStatuses.Associated;
+            }
+            else
+            {
+                return ParcelStatuses.Created;
+            }
+        }
+
+        private ParcelStatuses getParcelStatus(Parcel p)
         {
             if (p.Delivered != null)
             {
@@ -1012,6 +1052,19 @@ namespace BLobject
             {
                 throw;
             }
+        }
+
+        public ParcelToList TurnParcelToList(Parcel parcel)
+        {
+            return new ParcelToList()
+            {
+                Id = parcel.Id,
+                Priority = (Priorities)parcel.Priority,
+                Weight = (WeightCategories)parcel.Weight,
+                Status = getParcelStatus(parcel),
+                SenderName = dal.GetCustomer(parcel.Sender.Id).Name,
+                TargetName = dal.GetCustomer(parcel.Target.Id).Name
+            };
         }
 
         public void AttributionParcelToDrone(int id)

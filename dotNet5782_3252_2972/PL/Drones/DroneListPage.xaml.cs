@@ -46,6 +46,11 @@ namespace PL
             DroneStatusBox.ItemsSource = Enum.GetValues(typeof(BO.DroneStatuses));
             resetComboBoxes();
             this.DataContext = this;
+            DronesCollection.CollectionChanged += (s, e) =>
+            {
+                DronesCollection.OrderByDescending(d => d.Id);
+            };
+
             
         }
 
@@ -84,12 +89,30 @@ namespace PL
         {
             AddDroneWindow ADW = new AddDroneWindow();
             ADW.Show();
-            ADW.Closed += (s, e) =>
+            ADW.AddDrone_Button.Click += (s, e) =>
             {
-                resetDronesList();
+                int Id;
+                if (!int.TryParse(ADW.DroneId_TextBox.Text, out Id)) return;
+                if (DronesCollection.FirstOrDefault(d=> d.Id == Id) == null)
+                {
+                    try
+                    {
+                    BO.Drone d = myBL.GetDrone(Id);
+                    DronesCollection.Add(myBL.TurnDroneToList(d));
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
                 filterDroneList();
-
             };
+            //ADW.Closed += (s, e) =>
+            //{
+            //    resetDronesList();
+            //    filterDroneList();
+
+            //};
         }
 
         //private void closeWindow_click(object sender, RoutedEventArgs e)
@@ -123,11 +146,18 @@ namespace PL
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
             AddDroneWindow ADW = new AddDroneWindow((DroneList.SelectedItem as BO.DroneToList).Id);
-            ADW.Closed += (s, e) =>
+            ADW.Update_Button.Click += (s, e) =>
             {
-                filterDroneList();
-                resetDronesList();
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
+                DronesCollection.Add(myBL.TurnDroneToList(myBL.GetDrone(Id)));
+                DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
             };
+            //ADW.Closed += (s, e) =>
+            //{
+            //    filterDroneList();
+            //    resetDronesList();
+            //};
             ADW.Show();
 
         }

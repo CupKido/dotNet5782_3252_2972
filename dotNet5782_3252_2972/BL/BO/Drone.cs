@@ -20,7 +20,19 @@ namespace BO
 
         public Location CurrentLocation = new Location();
 
-        public ParcelInDelivery CurrentParcel { get; set; }
+        private ParcelInDelivery currentParcel = new ParcelInDelivery();
+
+        public ParcelInDelivery CurrentParcel
+        {
+            get
+            {
+                return currentParcel;
+            }
+            set
+            {
+                currentParcel = value;
+            }
+        }
 
         public override string ToString()
         {

@@ -58,9 +58,13 @@ namespace PL.Parcel
         {
             if (ParcelList.SelectedItem == null) return;
             ShowParcelWindow SPW = new ShowParcelWindow((ParcelList.SelectedItem as BO.ParcelToList).Id);
-            SPW.Closed += (s, e) =>
+            SPW.CloseWindow_Button.Click += (s, e) =>
             {
                 resetParcelsList();
+            };
+            SPW.DeleteParcel_Button.Click += (s, e) =>
+            {
+                ParcelsCollection.Remove((ParcelList.SelectedItem as BO.ParcelToList));
             };
             SPW.Show();
         }
@@ -72,23 +76,38 @@ namespace PL.Parcel
 
         private void DeleteParcel_Click(object sender, RoutedEventArgs e)
         {
+            
             try
             {
-                myBL.DeleteParcel(((BO.ParcelToList)ParcelList.SelectedItem).Id);
+                if (myBL.GetParcel(((BO.ParcelToList)ParcelList.SelectedItem).Id).DroneId != 0)
+                {
+                    MessageBox.Show("Cant Delete Parcel:\nDrone Id already associated", "Drone ID ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                    myBL.DeleteParcel(((BO.ParcelToList)ParcelList.SelectedItem).Id);
             }
-            catch
+            catch(Exception ex)
             {
-                //TODO
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            resetParcelsList();
+            ParcelsCollection.Remove((ParcelList.SelectedItem as BO.ParcelToList));
         }
 
         private void AddParcel_Button_Click(object sender, RoutedEventArgs e)
         {
             ShowParcelWindow SPW = new ShowParcelWindow();
-            SPW.Closed += (s, e) =>
+            SPW.AddParcel_Button.Click += (s, e) =>
             {
-                resetParcelsList();
+                int Id;
+                if(!int.TryParse(SPW.ParcelId_TextBox.Text, out Id))
+                {
+                    return;
+                }
+                if(ParcelsCollection.FirstOrDefault(p=> p.Id==Id) == null)
+                {
+                    ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(Id)));
+                }
             };
             SPW.Show();
         }

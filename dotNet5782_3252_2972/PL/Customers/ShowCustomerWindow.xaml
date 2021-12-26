@@ -100,6 +100,24 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        
+        <ListView x:Name="ArrivingParcelsList" Margin="301,20,18,190" FontSize="7">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="10" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="30" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
+                    <GridViewColumn Width="40" Header="From" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView x:Name="GoingParcelsList" Margin="301,98,18,112" FontSize="7">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="10" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="30" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
+                    <GridViewColumn Width="40" Header="To" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
