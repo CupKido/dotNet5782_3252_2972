@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using PL.Customers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -68,12 +69,18 @@ namespace PL
 
         private void CustomerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (CustomerList.SelectedItem == null) return;
+            ShowCustomerWindow SCW = new ShowCustomerWindow((CustomerList.SelectedItem as BO.CustomerToList).Id);
+            SCW.Closed += (s, e) =>
+            {
+                resetCustomersList();
+            };
+            SCW.Show();
         }
 
         private void resetCustomersList_click(object sender, RoutedEventArgs e)
         {
-
+            resetCustomersList();
         }
 
         private void addCustomer_click(object sender, RoutedEventArgs e)

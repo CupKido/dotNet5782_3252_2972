@@ -1,0 +1,105 @@
+﻿<Window x:Class="PL.Customers.ShowCustomerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="ShowCustomerWindow" Height="300" Width="500">
+    
+    <Window.Resources>
+        <local:BoolVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:InvertBoolVisibilityConverter x:Key="NotBoolToVisibilityConverter" />
+        <local:IntByEnumConverter x:Key="EnumToIntConverter"/>
+        <local:InvertBoolConverter x:Key="BoolToNotConverter"/>
+        <local:IfNot0VisibilityConverter x:Key="IfNot0ToVisibilityConverter"/>
+        <local:If0NoneConverter x:Key="If0ToNoneConverter"/>
+        <local:IfNotEmptyTrueConverter x:Key="EmptyToFalseConverter"/>
+        <local:IfNullFalseConverter x:Key="NullToFalseConverter"/>
+        <local:If0FalseConverter x:Key="If0ToFalseConverter"/>
+    </Window.Resources>
+    
+    
+    <Grid x:Name="Main" Background="#90A955">
+        
+        <CheckBox x:Name="IfPresentation" Content="IfPresentation" Visibility="Collapsed" HorizontalAlignment="Left" Margin="295,36,0,0" VerticalAlignment="Top"/>
+        
+        <TextBlock x:Name="CustomerId_TextBlock" HorizontalAlignment="Left" Margin="10,20,0,0"
+                   Text="ID:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="33" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="CustomerId_TextBox" HorizontalAlignment="Left" Margin="90,20,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                 Text="{Binding Id}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <TextBlock x:Name="CustomerName_TextBlock" HorizontalAlignment="Left" Margin="10,43,0,0"
+                   Text="Name:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="71" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="CustomerName_TextBox" HorizontalAlignment="Left" Margin="90,43,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                 Text="{Binding Name}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <TextBlock x:Name="CustomerPhone_TextBlock" HorizontalAlignment="Left" Margin="10,66,0,0"
+                   Text="Phone:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="71" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="CustomerPhone_TextBox" HorizontalAlignment="Left" Margin="90,66,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                 Text="{Binding Phone}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <TextBlock x:Name="CustomerLongitude_TextBlock" HorizontalAlignment="Left" Margin="10,89,0,0"
+                   Text="Longitude:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="71" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="CustomerLongitude_TextBox" HorizontalAlignment="Left" Margin="90,89,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                 Text="{Binding Path=Address.GetInFormLong, Mode=OneWay}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <TextBlock x:Name="CustomerLatitude_TextBlock" HorizontalAlignment="Left" Margin="10,112,0,0"
+                   Text="Latitude:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="71" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="CustomerLAtitude_TextBox" HorizontalAlignment="Left" Margin="90,112,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                 Text="{Binding Path=Address.GetInFormLati, Mode=OneWay}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <Button x:Name="CloseWindow_Button" Content="Close" HorizontalAlignment="Left" 
+                    Margin="150,198,0,0" VerticalAlignment="Top" Height="33" Width="83" FontFamily="Elephant"
+                    FontWeight="Bold" FontSize="11" Click="CloseWindow_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
+                    >
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#664E4C"/>
+                    <GradientStop Color="#B4CDED" Offset="2"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        
+    </Grid>
+</Window>

@@ -82,7 +82,7 @@ namespace PL
 
         private void addDrone_click(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL);
+            AddDroneWindow ADW = new AddDroneWindow();
             ADW.Show();
             ADW.Closed += (s, e) =>
             {
@@ -122,7 +122,7 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
-            AddDroneWindow ADW = new AddDroneWindow(myBL, (BO.DroneToList)DroneList.SelectedItem);
+            AddDroneWindow ADW = new AddDroneWindow((DroneList.SelectedItem as BO.DroneToList).Id);
             ADW.Closed += (s, e) =>
             {
                 filterDroneList();

@@ -381,7 +381,7 @@ namespace ConsoleUI
 
             Console.WriteLine(baseStation);
 
-            DO.AddDroneCharge(drone.Id, baseStation.Id);
+            DO.AddDroneCharge(drone.Id, baseStation.Id, DateTime.Now);
             //drone.Status = IDAL.DO.DroneStatuses.Maintenance;
             //drone.Battery = 100;
             DO.SetDrone(drone);

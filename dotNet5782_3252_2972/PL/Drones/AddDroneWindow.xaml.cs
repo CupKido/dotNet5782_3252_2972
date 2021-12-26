@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
-
+using BlApi;
 
 namespace PL
 {
@@ -21,25 +21,24 @@ namespace PL
     /// </summary>
     public partial class AddDroneWindow : Window
     {
-        BlApi.IBL myBL;
+        BlApi.IBL myBL = BlFactory.GetBL();
         bool disallowClosure = true;
 
-        public AddDroneWindow(BlApi.IBL bl)
+        public AddDroneWindow()
         {
 
             InitializeComponent();
-            myBL = bl;
+            
             
             prepareForAddition();
         }
 
 
-        public AddDroneWindow(BlApi.IBL bl, BO.DroneToList drone)
+        public AddDroneWindow( int DroneId)
         {
             InitializeComponent();
-            myBL = bl;
             
-            prepareForShow(drone);
+            prepareForShow(myBL.GetDrone(DroneId));
         }
 
         private void AddDrone_click(object sender, RoutedEventArgs e)
@@ -94,7 +93,7 @@ namespace PL
                                        select BS.Id;
         }
 
-        private void prepareForShow(BO.DroneToList DTL)
+        private void prepareForShow(BO.Drone drone)
         {
             AdditionChBox.IsChecked = true;
             Width = 420;
@@ -102,7 +101,6 @@ namespace PL
             
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
-            BO.Drone drone = myBL.GetDrone(DTL.Id);
             this.DataContext = drone;
             BO.DroneStatuses status = drone.Status;
             
@@ -150,7 +148,6 @@ namespace PL
 
             DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
 
-            DroneBattery_Data.Text = drone.Battery.ToString();
 
             if(drone.CurrentParcel == null)
             {

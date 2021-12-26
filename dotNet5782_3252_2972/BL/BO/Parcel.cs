@@ -11,12 +11,12 @@ namespace BO
         public DO.Priorities Priority { get; set; }
         public int DroneId { get; set; }
         // public DroneInParcel droneInParcel {get; set ;}
-        public DateTime? Requested = null;
-        public DateTime? scheduled = null;
-        public DateTime? PickedUp = null;
-        public DateTime? Delivered = null;
+        public DateTime? Requested { get; set; }
+        public DateTime? scheduled { get; set; }
+        public DateTime? PickedUp { get; set; }
+        public DateTime? Delivered { get; set; }
 
-        public override string ToString()
+    public override string ToString()
         {
             return "ID: " + Id +
                 "\nSender ID: " + Sender.Id + " Name: " + Sender.Name +

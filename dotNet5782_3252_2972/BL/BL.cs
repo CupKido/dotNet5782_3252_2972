@@ -892,11 +892,11 @@ namespace BLobject
             }
             try
             {
-                dal.GetCustomer(SenderId);
+                dal.GetCustomer(TargetId);
             }
             catch (DO.ItemNotFoundException ex)
             {
-                throw new ItemNotFoundException("Sender could not be found!", ex);
+                throw new ItemNotFoundException("Target could not be found!", ex);
             }
             if ((int)PackageWight < 0 || (int)PackageWight > 2)
             {
