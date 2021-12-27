@@ -908,6 +908,22 @@ namespace BLobject
                         }
                     }).ToList();
         }
+        
+        public CustomerToList TurnCustomerToList(Customer customer)
+        {
+            DO.Customer c = dal.GetCustomer(customer.Id);
+            return new CustomerToList()
+            {
+                Id = customer.Id,
+                Name = customer.Name,
+                Phone = customer.Phone,
+                SentAndDelivered = getSentAndDelivered(c),
+                SentAndNotDelivered = getSentAndNotDelivered(c),
+                Recieved = getRecieved(c),
+                OnTheWay = getOnTheWay(c),
+                
+            };
+        }
 
         #endregion
 

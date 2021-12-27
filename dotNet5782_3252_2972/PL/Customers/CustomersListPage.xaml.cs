@@ -84,9 +84,29 @@ namespace PL
         }
 
         private void addCustomer_click(object sender, RoutedEventArgs e)
-        {
+        { 
+           
+
+            ShowCustomerWindow SPW = new ShowCustomerWindow();
+            SPW.AddCustomer_Button.Click += (s, e) =>
+            {
+                int Id;
+                if (!int.TryParse(SPW.CustomerId_TextBox.Text, out Id))
+                {
+                    return;
+                }
+                if (CustomersCollection.FirstOrDefault(p => p.Id == Id) == null)
+                {
+                    BO.Customer c = myBL.GetCustomer(Id);
+                    CustomersCollection.Add(myBL.TurnCustomerToList(c));
+                }
+            };
+            SPW.Show();
+
 
         }
+
+        
 
     }
 }

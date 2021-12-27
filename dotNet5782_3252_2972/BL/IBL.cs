@@ -53,6 +53,8 @@ namespace BlApi
         public void DeleteCustomer(int Id);
         //public Customer RemoveCustomer(int Id);
 
+        public CustomerToList TurnCustomerToList(Customer customer);
+
 
 
         #endregion
