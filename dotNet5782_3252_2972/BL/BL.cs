@@ -701,18 +701,48 @@ namespace BLobject
 
         public IEnumerable<CustomerToList> GetAllCustomers()
         {
-            return (from DO.Customer c in dal.GetAllCustomers()
-                                        select new CustomerToList()
-                                        {
-                                            Id = c.Id,
-                                            Name = c.Name,
-                                            Phone = c.Phone,
-                                            SentAndDelivered = getSentAndDelivered(c),
-                                            SentAndNotDelivered = getSentAndNotDelivered(c),
-                                            OnTheWay = getOnTheWay(c),
-                                            Recieved = getRecieved(c)
-                                            //need to create private funcs for others params
-                                        }).OrderBy(CTL => CTL.Id);
+            List<CustomerToList> res = new List<CustomerToList>();
+            
+            foreach(DO.Customer c in dal.GetAllCustomers())
+            {
+                Customer BOc;
+                try
+                {
+                    BOc = GetCustomer(c.Id);
+                }
+                catch(Exception ex)
+                {
+                    throw;
+                }
+                CustomerToList newC = new CustomerToList();
+                foreach(ParcelInCustomer PIC in BOc.ToThisCustomer)
+                {
+                    if(PIC.Status == ParcelStatuses.Delivered)
+                    {
+                        newC.Recieved += 1;
+                    }
+                    else
+                    {
+                        newC.OnTheWay += 1;
+                    }
+                }
+                foreach(ParcelInCustomer PIC in BOc.FromThisCustomer)
+                {
+                    if (PIC.Status == ParcelStatuses.Delivered)
+                    {
+                        newC.SentAndDelivered += 1;
+                    }
+                    else
+                    {
+                        newC.SentAndNotDelivered += 1;
+                    }
+                }
+                newC.Id = c.Id;
+                newC.Name = c.Name;
+                newC.Phone = c.Phone;
+                res.Add(newC);
+            }
+            return res.OrderBy(CTL => CTL.Id);
             
         }
 

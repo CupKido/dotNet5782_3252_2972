@@ -11,6 +11,11 @@
         <local:BoolVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:IfNot0VisibilityConverter x:Key="IfNot0ToVisibilityConverter"/>
         <local:IfNotEmptyVisibilityConverter x:Key="IfNotEmptyToVisibility"/>
+        <local:If0NoneConverter x:Key="If0ToNoneConverter"/>
+        <local:If0FalseConverter x:Key="If0ToFalseConverter"/>
+        <local:NotNullVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
+        <local:IfNullFalseConverter x:Key="NullToFalseConverter"/>
+        <local:IfNotEmptyTrueConverter x:Key="EmptyToFalseConverter"/>
     </Window.Resources>
 
     <Border Background="#FF6B2350"  CornerRadius="10">
@@ -98,6 +103,7 @@
             <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="376,154,0,0"  TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="33" Height="16" RenderTransformOrigin="0.897,0.567" FontFamily="Bauhaus 93"
                        Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Text="{Binding Id}"
                        />
 
             <Button x:Name="AddDrone_Button" Content="Add Drone" HorizontalAlignment="Left" 
@@ -218,10 +224,12 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
+            
             <Button x:Name="ShowCarriedParcel_Button" Content="Show Parcel" HorizontalAlignment="Left" 
                     Margin="330,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="ShowCarriedParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
-                    Visibility="{Binding ElementName=DroneParcel_Data, Path=Text, Mode=OneWay, Converter={StaticResource IfNotEmptyToVisibility}}"
+                    IsEnabled="{Binding ElementName=DroneParcel_Data, Path=Text, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
+                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                     >
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

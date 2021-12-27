@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="ShowCustomerWindow" Height="300" Width="500">
-    
+
     <Window.Resources>
         <local:BoolVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:InvertBoolVisibilityConverter x:Key="NotBoolToVisibilityConverter" />
@@ -18,12 +18,12 @@
         <local:IfNullFalseConverter x:Key="NullToFalseConverter"/>
         <local:If0FalseConverter x:Key="If0ToFalseConverter"/>
     </Window.Resources>
-    
-    
+
+
     <Grid x:Name="Main" Background="#90A955">
-        
+
         <CheckBox x:Name="IfPresentation" Content="IfPresentation" Visibility="Collapsed" HorizontalAlignment="Left" Margin="295,36,0,0" VerticalAlignment="Top"/>
-        
+
         <TextBlock x:Name="CustomerId_TextBlock" HorizontalAlignment="Left" Margin="10,20,0,0"
                    Text="ID:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="33" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
         <TextBox x:Name="CustomerId_TextBox" HorizontalAlignment="Left" Margin="90,20,0,0" 
@@ -100,24 +100,28 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <ListView x:Name="ArrivingParcelsList" Margin="301,20,18,190" FontSize="7">
+        <ListView x:Name="ArrivingParcelsList" Margin="268,29,27,152" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="10" Header="ID" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Width="30" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
-                    <GridViewColumn Width="40" Header="From" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                    <GridViewColumn Width="25" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="40" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
+                    <GridViewColumn Width="45" Header="From" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                    <GridViewColumn Width="50" Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <ListView x:Name="GoingParcelsList" Margin="301,98,18,112" FontSize="7">
+        <ListView x:Name="GoingParcelsList" Margin="268,152,27,26" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="10" Header="ID" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Width="30" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
-                    <GridViewColumn Width="40" Header="To" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                    <GridViewColumn Width="25" Header="ID" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="40" Header="Weight" DisplayMemberBinding="{Binding Weight}"/>
+                    <GridViewColumn Width="45" Header="To" DisplayMemberBinding="{Binding Path=OtherSide.Name}"/>
+                    <GridViewColumn Width="50" Header="Status" DisplayMemberBinding="{Binding Path=Status}"/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <Label x:Name="arrivingLabel" Content="Arriving:" HorizontalAlignment="Left" Margin="268,3,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ongoingLabel" Content="Ongoing:" HorizontalAlignment="Left" Margin="268,0,0,0" VerticalAlignment="Center"/>
     </Grid>
 </Window>

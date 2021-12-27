@@ -54,6 +54,11 @@ namespace PL.Customers
             CloseWindow();
         }
 
-
+        private void ParcelsList_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Parcel.ShowParcelWindow SPW = new Parcel.ShowParcelWindow(((sender as ListView).SelectedItem as BO.ParcelInCustomer).Id);
+            SPW.Show();
+            CloseWindow();
+        }
     }
 }

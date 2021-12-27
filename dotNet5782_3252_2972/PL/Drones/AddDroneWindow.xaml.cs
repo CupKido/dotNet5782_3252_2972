@@ -34,7 +34,7 @@ namespace PL
         }
 
 
-        public AddDroneWindow( int DroneId)
+        public AddDroneWindow(int DroneId)
         {
             InitializeComponent();
             
@@ -149,14 +149,14 @@ namespace PL
             DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
 
 
-            if(drone.CurrentParcel == null)
+            if(drone.CurrentParcel.Id != 0)
             {
-                DroneParcel_TextBlock.Visibility = Visibility.Collapsed;
-                DroneParcel_Data.Visibility = Visibility.Collapsed;
+                DroneParcel_Data.DataContext = drone.CurrentParcel;
             }
             else
             {
-                DroneParcel_Data.Text = drone.CurrentParcel.Id.ToString();
+                DroneParcel_Data.Text = "none";
+                ShowCarriedParcel_Button.IsEnabled = false;
             }
         }
 
