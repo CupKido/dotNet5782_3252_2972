@@ -80,6 +80,8 @@
             </TextBox.Background>
         </TextBox>
 
+       
+
 
         <TextBlock x:Name="BaseStationLatitude_TextBlock" HorizontalAlignment="Left" Margin="10,89,0,0"
                    Text="Latitude Station:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="150" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
@@ -131,7 +133,7 @@
 
 
             <Button x:Name="CloseWindow_Button" Content="Close" HorizontalAlignment="Left" 
-                    Margin="150,198,0,0" VerticalAlignment="Top" Height="33" Width="87" FontFamily="Elephant"
+                    Margin="150,198,0,0" VerticalAlignment="Top" Height="33" Width="95" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="CloseWindow_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     >
                 <Button.Background>
@@ -143,7 +145,7 @@
             </Button>
 
         <Button x:Name="AddBaseStation_Button" Content="Add BaseStation" HorizontalAlignment="Left" 
-                    Margin="150,158,0,0" VerticalAlignment="Top" Height="33" Width="87" FontFamily="Elephant"
+                    Margin="150,158,0,0" VerticalAlignment="Top" Height="33" Width="95" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="AddBaseStation_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                    Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}" >
 
