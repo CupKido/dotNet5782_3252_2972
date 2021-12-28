@@ -87,11 +87,11 @@ namespace PL
         { 
            
 
-            ShowCustomerWindow SPW = new ShowCustomerWindow();
-            SPW.AddCustomer_Button.Click += (s, e) =>
+            ShowCustomerWindow SCW = new ShowCustomerWindow();
+            SCW.AddCustomer_Button.Click += (s, e) =>
             {
                 int Id;
-                if (!int.TryParse(SPW.CustomerId_TextBox.Text, out Id))
+                if (!int.TryParse(SCW.CustomerId_TextBox.Text, out Id))
                 {
                     return;
                 }
@@ -101,7 +101,7 @@ namespace PL
                     CustomersCollection.Add(myBL.TurnCustomerToList(c));
                 }
             };
-            SPW.Show();
+            SCW.Show();
 
 
         }

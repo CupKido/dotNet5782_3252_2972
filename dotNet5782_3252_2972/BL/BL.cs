@@ -432,6 +432,18 @@ namespace BLobject
 
         }
 
+        public BaseStationToList TurnBaseStationToList(BaseStation Bs)
+        {
+            int available = getAvailibleSlotsForBaseStation(Bs);
+            return new BaseStationToList()
+            {
+                Id = Bs.Id,
+                Name=Bs.Name,
+                ChargeSlotsAvailible= available,
+                ChargeSlotsTaken=Bs.ChargeSlots-available
+            };
+        }
+
         #endregion
 
         #region Drones 

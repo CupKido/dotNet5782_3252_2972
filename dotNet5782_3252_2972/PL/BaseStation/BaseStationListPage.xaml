@@ -29,8 +29,8 @@
 
                         <GridViewColumn Width="40" Header="ID" DisplayMemberBinding="{Binding Id}"/>
                         <GridViewColumn Width="70" Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Width="100" Header="Availibe Charge Slots" DisplayMemberBinding="{Binding ChargeSlotsAvailible}"/>
-                        <GridViewColumn Width="100" Header="Taken Charge Slots" DisplayMemberBinding="{Binding ChargeSlotsTaken}"/>
+                        <GridViewColumn Width="115" Header="Available Charge Slots" DisplayMemberBinding="{Binding ChargeSlotsAvailible}"/>
+                        <GridViewColumn Width="115" Header="Taken Charge Slots" DisplayMemberBinding="{Binding ChargeSlotsTaken}"/>
 
                     </GridView>
                 </ListView.View>

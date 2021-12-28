@@ -227,7 +227,8 @@ namespace BlApi
         /// <param name="Id">The wanted base station's ID to return</param>
         /// <returns>The base station with the specified ID from data base as a BL BaseStation</returns>
         public BaseStation GetBaseStation(int Id);
-        
+
+        public BaseStationToList TurnBaseStationToList(BaseStation Bs);
 
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 

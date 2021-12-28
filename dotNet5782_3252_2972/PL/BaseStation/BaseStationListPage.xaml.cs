@@ -61,7 +61,13 @@ namespace PL.BaseStation
 
         private void BaseStationList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (BaseStationList.SelectedItem == null) return;
+            ShowBaseStationWindow SCW = new ShowBaseStationWindow((BaseStationList.SelectedItem as BO.BaseStationToList).Id);
+            SCW.Closed += (s, e) =>
+            {
+                resetBaseStationList();
+            };
+            SCW.Show();
         }
 
         private void DeleteBaseStation_Click(object sender, RoutedEventArgs e)
