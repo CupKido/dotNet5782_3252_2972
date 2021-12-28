@@ -27,6 +27,7 @@ namespace PL.BaseStation
         public ShowBaseStationWindow()
         {
             InitializeComponent();
+            Width = 300;
         }
         public ShowBaseStationWindow(int BaseStationId)
         {
@@ -34,6 +35,7 @@ namespace PL.BaseStation
             BO.BaseStationToList Bs = myBL.TurnBaseStationToList(myBL.GetBaseStation(BaseStationId));
             this.DataContext = Bs;
             IfPresentation.IsChecked = true;
+            
             // ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
             // GoingParcelsList.ItemsSource = c.FromThisCustomer;
         }

@@ -115,7 +115,8 @@
         </Button>
 
 
-        <ListView x:Name="ArrivingParcelsList" Margin="268,29,27,152" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9">
+        <ListView x:Name="ArrivingParcelsList" Margin="268,29,27,152" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="25" Header="ID" DisplayMemberBinding="{Binding Id}"/>
@@ -126,7 +127,8 @@
             </ListView.View>
         </ListView>
 
-        <ListView x:Name="GoingParcelsList" Margin="268,152,27,26" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9">
+        <ListView x:Name="GoingParcelsList" Margin="268,152,27,26" MouseDoubleClick="ParcelsList_DoubleClick" FontSize="9"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="25" Header="ID" DisplayMemberBinding="{Binding Id}"/>
@@ -136,7 +138,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label x:Name="arrivingLabel" Content="Arriving:" HorizontalAlignment="Left" Margin="268,3,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ongoingLabel" Content="Ongoing:" HorizontalAlignment="Left" Margin="268,0,0,0" VerticalAlignment="Center"/>
+        <Label x:Name="arrivingLabel" Content="Arriving:" HorizontalAlignment="Left" Margin="268,3,0,0" VerticalAlignment="Top"
+               Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <Label x:Name="ongoingLabel" Content="Ongoing:" HorizontalAlignment="Left" Margin="268,0,0,0" VerticalAlignment="Center"
+               Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 </Window>

@@ -97,8 +97,16 @@ namespace PL
                 }
                 if (CustomersCollection.FirstOrDefault(p => p.Id == Id) == null)
                 {
+                    try
+                    {
                     BO.Customer c = myBL.GetCustomer(Id);
                     CustomersCollection.Add(myBL.TurnCustomerToList(c));
+                    }
+                    catch
+                    {
+                        resetCustomersList();
+                        return;
+                    }
                 }
             };
             SCW.Show();

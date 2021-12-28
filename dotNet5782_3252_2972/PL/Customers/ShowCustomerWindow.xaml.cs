@@ -26,6 +26,7 @@ namespace PL.Customers
         public ShowCustomerWindow()
         {
             InitializeComponent();
+            Width = 300;
         }
 
         public ShowCustomerWindow(int CustomerId)
@@ -105,8 +106,7 @@ namespace PL.Customers
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            disallowClosure = false;
-            this.Close();
+            CloseWindow();
         }
 
       
