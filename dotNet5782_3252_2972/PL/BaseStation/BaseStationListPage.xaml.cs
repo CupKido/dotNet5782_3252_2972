@@ -62,12 +62,12 @@ namespace PL.BaseStation
         private void BaseStationList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (BaseStationList.SelectedItem == null) return;
-            ShowBaseStationWindow SCW = new ShowBaseStationWindow((BaseStationList.SelectedItem as BO.BaseStationToList).Id);
-            SCW.Closed += (s, e) =>
+            ShowBaseStationWindow SBSW = new ShowBaseStationWindow((BaseStationList.SelectedItem as BO.BaseStationToList).Id);
+            SBSW.Closed += (s, e) =>
             {
                 resetBaseStationList();
             };
-            SCW.Show();
+            SBSW.Show();
         }
 
         private void DeleteBaseStation_Click(object sender, RoutedEventArgs e)
@@ -77,7 +77,20 @@ namespace PL.BaseStation
 
         private void AddBaseStation_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowBaseStationWindow SBSW = new ShowBaseStationWindow();
+            SBSW.AddBaseStation_Button.Click += (s, e) =>
+            {
+                int Id;
+                if (!int.TryParse(SBSW.BaseStationId_TextBox.Text, out Id))
+                {
+                    return;
+                }
+                if (BaseStationCollection.FirstOrDefault(p => p.Id == Id) == null)
+                {
+                    BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(Id)));
+                }
+            };
+            SBSW.Show();
         }
     }
 }

@@ -51,9 +51,11 @@
             </TextBox>
 
         <TextBlock x:Name="BaseStationChargeSlotsAvailable_TextBlock" HorizontalAlignment="Left" Margin="10,66,0,0"
-                   Text="Available Slots:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+                   Text="Available Slots:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
+                    Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
         <TextBox x:Name="BaseStationChargeSlotsAvailable_TextBox" HorizontalAlignment="Left" Margin="110,66,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                  Text="{Binding ChargeSlotsAvailible}">
                 <TextBox.Background>
                     <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
@@ -63,12 +65,46 @@
                 </TextBox.Background>
             </TextBox>
 
+        <TextBlock x:Name="BaseStationLongitude_TextBlock" HorizontalAlignment="Left" Margin="10,66,0,0"
+                   Text="Longitude BaseStation:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
+                   Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}"/>
+        <TextBox x:Name="BaseStationLongitude_TextBox" HorizontalAlignment="Left" Margin="110,66,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}"
+                 Text="{Binding ChargeSlotsAvailible}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+
+        <TextBlock x:Name="BaseStationLatitude_TextBlock" HorizontalAlignment="Left" Margin="10,89,0,0"
+                   Text="Latitude BaseStation:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
+                   Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}"/>
+        <TextBox x:Name="BaseStationLatitude_TextBox" HorizontalAlignment="Left" Margin="110,89,0,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}"
+                 Text="{Binding ChargeSlotsAvailible}">
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#ECF39E"/>
+                    <GradientStop Color="#132A13" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+
         <TextBlock x:Name="BaseStationChargeSlotsTaken_TextBlock_TextBlock" HorizontalAlignment="Left" Margin="10,89,0,0"
-                   Text="Taken Slots:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"/>
+                   Text="Taken Slots:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
+                    Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
         <TextBox x:Name="BaseStationChargeSlotsTaken_TextBox" HorizontalAlignment="Left" Margin="110,89,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
+                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                  Text="{Binding ChargeSlotsTaken}">
-                <TextBox.Background>
+            <TextBox.Background>
                     <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                         <GradientStop Color="#ECF39E"/>
                         <GradientStop Color="#132A13" Offset="1"/>
