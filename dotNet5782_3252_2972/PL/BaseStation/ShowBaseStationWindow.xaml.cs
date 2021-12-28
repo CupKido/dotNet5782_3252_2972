@@ -33,8 +33,9 @@ namespace PL.BaseStation
             InitializeComponent();
             BO.BaseStationToList Bs = myBL.TurnBaseStationToList(myBL.GetBaseStation(BaseStationId));
             this.DataContext = Bs;
-           // ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
-           // GoingParcelsList.ItemsSource = c.FromThisCustomer;
+            IfPresentation.IsChecked = true;
+            // ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
+            // GoingParcelsList.ItemsSource = c.FromThisCustomer;
         }
 
         private void CloseWindow_Button_Click(object sender, RoutedEventArgs e)

@@ -32,6 +32,7 @@ namespace PL.Customers
         {
             InitializeComponent();
             BO.Customer c = myBL.GetCustomer(CustomerId);
+            IfPresentation.IsChecked = true;
             this.DataContext = c;
             ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
             GoingParcelsList.ItemsSource = c.FromThisCustomer;
