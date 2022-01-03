@@ -16,7 +16,7 @@ using System.Threading.Tasks;
             public DO.Priorities Priority { get; set; }
             public DateTime Requested { get; set; }
             public int DroneId { get; set; }
-            public DateTime? scheduled { get; set; }
+            public DateTime? Scheduled { get; set; }
             public DateTime? PickedUp { get; set; }
             public DateTime? Delivered { get; set; }
 
@@ -26,7 +26,7 @@ using System.Threading.Tasks;
                     "\nWeight: " + Weight + "   Priority: " + Priority + "\nRequested: " + Requested;
                 if (DroneId != 0)
                 {
-                    res += "\nScheduled: " + scheduled + "  Drone's ID: " + DroneId;
+                    res += "\nScheduled: " + Scheduled + "  Drone's ID: " + DroneId;
                 }
                 return res;
             }

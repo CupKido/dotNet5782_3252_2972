@@ -63,4 +63,12 @@ namespace DO
         }
     }
 
+    public class XMLFileLoadCreateException : Exception
+    {
+        public string Path;
+        public XMLFileLoadCreateException(string path, string message, Exception innerException) :
+            base(message, innerException) => Path = path;
+        public override string ToString() => base.ToString() + $", Path: {Path}";
+    }
+
 }

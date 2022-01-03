@@ -14,6 +14,7 @@ namespace DalApi
             switch(typeDl)
             {
                 case "List": return DalObject.DalObject.GetInstance(); // DalApi.IDal.instance;
+                case "XML": return DalXml.DalXml.GetInstance();
                 // case "XML":return DLXML.instance;
                 default: return null;
             }

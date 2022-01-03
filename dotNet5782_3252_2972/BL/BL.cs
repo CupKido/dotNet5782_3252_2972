@@ -24,7 +24,7 @@ namespace BLobject
 
         private BL()
         {
-            dal = DalFactory.GetDal("List"); 
+            dal = DalFactory.GetDal("XML"); 
 
             runningNumForParcels = dal.GetAllParcels().Count() + 1;
             double[] arr = dal.AskForElectricity();
@@ -1013,7 +1013,7 @@ namespace BLobject
                     Target = new CustomerInParcel() { Id = target.Id, Name = target.Name },
                     Weight = p.Weight,
                     Requested = p.Requested,
-                    scheduled = p.scheduled,
+                    scheduled = p.Scheduled,
                     PickedUp = p.PickedUp,
                     Delivered = p.Delivered
                 };
@@ -1040,7 +1040,7 @@ namespace BLobject
             {
                 return ParcelStatuses.PickedUp;
             }
-            else if (p.scheduled != null)
+            else if (p.Scheduled != null)
             {
                 return ParcelStatuses.Associated;
             }
@@ -1141,7 +1141,7 @@ namespace BLobject
 
             foreach (DO.Parcel p2 in dal.GetAllParcels())
             {
-                if (((int)p2.Weight > (int)drone.MaxWeight) || p2.scheduled != null)
+                if (((int)p2.Weight > (int)drone.MaxWeight) || p2.Scheduled != null)
                 {
                     continue;
                 }
@@ -1221,7 +1221,7 @@ namespace BLobject
                 BLDrones.Add(BLdrone);
 
                 p1.DroneId = id;  // NEED TO CHANGE IN BO INT DRONEID-->> DroneInParcel drone
-                p1.scheduled = DateTime.Now;
+                p1.Scheduled = DateTime.Now;
                 try { dal.SetParcel(p1); }
                 catch { throw; }
 

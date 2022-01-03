@@ -159,7 +159,7 @@ namespace DalObject
                             times++;
                             parcel.DroneId = DronesId[r.Next(DronesId.Count)];
                             DronesId.Remove(parcel.DroneId);
-                            parcel.scheduled = DateTime.Now;
+                            parcel.Scheduled = DateTime.Now;
                             if(r.Next(2) == 1)
                             {
                                 parcel.PickedUp = DateTime.Now;
@@ -173,7 +173,7 @@ namespace DalObject
                         if(times == 4)
                         {
                             parcel.DroneId = 0;
-                            parcel.scheduled = null;
+                            parcel.Scheduled = null;
                             parcel.PickedUp = null;
                             parcel.Delivered = null;
                         }

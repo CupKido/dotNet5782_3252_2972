@@ -595,7 +595,7 @@ namespace ConsoleUI
                 Console.WriteLine(drone);
 
                 parcel.DroneId = Id;
-                parcel.scheduled = DateTime.Now;
+                parcel.Scheduled = DateTime.Now;
                 DO.SetParcel(parcel);
 
                 Console.WriteLine("Update Complete!\n");
