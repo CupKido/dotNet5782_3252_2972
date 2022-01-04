@@ -45,7 +45,7 @@ namespace DalApi
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created);
+        public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created);
 
         public IEnumerable<Parcel> GetAllParcels();
 

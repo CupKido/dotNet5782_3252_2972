@@ -17,7 +17,6 @@ namespace DalXml
         {
             CreateConfig();
             CreateAllFiles();
-            
         }
 
         private void CreateConfig()
@@ -37,7 +36,8 @@ namespace DalXml
                     new XElement("HeavyElec", HeavyElec),
                     new XElement("ChargePerHours", ChargePerHours)
                     );
-                XElement config = new XElement("Config", Elec);
+                XElement runningNum = new XElement("ParcelsRunningNum", 1);
+                XElement config = new XElement("Config", Elec, runningNum);
                 XMLTools.SaveListToXMLElement(config, configPath);
             }
         }
@@ -251,6 +251,24 @@ namespace DalXml
             }
         }
 
+        public void SetCustomer(Customer newCustomer)
+        {
+            XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
+            foreach (XElement CustomerElem in CustomersRootElem.Elements())
+            {
+                if (Convert.ToInt32(CustomerElem.Element("Id").Value) == newCustomer.Id)
+                {
+                    CustomerElem.Element("Name").Value = newCustomer.Name;
+                    CustomerElem.Element("Phone").Value = newCustomer.Phone;
+                    CustomerElem.Element("Longitude").Value = newCustomer.Longitude.ToString();
+                    CustomerElem.Element("Latitude").Value = newCustomer.Latitude.ToString();
+                    
+                    XMLTools.SaveListToXMLElement(CustomersRootElem, customersPath);
+                    return;
+                }
+            }
+        }
+
         public Customer RemoveCustomer(int Id)
         {
             XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
@@ -333,6 +351,21 @@ namespace DalXml
             catch
             {
                 throw new ItemNotFoundException(Id, "Drone Not Found!");
+            }
+        }
+
+        public void SetDrone(Drone newDrone)
+        {
+            XElement DronesRootElem = XMLTools.LoadListFromXMLElement(dronesPath);
+            foreach (XElement DroneElem in DronesRootElem.Elements())
+            {
+                if (Convert.ToInt32(DroneElem.Element("Id").Value) == newDrone.Id)
+                {
+                    DroneElem.Element("Model").Value = newDrone.Model;
+                    DroneElem.Element("MaxWeight").Value = ((int)newDrone.MaxWeight).ToString();
+                    XMLTools.SaveListToXMLElement(DronesRootElem, dronesPath);
+                    return;
+                }
             }
         }
 
@@ -419,6 +452,21 @@ namespace DalXml
             }
         }
 
+        public void SetDroneCharge(DroneCharge newDC)
+        {
+            XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
+            foreach (XElement DCElem in DCRootElem.Elements())
+            {
+                if (Convert.ToInt32(DCElem.Element("DroneId").Value) == newDC.DroneId)
+                {
+                    DCElem.Element("BaseStationId").Value = newDC.BaseStationId.ToString();
+                    DCElem.Element("Started").Value = newDC.Started.ToString();
+                    XMLTools.SaveListToXMLElement(DCRootElem, droneChargesPath);
+                    return;
+                }
+            }
+        }
+
         public DroneCharge RemoveDroneCharge(int DroneId)
         {
             XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
@@ -443,34 +491,26 @@ namespace DalXml
 
         #endregion
 
-        public void AddParcel(int Id, int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
+        #region Parcels
+
+        public int AddParcel( int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
         {
-            try
-            {
-                GetParcel(Id);
-                throw new ItemAlreadyExistsException(Id, "Parcel ID already taken");
-            }
-            catch (ItemNotFoundException ex)
-            {
-
-            }
-            catch
-            {
-                throw;
-            }
+           
             List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
-
+            XElement config = XMLTools.LoadListFromXMLElement(configPath);
+            int num = Convert.ToInt32(config.Element("ParcelsRunningNum").Value);
             Parcels.Add(new Parcel()
             {
-                Id = Id,
+                Id = num,
                 SenderId = SenderId,
                 TargetId = TargetId,
                 Weight = PackageWight,
                 Requested = created
             });
-
+            config.Element("ParcelsRunningNum").Value = (num + 1).ToString();
             XMLTools.SaveListToXMLSerializer<Parcel>(Parcels, parcelsPath);
-            
+            XMLTools.SaveListToXMLElement(config, configPath);
+            return num;
         }
 
         public IEnumerable<Parcel> GetAllParcels()
@@ -495,28 +535,10 @@ namespace DalXml
             return XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
         }
 
-        
-
-        
-
-
-
-       
-
-        
-
-
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)
         {
             return GetAllParcels().Where(p => predicate(p));
         }
-
-        
-
-
-        
-
-        
 
         public Parcel GetParcel(int Id)
         {
@@ -530,38 +552,44 @@ namespace DalXml
             }
         }
 
-        
-
-
-        
-
-        
+        public void SetParcel(Parcel newParcel)
+        {
+            List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+            foreach (Parcel exParcel in Parcels)
+            {
+                if (exParcel.Id == newParcel.Id)
+                {
+                    Parcels.Remove(exParcel);
+                    Parcels.Add(newParcel);
+                    XMLTools.SaveListToXMLSerializer<Parcel>(Parcels, parcelsPath);
+                    return;
+                }
+            }
+            throw new ItemNotFoundException(newParcel.Id, "Parcel Not Found!");
+        }
 
         public Parcel RemoveParcel(int Id)
         {
-            throw new NotImplementedException();
+            
+            List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+
+            try
+            {
+                Parcel res = Parcels.First(p => p.Id == Id);
+                Parcels.Remove(res);
+
+                XMLTools.SaveListToXMLSerializer<Parcel>(Parcels, parcelsPath);
+
+                return res;
+            }
+            catch
+            {
+                throw new ItemNotFoundException(Id, "Parcel Not Found!");
+            }
+
+            
         }
 
-        
-
-        public void SetCustomer(Customer customer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetDrone(Drone newDrone)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetDroneCharge(DroneCharge newDC)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetParcel(Parcel newParcel)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

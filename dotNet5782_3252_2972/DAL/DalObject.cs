@@ -31,6 +31,8 @@ namespace DalObject
             return instance;
         }
 
+        private static int runningNumForParcels = 1;
+
         #region Customers
 
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
@@ -200,21 +202,8 @@ namespace DalObject
 
         #region Parcels
 
-        public void AddParcel(int Id, int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created)
+        public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created)
         {
-            try
-            {
-                GetParcel(Id);
-                throw new ItemAlreadyExistsException(Id, "Parcel Id already taken");
-            }
-            catch (ItemAlreadyExistsException ex)
-            {
-                throw;
-            }
-            catch
-            {
-
-            }
 
             if (SenderId == TargetId)
                 throw new IllegalActionException("Can't send a Package to yourself!");
@@ -236,14 +225,15 @@ namespace DalObject
                 throw new IllegalActionException("Target customer is not signed in the system");
             }
             Parcel parcel = new Parcel();
-            parcel.Id = Id;
+            parcel.Id = runningNumForParcels;
+            runningNumForParcels++;
             parcel.SenderId = SenderId;
             parcel.TargetId = TargetId;
             parcel.Weight = PackageWight;
             parcel.Priority = priority;
             parcel.Requested = created;
             DataSource.Parcels.Add(parcel);
-
+            return parcel.Id;
         }
 
         public IEnumerable<Parcel> GetAllParcels()

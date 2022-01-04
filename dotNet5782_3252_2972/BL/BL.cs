@@ -18,15 +18,32 @@ namespace BLobject
         public Double IntermediateElec { get; set; }
         public Double HeavyElec { get; set; }
         public Double ChargePerHours { get; set; }
-        private static int runningNumForParcels { get; set; }
+
+        #region single tone
+
         internal static BL instance=null;
         private static object locker = new object();
+        public static BL GetInstance()
+        {
+         
+            if (instance == null)
+            {
+                lock (locker)
+                {
+                    if (instance == null)
+                    {
+                        instance = new BL();
+                    }
+                }
+            }
+            return instance;
+        }
+
+        #endregion
 
         private BL()
         {
             dal = DalFactory.GetDal("XML"); 
-
-            runningNumForParcels = dal.GetAllParcels().Count() + 1;
             double[] arr = dal.AskForElectricity();
             AvailbleElec = arr[0];
             LightElec = arr[1];
@@ -213,22 +230,6 @@ namespace BLobject
 
 
 
-        }
-
-         public static BL GetInstance()
-        {
-         
-            if (instance == null)
-            {
-                lock (locker)
-                {
-                    if (instance == null)
-                    {
-                        instance = new BL();
-                    }
-                }
-            }
-            return instance;
         }
 
         private void sendToMaitenance(DroneToList newD)
@@ -1023,15 +1024,13 @@ namespace BLobject
             int res = 0;
             try
             {
-                dal.AddParcel(runningNumForParcels, SenderId, TargetId, (DO.WeightCategories)PackageWight, (DO.Priorities)priority, created);
-                res = runningNumForParcels;
-                runningNumForParcels++;
+                return dal.AddParcel(SenderId, TargetId, (DO.WeightCategories)PackageWight, (DO.Priorities)priority, created);
             }
             catch (DO.ItemAlreadyExistsException ex)
             {
                 throw;
             }
-            return res;
+            
         }
 
         public Parcel GetParcel(int Id)
