@@ -27,6 +27,29 @@ namespace DalXml
             }
         }
 
+        internal static void CreateConfig(string path, int parcelCount)
+        {
+            if (!File.Exists(dir + path))
+            {
+                Double AvailbleElec = 20;
+                Double LightElec = 35;
+                Double IntermediateElec = 50;
+                Double HeavyElec = 80;
+                Double ChargePerHours = 40;
+                double[] a = { AvailbleElec, LightElec, IntermediateElec, HeavyElec, ChargePerHours };
+                XElement Elec = new XElement("Elec",
+                    new XElement("AvailbleElec", AvailbleElec),
+                    new XElement("LightElec", LightElec),
+                    new XElement("IntermediateElec", IntermediateElec),
+                    new XElement("HeavyElec", HeavyElec),
+                    new XElement("ChargePerHours", ChargePerHours)
+                    );
+                XElement runningNum = new XElement("ParcelsRunningNum", parcelCount);
+                XElement config = new XElement("Config", Elec, runningNum);
+                SaveListToXMLElement(config, path);
+            }
+        }
+
         #region SaveLoadWithXElement
         public static void SaveListToXMLElement(XElement rootElem, string filePath)
         {

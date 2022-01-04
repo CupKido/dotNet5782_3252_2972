@@ -31,7 +31,6 @@ namespace DalObject
             return instance;
         }
 
-        private static int runningNumForParcels = 1;
 
         #region Customers
 
@@ -225,8 +224,8 @@ namespace DalObject
                 throw new IllegalActionException("Target customer is not signed in the system");
             }
             Parcel parcel = new Parcel();
-            parcel.Id = runningNumForParcels;
-            runningNumForParcels++;
+            parcel.Id = DataSource.Config.runningNumForParcels;
+            DataSource.Config.runningNumForParcels++;
             parcel.SenderId = SenderId;
             parcel.TargetId = TargetId;
             parcel.Weight = PackageWight;

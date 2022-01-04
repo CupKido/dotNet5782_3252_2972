@@ -20,7 +20,8 @@ namespace DalObject
             internal static Double IntermediateElec = 50;
             internal static Double HeavyElec = 80;
             internal static Double ChargePerHours = 40;
-            
+            internal static int runningNumForParcels = 1;
+
         }
 
         private static Random r = new Random();

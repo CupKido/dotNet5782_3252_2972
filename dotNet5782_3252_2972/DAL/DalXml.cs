@@ -15,32 +15,11 @@ namespace DalXml
         private static object locker = new object();
         private DalXml()
         {
-            CreateConfig();
+            XMLTools.CreateConfig(configPath, GetAllParcels().Count());
             CreateAllFiles();
         }
 
-        private void CreateConfig()
-        {
-            if (!File.Exists(configPath))
-            {
-                Double AvailbleElec = 20;
-                Double LightElec = 35;
-                Double IntermediateElec = 50;
-                Double HeavyElec = 80;
-                Double ChargePerHours = 40;
-                double[] a = { AvailbleElec, LightElec, IntermediateElec, HeavyElec, ChargePerHours};
-                XElement Elec = new XElement("Elec", 
-                    new XElement("AvailbleElec", AvailbleElec),
-                    new XElement("LightElec", LightElec),
-                    new XElement("IntermediateElec", IntermediateElec),
-                    new XElement("HeavyElec", HeavyElec),
-                    new XElement("ChargePerHours", ChargePerHours)
-                    );
-                XElement runningNum = new XElement("ParcelsRunningNum", 1);
-                XElement config = new XElement("Config", Elec, runningNum);
-                XMLTools.SaveListToXMLElement(config, configPath);
-            }
-        }
+        
 
         private void CreateAllFiles()
         {
