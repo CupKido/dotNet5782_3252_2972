@@ -38,7 +38,7 @@ namespace DalObject
             try
             {
                 GetCustomer(Id);
-                throw new ItemAlreadyExistsException(Id, "Id already taken");
+                throw new ItemAlreadyExistsException(Id, "Customer Id already taken");
             }
             catch (ItemAlreadyExistsException ex)
             {

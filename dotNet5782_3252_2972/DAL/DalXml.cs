@@ -46,7 +46,6 @@ namespace DalXml
         {
             XMLTools.CreateFile(baseStationsPath, "BaseStations");
             XMLTools.CreateFile(dronesPath, "Drones");
-            XMLTools.CreateFile(parcelsPath, "Parcels");
             XMLTools.CreateFile(customersPath, "Customers");
             XMLTools.CreateFile(droneChargesPath, "DroneCharges");
         }
@@ -446,9 +445,55 @@ namespace DalXml
 
         public void AddParcel(int Id, int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
         {
-            throw new NotImplementedException();
+            try
+            {
+                GetParcel(Id);
+                throw new ItemAlreadyExistsException(Id, "Parcel ID already taken");
+            }
+            catch (ItemNotFoundException ex)
+            {
+
+            }
+            catch
+            {
+                throw;
+            }
+            List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+
+            Parcels.Add(new Parcel()
+            {
+                Id = Id,
+                SenderId = SenderId,
+                TargetId = TargetId,
+                Weight = PackageWight,
+                Requested = created
+            });
+
+            XMLTools.SaveListToXMLSerializer<Parcel>(Parcels, parcelsPath);
+            
         }
 
+        public IEnumerable<Parcel> GetAllParcels()
+        {
+            //XElement ParcelsRootElem = XMLTools.LoadListFromXMLElement(parcelsPath);
+
+            //return from ParcelElem in ParcelsRootElem.Elements()
+            //       select new Parcel()
+            //       {
+            //           Id = Convert.ToInt32(ParcelElem.Element("Id").Value),
+            //           DroneId = Convert.ToInt32(ParcelElem.Element("DroneId").Value),
+            //           SenderId = Convert.ToInt32(ParcelElem.Element("SenderId").Value),
+            //           TargetId = Convert.ToInt32(ParcelElem.Element("TargetId").Value),
+            //           Weight = (WeightCategories)Convert.ToInt32(ParcelElem.Element("Weight").Value),
+            //           Priority = (Priorities)Convert.ToInt32(ParcelElem.Element("Priority").Value),
+            //           Requested = Convert.ToDateTime(ParcelElem.Element("Requested").Value),
+            //           Scheduled = Convert.ToDateTime(ParcelElem.Element("Scheduled").Value),
+            //           PickedUp = Convert.ToDateTime(ParcelElem.Element("PickedUp").Value),
+            //           Delivered = Convert.ToDateTime(ParcelElem.Element("Delivered").Value)
+            //       };
+
+            return XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+        }
 
         
 
@@ -460,25 +505,6 @@ namespace DalXml
 
         
 
-        public IEnumerable<Parcel> GetAllParcels()
-        {
-            XElement ParcelsRootElem = XMLTools.LoadListFromXMLElement(parcelsPath);
-
-            return from ParcelElem in ParcelsRootElem.Elements()
-                   select new Parcel()
-                   {
-                       Id = Convert.ToInt32(ParcelElem.Element("Id").Value),
-                       DroneId = Convert.ToInt32(ParcelElem.Element("DroneId").Value),
-                       SenderId = Convert.ToInt32(ParcelElem.Element("SenderId").Value),
-                       TargetId = Convert.ToInt32(ParcelElem.Element("TargetId").Value),
-                       Weight = (WeightCategories)Convert.ToInt32(ParcelElem.Element("Weight").Value),
-                       Priority = (Priorities)Convert.ToInt32(ParcelElem.Element("Priority").Value),
-                       Requested = Convert.ToDateTime(ParcelElem.Element("Requested").Value),
-                       Scheduled = Convert.ToDateTime(ParcelElem.Element("Scheduled").Value),
-                       PickedUp = Convert.ToDateTime(ParcelElem.Element("PickedUp").Value),
-                       Delivered = Convert.ToDateTime(ParcelElem.Element("Delivered").Value)
-                   };
-        }
 
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)
         {
