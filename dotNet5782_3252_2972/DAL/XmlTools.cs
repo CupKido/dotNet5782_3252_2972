@@ -17,6 +17,16 @@ namespace DalXml
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
         }
+
+        public static void CreateFile(string path, string Name)
+        {
+            if(!File.Exists(dir + path))
+            {
+                XElement temp = new XElement(Name);
+                SaveListToXMLElement(temp, path);
+            }
+        }
+
         #region SaveLoadWithXElement
         public static void SaveListToXMLElement(XElement rootElem, string filePath)
         {

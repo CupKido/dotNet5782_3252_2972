@@ -44,10 +44,26 @@ namespace BLobject
                 if (p.DroneId != 0)
                 {
                     DO.Drone PDrone = dal.GetDrone(p.DroneId);
+                    DroneToList newD = new DroneToList();
+                    try
+                    {
+                        DO.DroneCharge droneCharge = dal.GetDroneCharge(PDrone.Id);
+                        DO.BaseStation baseStation = dal.GetBaseStation(droneCharge.BaseStationId);
+                        newD.CurrentLocation = new Location()
+                        {
+                            Latitude = baseStation.Latitude,
+                            Longitude = baseStation.Longitude
+                        };
+                        newD.Status = DroneStatuses.Maintenance;
+                        newD.Battery = r.Next(20);
+                        newD.CarriedParcelId = p.Id;
+                        BLDrones.Add(newD);
+                        continue;
+                    }catch{ }
+
                     if (p.Delivered == null)
                     {
 
-                        DroneToList newD = new DroneToList();
 
                         newD.Status = DroneStatuses.InDelivery;
                         newD.Id = PDrone.Id;
@@ -112,6 +128,27 @@ namespace BLobject
                 newD.Id = d.Id;
                 newD.MaxWeight = (WeightCategories)d.MaxWeight;
                 newD.Model = d.Model;
+                try
+                {
+                    DO.DroneCharge droneCharge = dal.GetDroneCharge(d.Id);
+                    DO.BaseStation baseStation = dal.GetBaseStation(droneCharge.BaseStationId);
+                    newD.CurrentLocation = new Location()
+                    {
+                        Latitude = baseStation.Latitude,
+                        Longitude = baseStation.Longitude
+                    };
+                    newD.Status = DroneStatuses.Maintenance;
+                    newD.Battery = r.Next(20);
+                    
+                    BLDrones.Add(newD);
+                    continue;
+                }
+                catch
+                {
+
+                }
+
+                
                 switch (r.Next(2))
                 {
                     case 0:
@@ -362,7 +399,7 @@ namespace BLobject
                     },
                     ChargeSlots = bs.ChargeSlots,
                     Name = bs.Name,
-                    DroneInChargesList = GetDronesInBaseStation(bs).ToList()
+                    DroneInChargesList = GetDronesInBaseStation(bs.Id).ToList()
 
                 };
             }
@@ -389,7 +426,7 @@ namespace BLobject
                 throw new NegetiveNumberException((int)ChargeSlots, "Charge Slots number cannot be negetive!");
             }
 
-            if (GetDronesInBaseStation(lastBS).Count() > ChargeSlots)
+            if (GetDronesInBaseStation(lastBS.Id).Count() > ChargeSlots)
             {
                 throw new OutOfRangeException((int)ChargeSlots, "Too many drones in base station num: " + lastBS.Id);
             }
@@ -406,10 +443,10 @@ namespace BLobject
             dal.SetBaseStation(lastBS);
         }
 
-        private IEnumerable<DroneInCharge> GetDronesInBaseStation(DO.BaseStation bs)
+        private IEnumerable<DroneInCharge> GetDronesInBaseStation(int BSId)
         {
             return from DO.DroneCharge DC in dal.GetAllDroneCharges()
-                   where DC.BaseStationId == bs.Id
+                   where DC.BaseStationId == BSId
                    select new DroneInCharge()
                    {
                        Battery = GetDrone(DC.DroneId).Battery,
