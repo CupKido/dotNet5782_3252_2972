@@ -104,6 +104,9 @@ namespace PL.BaseStation
             this.Close();
         }
 
-      
+        private void Update_Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -144,6 +144,18 @@
                 </Button.Background>
             </Button>
 
+        <Button x:Name="Update_Button" Content="Update" HorizontalAlignment="Left" 
+                    Margin="150,235,0,0" VerticalAlignment="Top" Height="33" Width="95" FontFamily="Elephant"
+                    FontWeight="Bold" FontSize="11" Click="Update_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
+                    >
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#664E4C"/>
+                    <GradientStop Color="#B4CDED" Offset="2"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
         <Button x:Name="AddBaseStation_Button" Content="Add BaseStation" HorizontalAlignment="Left" 
                     Margin="150,158,0,0" VerticalAlignment="Top" Height="33" Width="95" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="AddBaseStation_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
