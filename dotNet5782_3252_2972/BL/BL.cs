@@ -476,7 +476,7 @@ namespace BLobject
             return new BaseStationToList()
             {
                 Id = Bs.Id,
-                Name=Bs.Name,
+                Name = Bs.Name,
                 ChargeSlotsAvailible= available,
                 ChargeSlotsTaken=Bs.ChargeSlots-available
             };
@@ -635,6 +635,15 @@ namespace BLobject
             {
                 throw;
             }
+            try
+            {
+                dal.RemoveDroneCharge(Id);
+            }
+            catch
+            {
+
+            }
+
 
         }
 
@@ -1172,7 +1181,15 @@ namespace BLobject
             }
 
             bool flag = false;
-            DO.Parcel p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
+            DO.Parcel p1;
+            try
+            {
+            p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
+            }
+            catch
+            {
+                throw new NoParcelForThisDrone(id);
+            }
 
 
             foreach (DO.Parcel p2 in dal.GetAllParcels())
@@ -1260,8 +1277,7 @@ namespace BLobject
                 p1.Scheduled = DateTime.Now;
                 try { dal.SetParcel(p1); }
                 catch { throw; }
-
-                Console.WriteLine("drone id :" + id + " takes parcel number :" + p1.Id);
+                
                 return;
 
             }
@@ -1344,9 +1360,6 @@ namespace BLobject
             catch { throw; }
 
         }
-
-
-
 
         #endregion
     }

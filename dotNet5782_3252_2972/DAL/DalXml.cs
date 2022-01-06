@@ -99,6 +99,8 @@ namespace DalXml
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
 
+            try
+            {
             return from BSElem in BSRootElem.Elements()
                    select new BaseStation()
                    {
@@ -108,6 +110,12 @@ namespace DalXml
                        Longitude = Convert.ToDouble(BSElem.Element("Longitude").Value),
                        Latitude = Convert.ToDouble(BSElem.Element("Latitude").Value)
                    };
+            }
+            catch
+            {
+                return new List<BaseStation>();
+            }
+
         }
 
         public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
@@ -494,24 +502,15 @@ namespace DalXml
 
         public IEnumerable<Parcel> GetAllParcels()
         {
-            //XElement ParcelsRootElem = XMLTools.LoadListFromXMLElement(parcelsPath);
+            try
+            {
+                return XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+            }
+            catch
+            {
+                return new List<Parcel>();
+            }
 
-            //return from ParcelElem in ParcelsRootElem.Elements()
-            //       select new Parcel()
-            //       {
-            //           Id = Convert.ToInt32(ParcelElem.Element("Id").Value),
-            //           DroneId = Convert.ToInt32(ParcelElem.Element("DroneId").Value),
-            //           SenderId = Convert.ToInt32(ParcelElem.Element("SenderId").Value),
-            //           TargetId = Convert.ToInt32(ParcelElem.Element("TargetId").Value),
-            //           Weight = (WeightCategories)Convert.ToInt32(ParcelElem.Element("Weight").Value),
-            //           Priority = (Priorities)Convert.ToInt32(ParcelElem.Element("Priority").Value),
-            //           Requested = Convert.ToDateTime(ParcelElem.Element("Requested").Value),
-            //           Scheduled = Convert.ToDateTime(ParcelElem.Element("Scheduled").Value),
-            //           PickedUp = Convert.ToDateTime(ParcelElem.Element("PickedUp").Value),
-            //           Delivered = Convert.ToDateTime(ParcelElem.Element("Delivered").Value)
-            //       };
-
-            return XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
         }
 
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)

@@ -149,17 +149,36 @@ namespace PL
             ADW.Update_Button.Click += (s, e) =>
             {
                 int Id = int.Parse(ADW.DroneId_TextBox.Text);
-                DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
-                DronesCollection.Add(myBL.TurnDroneToList(myBL.GetDrone(Id)));
-                DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
+                updateSpecificDrone(Id);
             };
-            //ADW.Closed += (s, e) =>
-            //{
-            //    filterDroneList();
-            //    resetDronesList();
-            //};
+
+            ADW.DisCharge_Button.Click += (s, e) =>
+            {
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                updateSpecificDrone(Id);
+            };
+
+            ADW.Charge_Button.Click += (s, e) =>
+            {
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                updateSpecificDrone(Id);
+            };
+
+            ADW.Delete_Button.Click += (s, e) =>
+            {
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
+            };
+            
             ADW.Show();
 
+        }
+
+        private void updateSpecificDrone(int Id)
+        {
+            DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
+            DronesCollection.Add(myBL.TurnDroneToList(myBL.GetDrone(Id)));
+            DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
         }
 
         private void filterDroneList()

@@ -647,7 +647,7 @@ namespace ConsoleUI
             DateTime d = DateTime.Now;
             try
             {
-                DO.AddParcel(Id, SenderID, TargetID, PackageWight, priority,d);
+                DO.AddParcel(SenderID, TargetID, PackageWight, priority,d);
             }
             catch (Exception ex)
             {
