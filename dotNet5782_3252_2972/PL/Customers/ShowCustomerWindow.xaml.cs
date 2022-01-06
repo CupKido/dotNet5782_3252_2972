@@ -58,8 +58,19 @@ namespace PL.Customers
 
         private void ParcelsList_DoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if((sender as ListView).SelectedItem is null)
+            {
+                return;
+            }
+            try
+            {
             Parcel.ShowParcelWindow SPW = new Parcel.ShowParcelWindow(((sender as ListView).SelectedItem as BO.ParcelInCustomer).Id);
             SPW.Show();
+            }
+            catch
+            {
+                return;
+            }
             CloseWindow();
         }
 
