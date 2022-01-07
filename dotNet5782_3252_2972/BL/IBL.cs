@@ -164,6 +164,13 @@ namespace BlApi
         /// <param name="Id">the wanted parcel's ID</param>
         /// <returns>A parcel with the specified ID from the data base</returns>
         public Parcel GetParcel(int Id);
+        /// <summary>
+        /// updates a parcel' priority with the specified ID from the data base
+        /// </summary>
+        /// <param name="Id">the wanted parcel's ID</param>
+        /// <param name="prior">the wanted parcel's priority</param>
+
+        public void UpdateParcel(int Id, BO.Priorities prior);
 
         public void DeleteParcel(int Id);
 

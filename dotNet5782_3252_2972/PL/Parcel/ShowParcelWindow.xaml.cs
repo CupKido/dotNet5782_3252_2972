@@ -148,5 +148,21 @@ namespace PL.Parcel
             SCW.Show();
             CloseWindow();
         }
+
+        private void UpdateParcel_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int ParcelId = int.Parse(ParcelId_TextBox.Text);
+            try
+            {
+                myBL.UpdateParcel(ParcelId, (BO.Priorities)PriorityCB.SelectedItem);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            disallowClosure = false;
+            this.Close();
+        }
     }
 }

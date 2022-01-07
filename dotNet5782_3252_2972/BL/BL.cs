@@ -1361,6 +1361,27 @@ namespace BLobject
 
         }
 
+        public void UpdateParcel(int Id, BO.Priorities prior)
+        {
+            DO.Parcel lastParcel;
+
+            try
+            {
+                lastParcel = dal.GetParcel(Id);
+
+            }
+            catch (DO.ItemNotFoundException ex)
+            {
+                throw new ItemNotFoundException("Parcel with specified ID was not found", ex);
+            }
+            lastParcel.Priority = (DO.Priorities)prior;
+
+
+
+            dal.SetParcel(lastParcel);
+
+        }
+
         #endregion
     }
 }
