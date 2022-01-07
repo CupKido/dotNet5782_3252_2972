@@ -8,7 +8,7 @@ namespace BO
 {
     public class ParcelInDelivery
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public bool ParcelStatus { get; set; } // waiting for pickup or on the way to target
 

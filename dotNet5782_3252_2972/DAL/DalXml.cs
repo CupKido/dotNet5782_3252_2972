@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.IO;
 
@@ -29,6 +30,7 @@ namespace DalXml
             XMLTools.CreateFile(droneChargesPath, "DroneCharges");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static DalXml GetInstance()
         {
 
@@ -66,6 +68,7 @@ namespace DalXml
 
         #region BaseStations
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddBaseStations(int Id, string Name, double Longitude, double Latitude, int ChargeSlots)
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
@@ -95,6 +98,7 @@ namespace DalXml
             XMLTools.SaveListToXMLElement(BSRootElem, baseStationsPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStation> GetAllBaseStations()
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
@@ -118,11 +122,13 @@ namespace DalXml
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
         {
             return GetAllBaseStations().Where(bs => predicate(bs));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public BaseStation GetBaseStation(int Id)
         {
             try
@@ -135,6 +141,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetBaseStation(BaseStation newBS)
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
@@ -152,6 +159,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public BaseStation RemoveBaseStation(int Id)
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
@@ -177,6 +185,7 @@ namespace DalXml
 
         #region Customers
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddCustomer(int Id, string Name, string Phone, double Longitude, double Latitude)
         {
             XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
@@ -206,6 +215,7 @@ namespace DalXml
             XMLTools.SaveListToXMLElement(CustomersRootElem, customersPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetAllCustomers()
         {
             XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
@@ -221,11 +231,13 @@ namespace DalXml
                    };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetAllCustomersBy(Predicate<Customer> predicate)
         {
             return GetAllCustomers().Where(c => predicate(c));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer GetCustomer(int Id)
         {
             try
@@ -238,6 +250,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetCustomer(Customer newCustomer)
         {
             XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
@@ -256,6 +269,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer RemoveCustomer(int Id)
         {
             XElement CustomersRootElem = XMLTools.LoadListFromXMLElement(customersPath);
@@ -284,6 +298,7 @@ namespace DalXml
 
         #region Drones
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDrone(int Id, string Model, WeightCategories MaxWeight)
         {
             XElement DronesRootElem = XMLTools.LoadListFromXMLElement(dronesPath);
@@ -311,6 +326,7 @@ namespace DalXml
             XMLTools.SaveListToXMLElement(DronesRootElem, dronesPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Drone> GetAllDrones()
         {
             XElement DronesRootElem = XMLTools.LoadListFromXMLElement(dronesPath);
@@ -324,11 +340,13 @@ namespace DalXml
                    };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Drone> GetAllDronesBy(Predicate<Drone> predicate)
         {
             return GetAllDrones().Where(d => predicate(d));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Drone GetDrone(int Id)
         {
             try
@@ -341,6 +359,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetDrone(Drone newDrone)
         {
             XElement DronesRootElem = XMLTools.LoadListFromXMLElement(dronesPath);
@@ -356,6 +375,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Drone RemoveDrone(int Id)
         {
             XElement DronesRootElem = XMLTools.LoadListFromXMLElement(dronesPath);
@@ -382,6 +402,7 @@ namespace DalXml
 
         #region DroneCharges
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDroneCharge(int DroneId, int BaseStationId, DateTime started)
         {
             XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
@@ -409,6 +430,7 @@ namespace DalXml
             XMLTools.SaveListToXMLElement(DCRootElem, droneChargesPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> GetAllDroneCharges()
         {
             XElement DroneChargesRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
@@ -422,11 +444,13 @@ namespace DalXml
                    };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> GetAllDroneChargesBy(Predicate<DroneCharge> predicate)
         {
             return GetAllDroneCharges().Where(dc => predicate(dc));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneCharge GetDroneCharge(int DroneId)
         {
             try
@@ -439,6 +463,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetDroneCharge(DroneCharge newDC)
         {
             XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
@@ -454,6 +479,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneCharge RemoveDroneCharge(int DroneId)
         {
             XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
@@ -480,6 +506,7 @@ namespace DalXml
 
         #region Parcels
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddParcel( int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
         {
            
@@ -500,6 +527,7 @@ namespace DalXml
             return num;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Parcel> GetAllParcels()
         {
             try
@@ -513,11 +541,13 @@ namespace DalXml
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)
         {
             return GetAllParcels().Where(p => predicate(p));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Parcel GetParcel(int Id)
         {
             try
@@ -530,6 +560,7 @@ namespace DalXml
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetParcel(Parcel newParcel)
         {
             List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
@@ -546,6 +577,7 @@ namespace DalXml
             throw new ItemNotFoundException(newParcel.Id, "Parcel Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Parcel RemoveParcel(int Id)
         {
             

@@ -120,7 +120,7 @@ namespace PL
             }
             if ((int)status == 2)
             {
-                int parcelId = drone.CurrentParcel.Id;
+                int parcelId = (int)drone.CurrentParcel.Id;
                 BO.Parcel p = myBL.GetParcel(parcelId);
                 TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
                 DisCharge_Button.Visibility = Visibility.Collapsed;
@@ -209,8 +209,9 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            disallowClosure = false;
-            this.Close();
+            Charge_Button.Visibility = Visibility.Collapsed;
+            DisCharge_Button.Visibility = Visibility.Visible;
+            TimeInCharge_TextBox.Visibility = Visibility.Visible;
 
         }
 
@@ -233,9 +234,10 @@ namespace PL
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            disallowClosure = false;
-            this.Close();
-
+            Charge_Button.Visibility = Visibility.Visible;
+            DisCharge_Button.Visibility = Visibility.Collapsed;
+            TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
+            TimeInCharge_TextBox.Text = "";
         }
 
         private void Supply_Click(object sender, RoutedEventArgs e)

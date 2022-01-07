@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BlApi;
 using DalApi;
-
+using System.Runtime.CompilerServices;
 
 namespace BLobject
 {
@@ -21,11 +21,11 @@ namespace BLobject
 
         #region single tone
 
-        internal static BL instance=null;
+        internal static BL instance = null;
         private static object locker = new object();
         public static BL GetInstance()
         {
-         
+
             if (instance == null)
             {
                 lock (locker)
@@ -43,7 +43,7 @@ namespace BLobject
 
         private BL()
         {
-            dal = DalFactory.GetDal("XML"); 
+            dal = DalFactory.GetDal("XML");
             double[] arr = dal.AskForElectricity();
             AvailbleElec = arr[0];
             LightElec = arr[1];
@@ -76,7 +76,8 @@ namespace BLobject
                         newD.CarriedParcelId = p.Id;
                         BLDrones.Add(newD);
                         continue;
-                    }catch{ }
+                    }
+                    catch { }
 
                     if (p.Delivered == null)
                     {
@@ -156,7 +157,7 @@ namespace BLobject
                     };
                     newD.Status = DroneStatuses.Maintenance;
                     newD.Battery = r.Next(20);
-                    
+
                     BLDrones.Add(newD);
                     continue;
                 }
@@ -165,7 +166,7 @@ namespace BLobject
 
                 }
 
-                
+
                 switch (r.Next(2))
                 {
                     case 0:
@@ -232,6 +233,61 @@ namespace BLobject
 
         }
 
+        private BL(int a)
+        {
+            dal = DalFactory.GetDal("XML");
+            double[] arr = dal.AskForElectricity();
+            AvailbleElec = arr[0];
+            LightElec = arr[1];
+            IntermediateElec = arr[2];
+            HeavyElec = arr[3];
+            ChargePerHours = arr[4];
+            List<DO.Customer> SatisfiedCustomers = new List<DO.Customer>();
+            List<DO.Drone> DalDronesList = dal.GetAllDrones().ToList();
+
+            Random r = new Random();
+
+            //if in delivery
+            foreach (DO.Drone d in dal.GetAllDrones())
+            {
+                DroneToList newD = new DroneToList()
+                {
+                    Id = d.Id,
+                    MaxWeight = (WeightCategories)d.MaxWeight,
+                    Model = d.Model
+                };
+               
+                DO.Parcel p;
+                try
+                {
+                    p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id && p.Delivered is null)).First();
+                    //case of attributed parcel
+                }
+                catch
+                {
+                    try
+                    {
+                        p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id)).First();
+                        //case of satisfied customers
+                    }
+                    catch
+                    {
+                        //case of no attributed Parcel
+                        newD.Status = DroneStatuses.Maintenance;
+                        sendToMaitenance(newD);
+                        newD.Battery = r.Next(20);
+                    }
+                }
+
+            }
+
+        }
+
+
+
+
+
+
         private void sendToMaitenance(DroneToList newD)
         {
 
@@ -258,7 +314,7 @@ namespace BLobject
             dal.AddDroneCharge(newD.Id, bs.Id, DateTime.Now);
 
         }
-       
+
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
         {
             int ACS = baseStation.ChargeSlots;
@@ -336,8 +392,10 @@ namespace BLobject
             return deg * (Math.PI / 180);
         }
 
+
         #region Base Stations
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
             if (Id < 0)
@@ -355,6 +413,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStationToList> GetAllBaseStations()
         {
             return (from DO.BaseStation bs in dal.GetAllBaseStations()
@@ -366,9 +425,10 @@ namespace BLobject
                         ChargeSlotsAvailible = ACS,
                         ChargeSlotsTaken = bs.ChargeSlots - ACS
                     }).OrderBy(BSTL => BSTL.Id);
-           
+
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStationToList> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
         {
             return from DO.BaseStation bs in dal.GetAllBaseStations()
@@ -384,6 +444,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public BaseStation GetBaseStation(int Id)
         {
             DO.BaseStation bs;
@@ -410,6 +471,7 @@ namespace BLobject
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateBaseStation(int Id, string Name, int? ChargeSlots)
         {
             DO.BaseStation lastBS;
@@ -455,6 +517,7 @@ namespace BLobject
                    };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStationToList> GetAvailibleBaseStations()
         {
             return from DO.BaseStation bs in dal.GetAllBaseStations()
@@ -470,6 +533,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public BaseStationToList TurnBaseStationToList(BaseStation Bs)
         {
             int available = getAvailibleSlotsForBaseStation(Bs);
@@ -477,8 +541,8 @@ namespace BLobject
             {
                 Id = Bs.Id,
                 Name = Bs.Name,
-                ChargeSlotsAvailible= available,
-                ChargeSlotsTaken=Bs.ChargeSlots-available
+                ChargeSlotsAvailible = available,
+                ChargeSlotsTaken = Bs.ChargeSlots - available
             };
         }
 
@@ -486,6 +550,7 @@ namespace BLobject
 
         #region Drones 
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDrone(int Id, String Model, WeightCategories MaxWeight, int stationId)
         {
             if (Id < 1)
@@ -504,7 +569,7 @@ namespace BLobject
             {
                 Random r = new Random();
                 DO.BaseStation bs = dal.GetBaseStation(stationId);
-                if(getAvailibleSlotsForBaseStation(GetBaseStation(bs.Id)) <= 0)
+                if (getAvailibleSlotsForBaseStation(GetBaseStation(bs.Id)) <= 0)
                 {
                     throw new Exception("No Availible slot in Base Station num: " + bs.Id);
                 }
@@ -539,6 +604,7 @@ namespace BLobject
             }
         } //need to fix
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneToList> GetAllDrones()
         {
             BLDrones.Sort();
@@ -546,6 +612,7 @@ namespace BLobject
             return BLDrones;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneToList> GetAllDronesBy(Predicate<Drone> predicate)
         {
             return from DroneToList d in GetAllDrones()
@@ -554,6 +621,7 @@ namespace BLobject
                    select d;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateDrone(int Id, string Model)
         {
             DO.Drone lastDrone;
@@ -575,6 +643,7 @@ namespace BLobject
             BLDrones.Add(BLdrone);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Drone GetDrone(int Id)
         {
             DroneToList d = BLDrones.FirstOrDefault(p => p.Id == Id);
@@ -624,6 +693,7 @@ namespace BLobject
             };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeleteDrone(int Id)
         {
             try
@@ -647,6 +717,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneToList TurnDroneToList(Drone drone)
         {
             return new DroneToList()
@@ -661,6 +732,7 @@ namespace BLobject
             };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChargeDrone(int Id)
         {
             Drone droneToCharge;
@@ -700,6 +772,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DisChargeDrone(int Id, float time)
         {
             Drone droneDisCharge;
@@ -738,6 +811,7 @@ namespace BLobject
 
         #region Customers
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
         {
             if (Id < 1)
@@ -758,25 +832,26 @@ namespace BLobject
             }
         } //need to fix
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<CustomerToList> GetAllCustomers()
         {
             List<CustomerToList> res = new List<CustomerToList>();
-            
-            foreach(DO.Customer c in dal.GetAllCustomers())
+
+            foreach (DO.Customer c in dal.GetAllCustomers())
             {
                 Customer BOc;
                 try
                 {
                     BOc = GetCustomer(c.Id);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw;
                 }
                 CustomerToList newC = new CustomerToList();
-                foreach(ParcelInCustomer PIC in BOc.ToThisCustomer)
+                foreach (ParcelInCustomer PIC in BOc.ToThisCustomer)
                 {
-                    if(PIC.Status == ParcelStatuses.Delivered)
+                    if (PIC.Status == ParcelStatuses.Delivered)
                     {
                         newC.Recieved += 1;
                     }
@@ -785,7 +860,7 @@ namespace BLobject
                         newC.OnTheWay += 1;
                     }
                 }
-                foreach(ParcelInCustomer PIC in BOc.FromThisCustomer)
+                foreach (ParcelInCustomer PIC in BOc.FromThisCustomer)
                 {
                     if (PIC.Status == ParcelStatuses.Delivered)
                     {
@@ -802,9 +877,10 @@ namespace BLobject
                 res.Add(newC);
             }
             return res.OrderBy(CTL => CTL.Id);
-            
+
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer GetCustomer(int Id)
         {
             try
@@ -888,6 +964,7 @@ namespace BLobject
             return sum;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomer(int Id, string name, string phone)
         {
             DO.Customer lastCustomer;
@@ -916,6 +993,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeleteCustomer(int Id)
         {
             try
@@ -967,7 +1045,8 @@ namespace BLobject
                         }
                     }).ToList();
         }
-        
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public CustomerToList TurnCustomerToList(Customer customer)
         {
             DO.Customer c = dal.GetCustomer(customer.Id);
@@ -980,7 +1059,7 @@ namespace BLobject
                 SentAndNotDelivered = getSentAndNotDelivered(c),
                 Recieved = getRecieved(c),
                 OnTheWay = getOnTheWay(c),
-                
+
             };
         }
 
@@ -988,21 +1067,24 @@ namespace BLobject
 
         #region Parcel
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<ParcelToList> GetAllParcels()
         {
+
             return (from DO.Parcel p in dal.GetAllParcels()
-                                      select new ParcelToList()
-                                      {
-                                          Id = p.Id,
-                                          Priority = (Priorities)p.Priority,
-                                          Weight = (WeightCategories)p.Weight,
-                                          Status = getParcelStatus(p),
-                                          SenderName = dal.GetCustomer(p.SenderId).Name,
-                                          TargetName = dal.GetCustomer(p.TargetId).Name
-                                      }).OrderBy(PTL => PTL.Id);
-           
+                    select new ParcelToList()
+                    {
+                        Id = p.Id,
+                        Priority = (Priorities)p.Priority,
+                        Weight = (WeightCategories)p.Weight,
+                        Status = getParcelStatus(p),
+                        SenderName = dal.GetCustomer(p.SenderId).Name,
+                        TargetName = dal.GetCustomer(p.TargetId).Name
+                    }).OrderBy(PTL => PTL.Id);
+
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddParcel(int SenderId, int TargetId, BO.WeightCategories PackageWight, BO.Priorities priority)
         {
             try
@@ -1039,9 +1121,10 @@ namespace BLobject
             {
                 throw;
             }
-            
+
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Parcel GetParcel(int Id)
         {
             try
@@ -1075,6 +1158,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private ParcelStatuses getParcelStatus(DO.Parcel p)
         {
             if (p.Delivered != null)
@@ -1095,6 +1179,7 @@ namespace BLobject
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private ParcelStatuses getParcelStatus(Parcel p)
         {
             if (p.Delivered != null)
@@ -1115,6 +1200,7 @@ namespace BLobject
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<ParcelToList> GetParcelsWithNoDrone()
         {
             List<ParcelToList> PTL = (from DO.Parcel p in dal.GetAllParcels()
@@ -1132,16 +1218,17 @@ namespace BLobject
             return PTL;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeleteParcel(int Id)
         {
             try
             {
                 Parcel p = GetParcel(Id);
                 dal.RemoveParcel(Id);
-                if(p.DroneId != 0)
+                if (p.DroneId != 0)
                 {
                     DroneToList tempDrone = BLDrones.First(d => d.Id == p.DroneId);
-                    if(tempDrone.Status == DroneStatuses.InDelivery)
+                    if (tempDrone.Status == DroneStatuses.InDelivery)
                     {
                         BLDrones.Remove(tempDrone);
                         tempDrone.Status = DroneStatuses.Availible;
@@ -1157,6 +1244,7 @@ namespace BLobject
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public ParcelToList TurnParcelToList(Parcel parcel)
         {
             return new ParcelToList()
@@ -1170,9 +1258,9 @@ namespace BLobject
             };
         }
 
-        public void AttributionParcelToDrone(int id)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void AttributionParcelToDroneTemp(int id)
         {
-
             DO.Drone drone = dal.GetDrone(id);
             Drone d = GetDrone(id);
             if (d.Status != DroneStatuses.Availible)
@@ -1184,7 +1272,7 @@ namespace BLobject
             DO.Parcel p1;
             try
             {
-            p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
+                p1 = dal.GetAllParcels().First(); //p1 is variable (parcel) we gonna check to connect
             }
             catch
             {
@@ -1221,7 +1309,7 @@ namespace BLobject
                 {
                     continue;
                 }
-                if(p1.DroneId != 0)
+                if (p1.DroneId != 0)
                 {
                     continue;
                 }
@@ -1260,10 +1348,8 @@ namespace BLobject
                 }
                 flag = true;
 
-
-
             }
-            if (flag) // to meke condition if didnt finnd parcels at all
+            if (flag) // to meke condition if didnt find parcels at all
             {
 
 
@@ -1277,7 +1363,7 @@ namespace BLobject
                 p1.Scheduled = DateTime.Now;
                 try { dal.SetParcel(p1); }
                 catch { throw; }
-                
+
                 return;
 
             }
@@ -1286,6 +1372,81 @@ namespace BLobject
 
         }
 
+        public void AttributionParcelToDrone(int Id)
+        {
+            Drone d = GetDrone(Id);
+            if (d.Status != DroneStatuses.Availible)
+            {
+                throw new NoParcelForThisDrone(Id);
+            }
+
+            try
+            {
+                DO.Parcel parcel = (from DO.Parcel p in dal.GetAllParcelsBy(p => (canSupply(d, p) && p.DroneId == 0))
+                                    orderby p.Priority
+                                    select p).Last();
+                updateAttribution(Id, parcel.Id);
+            }
+            catch
+            {
+                throw new NoParcelForThisDrone(Id);
+            }
+
+        }
+        private void updateAttribution(int DroneId, int ParcelId)
+        {
+            try
+            {
+                DO.Parcel p = dal.GetParcel(ParcelId);
+                p.DroneId = DroneId;
+                p.Scheduled = DateTime.Now;
+                dal.SetParcel(p);
+                DroneToList d = BLDrones.First(d => d.Id == DroneId);
+                BLDrones.Remove(d);
+                d.CarriedParcelId = ParcelId;
+                d.Status = DroneStatuses.InDelivery;
+                BLDrones.Add(d);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+        private bool canSupply(Drone drone, DO.Parcel parcel)
+        {
+            if ((int)drone.MaxWeight < (int)parcel.Weight)
+            {
+                return false;
+            }
+            DO.Customer sender = dal.GetCustomer(parcel.SenderId);
+            Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
+            DO.Customer target = dal.GetCustomer(parcel.TargetId);
+            Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
+
+            double batteryNeeded = getDistanceInBattery(drone.CurrentLocation, senderL) + getDistanceInBattery(senderL, targetL, parcel.Weight);
+
+            if (drone.Battery >= batteryNeeded)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private double getDistanceInBattery(Location from, Location to)
+        {
+            double disinkm = getDistanceFromLatLonInKm(from.Latitude, from.Longitude, to.Latitude, to.Longitude);
+            return disinkm / AvailbleElec;
+
+        }
+
+        private double getDistanceInBattery(Location from, Location to, DO.WeightCategories weight)
+        {
+            double disinkm = getDistanceFromLatLonInKm(from.Latitude, from.Longitude, to.Latitude, to.Longitude);
+            return disinkm / dal.AskForElectricity()[(int)weight + 1];
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void PickUpParcelByDrone(int Id)
         {
             try
@@ -1295,7 +1456,7 @@ namespace BLobject
                 {
                     throw new StatusIsntInDelivery(Id);
                 }
-                int parcelId = drone.CurrentParcel.Id;
+                int parcelId = (int)drone.CurrentParcel.Id;
                 DO.Parcel parcel = dal.GetParcel(parcelId);
                 if (parcel.PickedUp != null)
                 {
@@ -1321,6 +1482,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SupplyParcel(int Id)
         {
             try
@@ -1330,7 +1492,7 @@ namespace BLobject
                 {
                     throw new StatusIsntInDelivery(Id);
                 }
-                int parcelId = drone.CurrentParcel.Id;
+                int parcelId = (int)drone.CurrentParcel.Id;
                 DO.Parcel parcel = dal.GetParcel(parcelId);
                 if (parcel.Delivered != null)
                 {
@@ -1361,6 +1523,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateParcel(int Id, BO.Priorities prior)
         {
             DO.Parcel lastParcel;

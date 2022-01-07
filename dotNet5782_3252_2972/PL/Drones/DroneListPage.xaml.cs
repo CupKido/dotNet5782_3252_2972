@@ -164,6 +164,12 @@ namespace PL
                 updateSpecificDrone(Id);
             };
 
+            ADW.Attribution_Button.Click += (s, e) =>
+            {
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                updateSpecificDrone(Id);
+            };
+
             ADW.Delete_Button.Click += (s, e) =>
             {
                 int Id = int.Parse(ADW.DroneId_TextBox.Text);
