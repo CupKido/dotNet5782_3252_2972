@@ -26,6 +26,7 @@ namespace PL.Customers
         public ShowCustomerWindow()
         {
             InitializeComponent();
+            IfPresentation.IsChecked = false;
             Width = 300;
         }
 
@@ -37,6 +38,11 @@ namespace PL.Customers
             this.DataContext = c;
             ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
             GoingParcelsList.ItemsSource = c.FromThisCustomer;
+            CustomerId_TextBox.IsEnabled = false;
+            CustomerLongitude_TextBox.IsEnabled = false;
+            CustomerLAtitude_TextBox.IsEnabled = false;
+
+            
         }
 
         public void CloseWindow()
@@ -120,6 +126,41 @@ namespace PL.Customers
             CloseWindow();
         }
 
-      
+        private void Update_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int customerId = int.Parse(CustomerId_TextBox.Text);
+            
+            string customerName = CustomerName_TextBox.Text;
+            string customerPhone = CustomerPhone_TextBox.Text;
+            int PhoneTemp;
+
+            if (CustomerName_TextBox.Text == "")
+            {
+                MessageBox.Show("Please enter the customer's name", "Empty name value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            bool check = int.TryParse(CustomerPhone_TextBox.Text, out PhoneTemp);
+            if (!check)
+            {
+                MessageBox.Show(" Phone number has to be a number", "Wrong type Phone number", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (customerPhone.Length != 10)
+            {
+                MessageBox.Show(" Phone number should contain 10 digits", "Wrong type Phone number", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                myBL.UpdateCustomer(customerId , CustomerName_TextBox.Text , CustomerPhone_TextBox.Text );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            disallowClosure = false;
+            this.Close();
+        }
     }
 }
