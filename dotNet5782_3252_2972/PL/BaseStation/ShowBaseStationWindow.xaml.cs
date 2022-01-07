@@ -35,7 +35,9 @@ namespace PL.BaseStation
             BO.BaseStationToList Bs = myBL.TurnBaseStationToList(myBL.GetBaseStation(BaseStationId));
             this.DataContext = Bs;
             IfPresentation.IsChecked = true;
-            
+            BaseStationId_TextBox.IsEnabled = false;
+            BaseStationChargeSlotsTaken_TextBox.IsEnabled = false;
+
             // ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
             // GoingParcelsList.ItemsSource = c.FromThisCustomer;
         }
@@ -106,7 +108,34 @@ namespace PL.BaseStation
 
         private void Update_Button_Click(object sender, RoutedEventArgs e)
         {
+            int BsId = int.Parse(BaseStationId_TextBox.Text);
+            int takenSlots, availableSlots;
+            string BsName = BaseStationName_TextBox.Text;
+            if (BaseStationName_TextBox.Text == "")
+            {
+                MessageBox.Show("Please enter the Base station's name", "Empty name value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            takenSlots = int.Parse(BaseStationChargeSlotsTaken_TextBox.Text);
+            bool check = int.TryParse(BaseStationChargeSlotsAvailable_TextBox.Text, out availableSlots);
+            if(!check)
+            {
+                MessageBox.Show(" Available slots has to be a number", "Wrong type number", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                myBL.UpdateBaseStation(BsId, BaseStationName_TextBox.Text , availableSlots + takenSlots);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            disallowClosure = false;
             this.Close();
         }
+
     }
 }
