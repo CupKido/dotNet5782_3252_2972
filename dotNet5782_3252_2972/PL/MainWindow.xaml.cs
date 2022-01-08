@@ -10,11 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using BlApi;
-using PL.BaseStation;
-using PL.Parcel;
 
 namespace PL
 {
@@ -23,42 +19,21 @@ namespace PL
     /// </summary>
     public partial class MainWindow : Window
     {
-        BlApi.IBL myBL = BlFactory.GetBL();
-        
         public MainWindow()
         {
             InitializeComponent();
-            Main.Content = new DroneListPage();
-            this.Show();
-            
-        }
-        public void showDroneList_click(object sender, RoutedEventArgs e)
-        {
-            Main.Content = null;
-            Main.Content = new DroneListPage();
         }
 
-        private void showCustomersList_click(object sender, RoutedEventArgs e)
+        private void LogInAsManager_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = null;
-            Main.Content = new CustomersListPage();
-        }
-
-        private void showParcelsList_click(object sender, RoutedEventArgs e)
-        {
-            Main.Content = null;
-            Main.Content = new ParcelListPage();
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
+            (new MainManagerWindow()).Show();
             this.Close();
         }
 
-        private void ShowBaseStations_Click(object sender, RoutedEventArgs e)
+        private void LogInAsCustomer_Click(object sender, RoutedEventArgs e)
         {
-            Main.Content = null;
-            Main.Content = new BaseStationListPage();
+            (new MainManagerWindow()).Show();
+            this.Close();
         }
     }
 }

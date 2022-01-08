@@ -281,6 +281,7 @@ namespace BLobject
                 {
                     p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id && p.Delivered is null)).First();
                     newD.Status = DroneStatuses.InDelivery;
+                    newD.CarriedParcelId = p.Id;
                     DO.Customer sender = dal.GetCustomer(p.SenderId);
                     Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
                     DO.Customer target = dal.GetCustomer(p.SenderId);
@@ -338,10 +339,6 @@ namespace BLobject
             }
 
         }
-
-
-
-
 
 
         private int sendToMaitenance(DroneToList newD)
