@@ -41,7 +41,7 @@ namespace BLobject
 
         #endregion
 
-        private BL()
+        private BL(int a)
         {
             dal = DalFactory.GetDal("XML");
             double[] arr = dal.AskForElectricity();
@@ -233,7 +233,7 @@ namespace BLobject
 
         }
 
-        private BL(int a)
+        private BL()
         {
             dal = DalFactory.GetDal("XML");
             double[] arr = dal.AskForElectricity();
@@ -263,9 +263,12 @@ namespace BLobject
                     newD.Status = DroneStatuses.Maintenance;
                     newD.CurrentLocation = new Location()
                     {
+
                         Longitude = chargedIn.Longitude,
                         Latitude = chargedIn.Latitude
+
                     };
+                    newD.Battery = r.Next(20);
                     BLDrones.Add(newD);
                     continue;
                 }
@@ -290,8 +293,8 @@ namespace BLobject
                     {
                         newD.CurrentLocation = new Location()
                         {
-                            Longitude = c.Longitude,
-                            Latitude = c.Latitude
+                            Longitude = sender.Longitude,
+                            Latitude = sender.Latitude
                         };
                     }
                     else
@@ -307,18 +310,29 @@ namespace BLobject
                 }
                 catch
                 {
-                    try
-                    {
-                        p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id)).First();
-                        //case of satisfied customers
-                    }
-                    catch
-                    {
-                        //case of no attributed Parcel
-                        newD.Status = DroneStatuses.Maintenance;
-                        sendToMaitenance(newD);
-                        newD.Battery = r.Next(20);
-                    }
+                    
+                }
+                try
+                {
+                    p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id)).OrderBy(d => d.Delivered).First();
+                    newD.Status = DroneStatuses.Availible;
+                    DO.Customer target = dal.GetCustomer(p.TargetId);
+                    BaseStation targetBS = closestBaseStation(target.Longitude, target.Latitude);
+                    newD.CurrentLocation = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
+                    newD.Battery = r.Next((int)getDistanceInBattery(newD.CurrentLocation, targetBS.StationLocation) + 1, 101);
+                    BLDrones.Add(newD);
+                    continue;
+                    //case of satisfied customers
+                }
+                catch
+                {
+                    //case of no attributed Parcel
+                    newD.Status = DroneStatuses.Maintenance;
+                    DO.BaseStation baseStation = dal.GetBaseStation(sendToMaitenance(newD));
+                    newD.CurrentLocation = new Location() { Longitude = baseStation.Longitude, Latitude = baseStation.Latitude };
+                    newD.Battery = r.Next(20);
+                    BLDrones.Add(newD);
+                    continue;
                 }
 
             }
@@ -330,31 +344,20 @@ namespace BLobject
 
 
 
-        private void sendToMaitenance(DroneToList newD)
+        private int sendToMaitenance(DroneToList newD)
         {
 
-            List<BaseStation> availibleStation = new List<BaseStation>();
-
-            foreach (DO.BaseStation baseStation in dal.GetAllBaseStations())
-            {
-                if (getAvailibleSlotsForBaseStation(baseStation) != 0)
-                {
-                    availibleStation.Add(new BaseStation()
-                    {
-                        Id = baseStation.Id
-                    });
-                }
-            }
+            IEnumerable<BaseStation> availibleStation = from DO.BaseStation baseStation in dal.GetAllBaseStations()
+                                                 where getAvailibleSlotsForBaseStation(baseStation) > 0
+                                                 select new BaseStation()
+                                                 {
+                                                     Id = baseStation.Id
+                                                 };
 
             Random r = new Random();
-            BaseStation bs = GetBaseStation(availibleStation[r.Next(availibleStation.Count)].Id);
-            newD.CurrentLocation = new Location()
-            {
-                Latitude = bs.StationLocation.Latitude,
-                Longitude = bs.StationLocation.Longitude
-            };
+            BaseStation bs = GetBaseStation(availibleStation.ToArray()[r.Next(availibleStation.Count())].Id);
             dal.AddDroneCharge(newD.Id, bs.Id, DateTime.Now);
-
+            return bs.Id;
         }
 
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
