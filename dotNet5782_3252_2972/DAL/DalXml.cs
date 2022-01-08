@@ -18,9 +18,177 @@ namespace DalXml
         {
             XMLTools.CreateConfig(configPath, GetAllParcels().Count());
             CreateAllFiles();
+            if(GetAllBaseStations().Count() == 0 && GetAllCustomers().Count() == 0 && GetAllDrones().Count() == 0 && GetAllParcels().Count() == 0)
+            {
+                Initialize();
+            }
         }
 
-        
+        internal void Initialize()
+        {
+            Random r = new Random();
+            //5 Drones initializer
+            for (int i = 0; i < 10; i++)
+            {
+                DO.Drone drone = new DO.Drone();
+                drone.Id = i + 1;
+                //drone.Battery = r.Next(25, 100) + r.NextDouble();
+
+
+                drone.MaxWeight = (DO.WeightCategories)r.Next(0, 3); //IDAL.DO.WeightCategories.Heavy;
+
+
+                switch (r.Next(1, 4))
+                {
+                    case 1:
+                        drone.Model = "Mavic";
+                        break;
+                    case 2:
+                        drone.Model = "SkyDrone";
+                        break;
+                    case 3:
+                        drone.Model = "Parrot";
+                        break;
+                }
+                AddDrone(drone.Id, drone.Model, drone.MaxWeight);
+            }
+
+
+            //2 Base Stations initializer
+            for (int i = 0; i < 2; i++)
+            {
+                DO.BaseStation BS = new DO.BaseStation();
+                BS.Id = i + 1;
+                BS.Latitude = r.Next(0, 10) + r.NextDouble();
+                BS.Longitude = r.Next(0, 10) + r.NextDouble();
+                BS.ChargeSlots = r.Next(5, GetAllDrones().Count());
+                if (i == 0)
+                {
+                    BS.Name = "Jerusalem";
+                }
+                else
+                {
+                    BS.Name = "Haifa";
+                }
+                AddBaseStation(BS.Id, BS.Name, BS.Longitude, BS.Latitude, BS.ChargeSlots);
+            }
+
+            //10 Customers
+            string[] Names = { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
+
+            for (int i = 0; i < 10; i++)
+            {
+                DO.Customer customer = new DO.Customer();
+                customer.Id = i + 1;
+                customer.Latitude = r.Next(5, 10) + r.NextDouble();
+                customer.Longitude = r.Next(5, 10) + r.NextDouble();
+                switch (r.Next(1, 5))
+                {
+                    case 1:
+                        customer.Phone = "052";
+                        break;
+                    case 2:
+                        customer.Phone = "054";
+                        break;
+                    case 3:
+                        customer.Phone = "058";
+                        break;
+                    case 4:
+                        customer.Phone = "055";
+                        break;
+                }
+                for (int j = 0; j < 7; j++)
+                {
+                    customer.Phone += r.Next(0, 10);
+                }
+                customer.Name = Names[i];
+                AddCustomer(customer.Id, customer.Name, customer.Phone, customer.Longitude, customer.Latitude);
+            }
+            //customers[0].Name = "Itzhak";
+            //Customers[1].Name = "Shlomo";
+            //Customers[2].Name = "Moshe";
+            //Customers[3].Name = "Yosef";
+            //Customers[4].Name = "John";
+            //Customers[5].Name = "Ahmed";
+            //Customers[6].Name = "Sayuri";
+            //Customers[7].Name = "Jason";
+            //Customers[8].Name = "Yaakov";
+            //Customers[9].Name = "Avi";
+            ///string[] Names= { "Itzhak", "Shlomo", "Moshe", "Yosef", "John", "Ahmed", "Sayuri", "Jason", "Yaakov", "Avi" };
+
+
+
+            DateTime start = new DateTime(2020, 1, 1);
+            int range = (DateTime.Today - start).Days;
+
+            List<int> DronesId = (from DO.Drone DId in GetAllDrones()
+                                  select DId.Id).ToList();
+
+            for (int i = 0; i < 10; i++)
+            {
+                DO.Parcel parcel = new DO.Parcel();
+                parcel.Id = GetAllParcels().Count() + 1;
+                bool flag = true;
+                while (flag)
+                {
+                    parcel.SenderId = r.Next(1, 11);
+                    parcel.TargetId = r.Next(1, 11);
+                    if (parcel.SenderId != parcel.TargetId)
+                    {
+                        flag = false;
+                    }
+                }
+                parcel.Priority = (DO.Priorities)r.Next(0, 3);
+                parcel.Weight = (DO.WeightCategories)r.Next(0, 3);
+                parcel.Requested = start.AddDays(r.Next(range));
+
+
+                switch (r.Next(4))
+                {
+                    case 0:
+                        parcel.DroneId = 0;
+                        break;
+
+                    case 1:
+                    case 2:
+                    case 3:
+                        DO.Parcel? takenDroneP;
+                        int times = 0;
+                        do
+                        {
+                            times++;
+                            parcel.DroneId = DronesId[r.Next(DronesId.Count)];
+                            DronesId.Remove(parcel.DroneId);
+                            parcel.Scheduled = DateTime.Now;
+                            if (r.Next(2) == 1)
+                            {
+                                parcel.PickedUp = DateTime.Now;
+                                if (r.Next(2) == 1)
+                                {
+                                    parcel.Delivered = DateTime.Now;
+                                }
+                            }
+                            takenDroneP = GetAllParcels().FirstOrDefault(p => p.DroneId == parcel.DroneId && p.Delivered == null);
+                        } while (takenDroneP.Value.Id != 0 && parcel.Weight > GetAllDrones().FirstOrDefault(d => d.Id == parcel.DroneId).MaxWeight && times <= 3);
+                        if (times == 4)
+                        {
+                            parcel.DroneId = 0;
+                            parcel.Scheduled = null;
+                            parcel.PickedUp = null;
+                            parcel.Delivered = null;
+                        }
+                        break;
+                }
+
+
+                AddParcel(parcel.SenderId, parcel.TargetId, parcel.Weight, parcel.Priority, DateTime.Now);
+            }
+
+
+
+        }
+
+       
 
         private void CreateAllFiles()
         {
@@ -69,7 +237,7 @@ namespace DalXml
         #region BaseStations
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void AddBaseStations(int Id, string Name, double Longitude, double Latitude, int ChargeSlots)
+        public void AddBaseStation(int Id, string Name, double Longitude, double Latitude, int ChargeSlots)
         {
             XElement BSRootElem = XMLTools.LoadListFromXMLElement(baseStationsPath);
             try

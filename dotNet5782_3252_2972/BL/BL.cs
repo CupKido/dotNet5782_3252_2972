@@ -311,7 +311,7 @@ namespace BLobject
                 }
                 catch
                 {
-                    
+
                 }
                 try
                 {
@@ -345,11 +345,12 @@ namespace BLobject
         {
 
             IEnumerable<BaseStation> availibleStation = from DO.BaseStation baseStation in dal.GetAllBaseStations()
-                                                 where getAvailibleSlotsForBaseStation(baseStation) > 0
-                                                 select new BaseStation()
-                                                 {
-                                                     Id = baseStation.Id
-                                                 };
+                                                        let BObs = GetBaseStation(baseStation.Id)
+                                                        where BObs.DroneInChargesList.Count < BObs.ChargeSlots
+                                                        select new BaseStation()
+                                                        {
+                                                            Id = baseStation.Id
+                                                        };
 
             Random r = new Random();
             BaseStation bs = GetBaseStation(availibleStation.ToArray()[r.Next(availibleStation.Count())].Id);
@@ -438,7 +439,7 @@ namespace BLobject
         #region Base Stations
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void AddBaseStations(int Id, string Name, Location StationLocation, int ChargeSlots)
+        public void AddBaseStation(int Id, string Name, Location StationLocation, int ChargeSlots)
         {
             if (Id < 0)
             {
@@ -446,7 +447,7 @@ namespace BLobject
             }
             try
             {
-                dal.AddBaseStations(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
+                dal.AddBaseStation(Id, Name, StationLocation.Longitude, StationLocation.Latitude, ChargeSlots);
             }
             catch (DO.ItemAlreadyExistsException ex)
             {
@@ -815,7 +816,7 @@ namespace BLobject
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void DisChargeDrone(int Id, float time)
+        public double DisChargeDrone(int Id, float time)
         {
             Drone droneDisCharge;
             try
@@ -845,7 +846,7 @@ namespace BLobject
             BLDrones.Add(dToUpdate);
             dal.RemoveDroneCharge(Id);
 
-
+            return dToUpdate.Battery;
 
         }
 

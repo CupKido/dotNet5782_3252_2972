@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BlApi;
+using PL.Parcel;
 
 namespace PL.Customers
 {
@@ -36,13 +37,20 @@ namespace PL.Customers
             BO.Customer c = myBL.GetCustomer(CustomerId);
             IfPresentation.IsChecked = true;
             this.DataContext = c;
-            ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
-            GoingParcelsList.ItemsSource = c.FromThisCustomer;
-            CustomerId_TextBox.IsEnabled = false;
-            CustomerLongitude_TextBox.IsEnabled = false;
-            CustomerLAtitude_TextBox.IsEnabled = false;
+            ArrivingParcelsList.DataContext = c.ToThisCustomer;
+            GoingParcelsList.DataContext = c.FromThisCustomer;
+        }
 
-            
+        public ShowCustomerWindow(int CustomerId, object n)
+        {
+            InitializeComponent();
+            BO.Customer c = myBL.GetCustomer(CustomerId);
+            IfPresentation.IsChecked = true;
+            this.DataContext = c;
+            ArrivingParcelsList.DataContext = c.ToThisCustomer;
+            GoingParcelsList.DataContext = c.FromThisCustomer;
+            ArrivingParcelsList.MouseDoubleClick -= ParcelsList_DoubleClick;
+            GoingParcelsList.MouseDoubleClick -= ParcelsList_DoubleClick;
         }
 
         public void CloseWindow()
@@ -107,7 +115,7 @@ namespace PL.Customers
                 MessageBox.Show("Longitude must be a Number!", "Wrong Longitude type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (!double.TryParse(CustomerLAtitude_TextBox.Text, out latitude))
+            if (!double.TryParse(CustomerLatitude_TextBox.Text, out latitude))
             {
                 MessageBox.Show("LAtitude must be a Number!", "Wrong LAtitude type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -153,14 +161,27 @@ namespace PL.Customers
             try
             {
                 myBL.UpdateCustomer(customerId , CustomerName_TextBox.Text , CustomerPhone_TextBox.Text );
+                MessageBox.Show("Customer has been updated", "update confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            disallowClosure = false;
-            this.Close();
+
+        }
+
+        private void AddParcel_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ShowParcelWindow SPW = new ShowParcelWindow(int.Parse(CustomerId_TextBox.Text), "");
+            SPW.AddParcel_Button.Click += (s, e) =>
+            {
+                int Id;
+                if (!int.TryParse(SPW.SenderId_TextBox.Text, out Id)) return;
+                BO.Customer c = myBL.GetCustomer(Id);
+                GoingParcelsList.ItemsSource = c.FromThisCustomer;
+            };
+            SPW.Show();
         }
     }
 }

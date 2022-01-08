@@ -77,7 +77,7 @@ namespace DalApi
 
         #region Base Stations
 
-        public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots);
+        public void AddBaseStation(int Id, String Name, double Longitude, double Latitude, int ChargeSlots);
 
         public IEnumerable<BaseStation> GetAllBaseStations();
         public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate);

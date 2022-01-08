@@ -63,11 +63,24 @@ namespace PL
                 return;
             }
 
-            (new ShowCustomerWindow(Id)).Show();
+            (new ShowCustomerWindow(Id, "")).Show();
             this.Close();
 
         }
 
-        
+        private void SignUp_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            (new ShowCustomerWindow()).Show();
+        }
+
+        private void SignUp_MouseEnter(object sender, MouseEventArgs e)
+        {
+            SignUp.Foreground = Brushes.Red;
+        }
+
+        private void SignUp_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SignUp.Foreground = Brushes.Blue;
+        }
     }
 }

@@ -111,7 +111,7 @@ namespace BlApi
         /// </summary>
         /// <param name="id">the wanted drone's ID</param>
         /// <param name="time">the amount of time the drone was in charging</param>
-        public void DisChargeDrone(int id, float time);
+        public double DisChargeDrone(int id, float time);
 
         /// <summary>
         /// assosiates a drone to a package
@@ -203,7 +203,7 @@ namespace BlApi
         /// <param name="Name">The base Station's name</param>
         /// <param name="StationLocation">The base station's location</param>
         /// <param name="ChargeSlots">the amount of charge slots that the new base station has</param>
-        public void AddBaseStations(int Id, String Name, Location StationLocation, int ChargeSlots);
+        public void AddBaseStation(int Id, String Name, Location StationLocation, int ChargeSlots);
 
         /// <summary>
         /// returns all base stations in the data base as BaseToList

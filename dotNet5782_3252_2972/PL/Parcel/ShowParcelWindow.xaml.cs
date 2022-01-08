@@ -27,7 +27,19 @@ namespace PL.Parcel
         {
             InitializeComponent();
             resetComboBoxes();
+            IfPresentation.IsChecked = false;
             this.Width = 270;
+        }
+
+        public ShowParcelWindow(int CustomerId, object n)
+        {
+            InitializeComponent();
+            resetComboBoxes();
+            IfPresentation.IsChecked = false;
+            this.Width = 270;
+            Main.DataContext = new BO.Parcel() { Sender = new BO.CustomerInParcel() { Id = CustomerId } };
+            SenderId_TextBox.IsEnabled = false;
+            
         }
 
         public ShowParcelWindow(int ParcelId)

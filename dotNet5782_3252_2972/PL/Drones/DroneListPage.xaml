@@ -26,7 +26,7 @@
                         <Grid Margin="-6">
                             <ProgressBar Value="{Binding Path=Battery, Mode=OneWay}" Minimum="0" Maximum="100" Width="55" Height="15" 
                                                  Foreground="{Binding Path=Battery, Mode=OneWay, Converter={StaticResource PercentageToColorConverter}}"></ProgressBar>
-                            <TextBlock Text="{Binding Battery, StringFormat={}{0}%}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Battery, StringFormat=N2}" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.Resources>

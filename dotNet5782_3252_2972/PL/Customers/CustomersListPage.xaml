@@ -28,7 +28,7 @@
                     <GridView>
 
                         <GridViewColumn Width="40" Header="ID" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Width="50" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Width="90" Header="Name" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Width="70" Header="Phone" DisplayMemberBinding="{Binding Phone}"/>
                         <GridViewColumn Width="80" Header="Sent n delivered" DisplayMemberBinding="{Binding SentAndDelivered}"/>
                         <GridViewColumn Width="80" Header="Sent n !delivered" DisplayMemberBinding="{Binding SentAndNotDelivered}"/>

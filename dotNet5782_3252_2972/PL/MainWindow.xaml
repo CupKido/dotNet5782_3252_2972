@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="566,276,0,0" VerticalAlignment="Top" Height="34" Width="108"/>
-        <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="136,149,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="136,175,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="136,217,0,0" VerticalAlignment="Top"/>
+        Title="MainWindow" Height="235" Width="378">
+    <Grid Margin="0,0,0,1">
+        <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="225,137,0,0" VerticalAlignment="Top" Height="34" Width="108"/>
+        <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="36,118,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="36,141,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="36,167,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="SignUp"  MouseDoubleClick="SignUp_MouseDoubleClick" MouseEnter="SignUp_MouseEnter" MouseLeave="SignUp_MouseLeave" Foreground="Blue"  HorizontalAlignment="Left" Margin="96,164,0,0" VerticalAlignment="Top">
+            <TextBlock x:Name="SignUp_TextBlock" Text="Sign up" TextDecorations="Underline"/>
+        </Label>
+        <Label x:Name="label" Content="Bambinu Drone Delivery" HorizontalAlignment="Center" Margin="0,45,0,0" FontSize="20" VerticalAlignment="Top" Height="51" Width="226"/>
 
     </Grid>
 </Window>

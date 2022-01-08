@@ -71,11 +71,24 @@ namespace PL
         {
             if (CustomerList.SelectedItem == null) return;
             ShowCustomerWindow SCW = new ShowCustomerWindow((CustomerList.SelectedItem as BO.CustomerToList).Id);
-            SCW.Closed += (s, e) =>
+            SCW.Update_Button.Click += (s, e) =>
             {
-                resetCustomersList();
+                int Id = int.Parse(SCW.CustomerId_TextBox.Text);
+                updateSpecificCustomer(Id);
+            };
+            SCW.AddParcel_Button.Click += (s, e) =>
+            {
+                int Id = int.Parse(SCW.CustomerId_TextBox.Text);
+                updateSpecificCustomer(Id);
             };
             SCW.Show();
+        }
+
+        private void updateSpecificCustomer(int Id)
+        {
+            CustomersCollection.Remove(CustomersCollection.First(c => c.Id == Id));
+            CustomersCollection.Add(myBL.TurnCustomerToList(myBL.GetCustomer(Id)));
+            CustomerList.DataContext = CustomersCollection.OrderBy(c => c.Id);
         }
 
         private void resetCustomersList_click(object sender, RoutedEventArgs e)

@@ -227,7 +227,7 @@ namespace PL
             float time = float.Parse(TimeInCharge_TextBox.Text);
             try
             {
-                myBL.DisChargeDrone(DroneId,time);
+                DroneBattery_Data.Text = myBL.DisChargeDrone(DroneId,time).ToString("N2");
             }
             catch (Exception ex)
             {

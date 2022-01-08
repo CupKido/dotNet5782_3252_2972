@@ -90,7 +90,7 @@ namespace PL.BaseStation
             location.Longitude = longitude;
             try
             {
-                myBL.AddBaseStations(BsId, BaseStationName_TextBox.Text, location, numOfCharges);
+                myBL.AddBaseStation(BsId, BaseStationName_TextBox.Text, location, numOfCharges);
 
             }
             catch (Exception ex)
