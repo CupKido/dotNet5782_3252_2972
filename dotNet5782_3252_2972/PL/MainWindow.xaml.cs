@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlApi;
+using PL.Customers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +21,8 @@ namespace PL
     /// </summary>
     public partial class MainWindow : Window
     {
+        BlApi.IBL myBL = BlFactory.GetBL();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,8 +36,38 @@ namespace PL
 
         private void LogInAsCustomer_Click(object sender, RoutedEventArgs e)
         {
-            (new MainManagerWindow()).Show();
+            int Id;
+            if(!int.TryParse(CustomerId.Text, out Id))
+            {
+                MessageBox.Show("ID must be a Number!", "Wrong ID type", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            int Phone;
+            if (!int.TryParse(CustomerPhone.Text, out Phone))
+            {
+                MessageBox.Show("Phone must be a Number!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                BO.Customer customer = myBL.GetCustomer(Id);
+                if (CustomerPhone.Text != customer.Phone)
+                {
+                    MessageBox.Show("Phone number does not match!", "Wrong Phone number", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+            catch(BO.ItemNotFoundException ex)
+            {
+                MessageBox.Show(ex.ToString(), "Customer Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            (new ShowCustomerWindow(Id)).Show();
             this.Close();
+
         }
+
+        
     }
 }

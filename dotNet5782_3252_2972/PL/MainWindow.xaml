@@ -8,6 +8,9 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="566,276,0,0" VerticalAlignment="Top" Height="34" Width="108"/>
+        <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="136,149,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="136,175,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="136,217,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
