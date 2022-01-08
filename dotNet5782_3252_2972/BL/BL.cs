@@ -256,11 +256,53 @@ namespace BLobject
                     MaxWeight = (WeightCategories)d.MaxWeight,
                     Model = d.Model
                 };
-               
+                try
+                {
+
+                    DO.BaseStation chargedIn = dal.GetBaseStation(dal.GetDroneCharge(d.Id).BaseStationId);
+                    newD.Status = DroneStatuses.Maintenance;
+                    newD.CurrentLocation = new Location()
+                    {
+                        Longitude = chargedIn.Longitude,
+                        Latitude = chargedIn.Latitude
+                    };
+                    BLDrones.Add(newD);
+                    continue;
+                }
+                catch
+                {
+
+                }
                 DO.Parcel p;
                 try
                 {
                     p = dal.GetAllParcelsBy(p => (p.DroneId == d.Id && p.Delivered is null)).First();
+                    newD.Status = DroneStatuses.InDelivery;
+                    DO.Customer sender = dal.GetCustomer(p.SenderId);
+                    Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
+                    DO.Customer target = dal.GetCustomer(p.SenderId);
+                    Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
+                    BaseStation senderBS = closestBaseStation(sender.Longitude, sender.Latitude);
+                    BaseStation targetBS = closestBaseStation(target.Longitude, target.Latitude);
+                    newD.Battery = getDistanceInBattery(senderL, targetL, p.Weight);
+                    newD.Battery += getDistanceInBattery(targetL, targetBS.StationLocation);
+                    if (p.PickedUp is not null)
+                    {
+                        newD.CurrentLocation = new Location()
+                        {
+                            Longitude = c.Longitude,
+                            Latitude = c.Latitude
+                        };
+                    }
+                    else
+                    {
+                        newD.CurrentLocation = senderBS.StationLocation;
+                        newD.Battery += getDistanceInBattery(senderBS.StationLocation, senderL);
+                    }
+                    if (newD.Battery > 100) newD.Battery = 100;
+                    else newD.Battery = r.Next((int)newD.Battery + 1, 101);
+                    BLDrones.Add(newD);
+                    continue;
                     //case of attributed parcel
                 }
                 catch
@@ -1437,6 +1479,13 @@ namespace BLobject
         {
             double disinkm = getDistanceFromLatLonInKm(from.Latitude, from.Longitude, to.Latitude, to.Longitude);
             return disinkm / AvailbleElec;
+
+        }
+
+        private double getDistanceInBattery(double fLatitude, double fLongitude, double tLatitude, double tLongitude, DO.WeightCategories weight)
+        {
+            double disinkm = getDistanceFromLatLonInKm(fLatitude, fLongitude, tLatitude, tLongitude);
+            return disinkm / dal.AskForElectricity()[(int)weight + 1];
 
         }
 

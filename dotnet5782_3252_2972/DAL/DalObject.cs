@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using DO;
@@ -15,6 +16,8 @@ namespace DalObject
         {
             DataSource.Initialize();
         }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static DalObject GetInstance()
         {
 
@@ -34,6 +37,7 @@ namespace DalObject
 
         #region Customers
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddCustomer(int Id, String Name, String Phone, double Longitude, double Latitude)
         {
             try
@@ -60,6 +64,7 @@ namespace DalObject
             DataSource.Customers.Add(newCustomer);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetCustomer(Customer customer)
         {
             foreach (Customer exCustomer in DataSource.Customers)
@@ -74,6 +79,7 @@ namespace DalObject
             throw new ItemNotFoundException(customer.Id, "Customer Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer GetCustomer(int Id)
         {
             foreach (Customer customer in DataSource.Customers)
@@ -86,11 +92,13 @@ namespace DalObject
             throw new ItemNotFoundException(Id, "Customer Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetAllCustomers()
         {
             return DataSource.Customers;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetAllCustomersBy(Predicate<Customer> predicate)
         {
             return from Customer c in GetAllCustomers()
@@ -98,6 +106,7 @@ namespace DalObject
                    select c;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer RemoveCustomer(int Id)
         {
             foreach (Customer customer in DataSource.Customers)
@@ -201,6 +210,7 @@ namespace DalObject
 
         #region Parcels
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created)
         {
 
@@ -235,11 +245,13 @@ namespace DalObject
             return parcel.Id;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Parcel> GetAllParcels()
         {
             return DataSource.Parcels;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Parcel> GetAllParcelsBy(Predicate<Parcel> predicate)
         {
             return from Parcel p in GetAllParcels()
@@ -247,6 +259,7 @@ namespace DalObject
                    select p;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DO.Parcel GetParcel(int Id)
         {
             foreach (Parcel parcel in DataSource.Parcels)
@@ -257,6 +270,7 @@ namespace DalObject
             throw new ItemNotFoundException(Id, "Package Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetParcel(Parcel newParcel)
         {
             foreach (Parcel exParcel in DataSource.Parcels)
@@ -271,6 +285,7 @@ namespace DalObject
             throw new ItemNotFoundException(newParcel.Id, "Package Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Parcel RemoveParcel(int Id)
         {
             foreach (Parcel parcel in DataSource.Parcels)
@@ -288,6 +303,7 @@ namespace DalObject
 
         #region Base Stations
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots)
         {
             try
@@ -316,11 +332,13 @@ namespace DalObject
             
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStation> GetAllBaseStations()
         {
             return DataSource.BaseStations;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<BaseStation> GetAllBaseStationsBy(Predicate<BaseStation> predicate)
         {
             return from BaseStation b in GetAllBaseStations()
@@ -328,6 +346,7 @@ namespace DalObject
                    select b;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DO.BaseStation GetBaseStation(int Id)
         {
             foreach (BaseStation baseStation in DataSource.BaseStations)
@@ -338,6 +357,7 @@ namespace DalObject
             throw new ItemNotFoundException(Id, "Base Station Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetBaseStation(BaseStation newBS)
         {
             foreach (BaseStation exBS in DataSource.BaseStations)
@@ -352,6 +372,7 @@ namespace DalObject
             throw new ItemNotFoundException(newBS.Id, "Base Station Not Found!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public BaseStation RemoveBaseStation(int Id)
         {
             try
@@ -371,6 +392,7 @@ namespace DalObject
 
         #region Drone Charges
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDroneCharge(int DroneId, int BaseStationId, DateTime started)
         {
             try
@@ -393,6 +415,7 @@ namespace DalObject
             
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneCharge GetDroneCharge(int DroneId)
         {
             foreach(DroneCharge droneCharge in DataSource.DroneCharges)
@@ -405,17 +428,20 @@ namespace DalObject
             throw new ItemNotFoundException(DroneId, "Drone is not being charged!");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetDroneCharge(DroneCharge newDC)
         {
             DataSource.DroneCharges.Remove(GetDroneCharge(newDC.DroneId));
             DataSource.DroneCharges.Add(newDC);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> GetAllDroneCharges()
         {
             return DataSource.DroneCharges;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneCharge RemoveDroneCharge(int DroneId)
         {
             DroneCharge DC = GetDroneCharge(DroneId);
@@ -424,6 +450,7 @@ namespace DalObject
             return DC;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> GetAllDroneChargesBy(Predicate<DroneCharge> predicate)
         {
             return from DroneCharge dc in GetAllDroneCharges()
