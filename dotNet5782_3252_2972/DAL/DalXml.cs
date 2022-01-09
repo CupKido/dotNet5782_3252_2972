@@ -179,7 +179,7 @@ namespace DalXml
                 }
 
 
-                AddParcel(parcel.SenderId, parcel.TargetId, parcel.Weight, parcel.Priority, DateTime.Now);
+                AddParcel(parcel.SenderId, parcel.TargetId, parcel.Weight, parcel.Priority, DateTime.Now, parcel.Scheduled, parcel.PickedUp, parcel.Delivered);
             }
 
 
@@ -670,9 +670,31 @@ namespace DalXml
         #region Parcels
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public int AddParcel( int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
+        public int AddParcel( int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created , DateTime? scheduled, DateTime? pickedUp, DateTime? delivered)
         {
            
+            List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
+            XElement config = XMLTools.LoadListFromXMLElement(configPath);
+            int num = Convert.ToInt32(config.Element("ParcelsRunningNum").Value);
+            Parcels.Add(new Parcel()
+            {
+                Id = num,
+                SenderId = SenderId,
+                TargetId = TargetId,
+                Weight = PackageWight,
+                Requested = created,
+                Scheduled = scheduled,
+                PickedUp= pickedUp,
+                Delivered= delivered
+            });
+            config.Element("ParcelsRunningNum").Value = (num + 1).ToString();
+            XMLTools.SaveListToXMLSerializer<Parcel>(Parcels, parcelsPath);
+            XMLTools.SaveListToXMLElement(config, configPath);
+            return num;
+        }
+        public int AddParcel(int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created)
+        {
+
             List<Parcel> Parcels = XMLTools.LoadListFromXMLSerializer<Parcel>(parcelsPath);
             XElement config = XMLTools.LoadListFromXMLElement(configPath);
             int num = Convert.ToInt32(config.Element("ParcelsRunningNum").Value);
