@@ -551,14 +551,32 @@ namespace BLobject
 
         private IEnumerable<DroneInCharge> GetDronesInBaseStation(int BSId)
         {
-            
-                return from DO.DroneCharge DC in dal.GetAllDroneCharges()
-                       where DC.BaseStationId == BSId
-                       select new DroneInCharge()
-                       {
-                           Battery = GetDrone(DC.DroneId).Battery,
-                           Id = DC.DroneId
-                       };
+            Random r = new Random();
+            List<DroneInCharge> list = new List<DroneInCharge>();
+            foreach(DO.DroneCharge DC in dal.GetAllDroneCharges())
+            {
+                if(DC.BaseStationId == BSId)
+                {
+                    try
+                    {
+                        list.Add(new DroneInCharge()
+                        {
+                            Battery = GetDrone(DC.DroneId).Battery,
+                            Id = DC.DroneId
+                        });
+                    }
+                    catch
+                    {
+                        list.Add(new DroneInCharge()
+                        {
+                            Battery = r.Next(20),
+                            Id = DC.DroneId
+                        });
+                    }
+                }
+            }
+            return list;
+                
             
             
             

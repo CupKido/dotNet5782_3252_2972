@@ -16,7 +16,7 @@ namespace DalXml
         private static object locker = new object();
         private DalXml()
         {
-            XMLTools.CreateConfig(configPath, GetAllParcels().Count());
+            XMLTools.CreateConfig(configPath, GetAllParcels().Count() + 1);
             CreateAllFiles();
             if(GetAllBaseStations().Count() == 0 && GetAllCustomers().Count() == 0 && GetAllDrones().Count() == 0 && GetAllParcels().Count() == 0)
             {
@@ -124,11 +124,11 @@ namespace DalXml
             List<int> DronesId = (from DO.Drone DId in GetAllDrones()
                                   select DId.Id).ToList();
 
+            
+
             for (int i = 0; i < 10; i++)
             {
                 DO.Parcel parcel = new DO.Parcel();
-                parcel.Id = GetAllParcels().Count() + 1;
-               
                 parcel.SenderId = r.Next(1, 11);
                 parcel.TargetId = r.Next(1, 11);
                 while (parcel.SenderId == parcel.TargetId)
@@ -181,7 +181,6 @@ namespace DalXml
 
                 AddParcel(parcel.SenderId, parcel.TargetId, parcel.Weight, parcel.Priority, DateTime.Now);
             }
-
 
 
         }
