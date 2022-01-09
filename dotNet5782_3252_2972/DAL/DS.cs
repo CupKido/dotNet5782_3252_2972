@@ -19,7 +19,7 @@ namespace DalObject
             internal static Double LightElec = 35;
             internal static Double IntermediateElec = 50;
             internal static Double HeavyElec = 80;
-            internal static Double ChargePerHours = 40;
+            internal static Double ChargePerHours = 30;
             internal static int runningNumForParcels = 1;
 
         }

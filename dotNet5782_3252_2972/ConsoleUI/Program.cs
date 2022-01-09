@@ -693,7 +693,7 @@ namespace ConsoleUI
 
             try
             {
-                DO.AddBaseStations(Id,  Name,  Longitude,  Latitude,  ChargeSlots);
+                DO.AddBaseStation(Id,  Name,  Longitude,  Latitude,  ChargeSlots);
             }
             catch (Exception ex)
             {

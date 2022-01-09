@@ -195,7 +195,14 @@ namespace PL
             ADW.SimulatorWorker.ProgressChanged += (s, e) =>
             {
                 int Id = int.Parse(ADW.DroneId_TextBox.Text);
-                updateSpecificDrone(Id);
+                try
+                {
+                    updateSpecificDrone(Id);
+                }
+                catch
+                {
+                    
+                }
             };
 
             ADW.Show();

@@ -12,10 +12,11 @@ namespace BLobject
 {
     internal class Simulator
     {
-        const double DroneSpeed = 400;
+        const double DroneSpeed = 100;
         const int TimerCheck = 500;
         Drone drone;
         Parcel currentParcel;
+        BaseStation toChargeIn;
         public Simulator(BL myBL, int DroneId, Action UpdatePL, Func<Boolean> ToCancel)
         {
 
@@ -26,31 +27,52 @@ namespace BLobject
                 Thread.Sleep(TimerCheck);
                 lock (myBL)
                 {
-                    drone = myBL.GetDrone(DroneId);
+                    try
+                    {
+                        drone = myBL.GetDrone(DroneId);
+                    }
+                    catch
+                    {
+                        return;
+                    }
                 }
                 if (drone.Status == DroneStatuses.Availible)
                 {
-                    try
+
+                    if (drone.Battery > 95)
                     {
-                        if (drone.Battery > 95)
+                        try
                         {
                             myBL.AttributionParcelToDrone(DroneId);
+
                         }
-                        else
+                        catch (BO.NoParcelForThisDrone ex)
                         {
-                            myBL.ChargeDrone(DroneId);
+                            myBL.subtructStandingBattery(DroneId);
+                            UpdatePL();
                             continue;
                         }
                     }
-                    catch (BO.NoParcelForThisDrone ex)
+                    else
                     {
-                        Thread.Sleep(3000);
-                        continue;
+                        try
+                        {
+                            toChargeIn = myBL.closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                            if (myBL.GoTowards(DroneId, toChargeIn.StationLocation, DroneSpeed, myBL.AvailbleElec) == toChargeIn.StationLocation)
+                            {
+                                myBL.ChargeDrone(DroneId);
+                            }
+                        }
+                        catch (BO.NotEnoughDroneBatteryException ex)
+                        {
+                            UpdatePL();
+                            return;
+                        }
                     }
                 }
                 else if (drone.Status == DroneStatuses.Maintenance)
                 {
-                    if (drone.Battery < 95)
+                    if (drone.Battery < 99)
                     {
                         lock (myBL)
                         {
@@ -65,7 +87,7 @@ namespace BLobject
                         }
                     }
                 }
-                else if(drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id != null)
+                else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id != null)
                 {
                     lock (myBL)
                     {
@@ -102,6 +124,6 @@ namespace BLobject
             }
         }
 
-        
+
     }
 }

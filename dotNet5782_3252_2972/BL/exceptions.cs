@@ -29,10 +29,15 @@ namespace BO
 
     public class ItemNotFoundException : Exception
     {
+        int Id;
+        public ItemNotFoundException(int ID, String message) : base(message) {
+            Id = ID;
+        }
+
         public ItemNotFoundException(String message, Exception inner) : base(message, inner) { }
         public override string ToString()
         {
-            return InnerException.Message + "\n" + Message + "\n";
+            return (InnerException is not null ? InnerException.Message : $"Item number {Id} was not found") + "\n" + Message + "\n";
         }
     }
 

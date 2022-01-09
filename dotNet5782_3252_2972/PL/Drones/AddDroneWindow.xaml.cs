@@ -294,6 +294,11 @@ namespace PL
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
+            closeWindow();
+        }
+
+        private void closeWindow()
+        {
             disallowClosure = false;
             SimulatorWorker.CancelAsync();
             simulatorIsActive = false;
@@ -350,7 +355,14 @@ namespace PL
         }
         private void refresh(object sender, ProgressChangedEventArgs e)
         {
-            this.DataContext = myBL.GetDrone(thisDroneId);
+            try
+            {
+                this.DataContext = myBL.GetDrone(thisDroneId);
+            }catch (BO.ItemNotFoundException ex)
+            {
+                MessageBox.Show("Drone has crashed due to low battery");
+                closeWindow();
+            }
         }
         private bool ToCancel()
         {

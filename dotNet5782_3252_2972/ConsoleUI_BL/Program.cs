@@ -614,7 +614,7 @@ namespace ConsoleUI_BL
 
             try
             {
-                myBL.AddBaseStations(BSId, BSName, new Location() { Longitude = BSLongitude, Latitude = BSLatitude }, BSChargeSlots);
+                myBL.AddBaseStation(BSId, BSName, new Location() { Longitude = BSLongitude, Latitude = BSLatitude }, BSChargeSlots);
             }
             catch(Exception ex)
             {
