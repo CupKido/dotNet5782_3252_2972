@@ -128,6 +128,7 @@ namespace PL
                 DronesCollection.Clear();
             }
             myBL.GetAllDrones().Distinct().ToList().ForEach(i => DronesCollection.Add(i));
+            DroneList.DataContext = DronesCollection;
             //foreach (BO.DroneToList DTL in myBL.GetAllDrones())
             //{
             //    DronesCollection.Add(DTL);
@@ -201,10 +202,17 @@ namespace PL
                 }
                 catch
                 {
-                    
+                    try
+                    {
+                        DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
+                    }
+                    catch
+                    {
+                        resetDronesList();
+                    }
                 }
             };
-
+            
             ADW.Show();
 
         }

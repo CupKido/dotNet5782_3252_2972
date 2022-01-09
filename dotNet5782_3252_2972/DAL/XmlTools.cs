@@ -35,7 +35,7 @@ namespace DalXml
                 Double LightElec = 35;
                 Double IntermediateElec = 50;
                 Double HeavyElec = 80;
-                Double ChargePerHours = 30;
+                Double ChargePerHours = 10;
                 double[] a = { AvailbleElec, LightElec, IntermediateElec, HeavyElec, ChargePerHours };
                 XElement Elec = new XElement("Elec",
                     new XElement("AvailbleElec", AvailbleElec),

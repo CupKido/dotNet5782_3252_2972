@@ -55,6 +55,12 @@ namespace BLobject
                     }
                     else
                     {
+                        if(drone.Battery <= 0)
+                        {
+                            myBL.DeleteDrone(DroneId);
+                            UpdatePL();
+                            return;
+                        }
                         try
                         {
                             toChargeIn = myBL.closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
