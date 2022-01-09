@@ -11,8 +11,8 @@ namespace BLobject
     public partial class BL : BlApi.IBL // IBL.IBL
     {
 
-        public DalApi.IDal dal; //with dal we have access to data source
-        List<DroneToList> BLDrones = new List<DroneToList>();
+        internal DalApi.IDal dal; //with dal we have access to data source
+        internal List<DroneToList> BLDrones = new List<DroneToList>();
         public Double AvailbleElec { get; set; }
         public Double LightElec { get; set; }
         public Double IntermediateElec { get; set; }
@@ -850,6 +850,29 @@ namespace BLobject
 
         }
 
+        internal double chargeDrone(int Id, int timeInMil)
+        {
+            DroneToList drone = BLDrones.First(d => d.Id == Id);
+            
+            BLDrones.Remove(drone);
+            drone.Battery += ChargePerHours * timeInMil / 1000;
+            if (drone.Battery > 100)
+            {
+                drone.Battery = 100;
+            }
+            BLDrones.Add(drone);
+            return drone.Battery;
+        }
+
+        internal void disChargeDrone(int Id)
+        {
+            DroneToList drone = BLDrones.First(d => d.Id == Id);
+            BLDrones.Remove(drone);
+            drone.Status = DroneStatuses.Availible;
+            BLDrones.Add(drone);
+            dal.RemoveDroneCharge(Id);
+        }
+
         #endregion
 
         #region Customers
@@ -1593,6 +1616,11 @@ namespace BLobject
 
             dal.SetParcel(lastParcel);
 
+        }
+
+        public void ActivateSimulator(int DroneId, Action UpdatePL, Func<bool> ToCancel)
+        {
+            Simulator a = new Simulator(this, DroneId, UpdatePL, ToCancel);
         }
 
         #endregion

@@ -304,7 +304,7 @@ namespace DalObject
         #region Base Stations
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void AddBaseStations(int Id, String Name, double Longitude, double Latitude, int ChargeSlots)
+        public void AddBaseStation(int Id, String Name, double Longitude, double Latitude, int ChargeSlots)
         {
             try
             {

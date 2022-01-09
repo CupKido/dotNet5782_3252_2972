@@ -145,6 +145,10 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
+            if(DroneList.SelectedItem is null)
+            {
+                return;
+            }
             AddDroneWindow ADW = new AddDroneWindow((DroneList.SelectedItem as BO.DroneToList).Id);
             ADW.Update_Button.Click += (s, e) =>
             {
@@ -187,7 +191,13 @@ namespace PL
                 int Id = int.Parse(ADW.DroneId_TextBox.Text);
                 DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
             };
-            
+
+            ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+            {
+                int Id = int.Parse(ADW.DroneId_TextBox.Text);
+                updateSpecificDrone(Id);
+            };
+
             ADW.Show();
 
         }

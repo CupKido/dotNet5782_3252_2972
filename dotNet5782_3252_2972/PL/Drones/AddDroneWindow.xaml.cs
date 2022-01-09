@@ -23,13 +23,17 @@ namespace PL
     {
         BlApi.IBL myBL = BlFactory.GetBL();
         bool disallowClosure = true;
+        bool simulatorIsActive = false;
+        public BackgroundWorker SimulatorWorker = new BackgroundWorker();
 
+        public Action Invoke;
+        int thisDroneId;
         public AddDroneWindow()
         {
 
             InitializeComponent();
-            
-            
+
+
             prepareForAddition();
         }
 
@@ -37,27 +41,29 @@ namespace PL
         public AddDroneWindow(int DroneId)
         {
             InitializeComponent();
-            
+
             prepareForShow(myBL.GetDrone(DroneId));
+            thisDroneId = DroneId;
+            
         }
 
         private void AddDrone_click(object sender, RoutedEventArgs e)
         {
-            
+
             int DroneId;
-            if(!int.TryParse(DroneId_TextBox.Text, out DroneId))
+            if (!int.TryParse(DroneId_TextBox.Text, out DroneId))
             {
                 MessageBox.Show("ID must be a Number!", "Wrong ID type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if(DroneModel_TextBox.Text == "")
+            if (DroneModel_TextBox.Text == "")
             {
                 MessageBox.Show("Please enter the drone's model", "Empty model value", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if(MaxWeightCB.SelectedIndex < 0)
+            if (MaxWeightCB.SelectedIndex < 0)
             {
                 MessageBox.Show("Please select the max weight", "Empty weight value", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -73,7 +79,7 @@ namespace PL
             {
                 myBL.AddDrone(DroneId, DroneModel_TextBox.Text, (BO.WeightCategories)MaxWeightCB.SelectedItem, (int)StartingBSCB.SelectedItem);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Exception ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -98,12 +104,12 @@ namespace PL
             AdditionChBox.IsChecked = true;
             Width = 420;
             AddDrone_Button.Visibility = Visibility.Collapsed;
-            
+
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
             this.DataContext = drone;
             BO.DroneStatuses status = drone.Status;
-            
+
             if ((int)status == 0)
             {
                 PickUp_Button.Visibility = Visibility.Collapsed;
@@ -126,11 +132,11 @@ namespace PL
                 DisCharge_Button.Visibility = Visibility.Collapsed;
                 Attribution_Button.Visibility = Visibility.Collapsed;
                 Charge_Button.Visibility = Visibility.Collapsed;
-                if (p.PickedUp==null || p.PickedUp ==DateTime.MinValue )
+                if (p.PickedUp == null || p.PickedUp == DateTime.MinValue)
                 {
                     Supply_Button.Visibility = Visibility.Collapsed;
                 }
-                else 
+                else
                 {
                     PickUp_Button.Visibility = Visibility.Collapsed;
                 }
@@ -149,7 +155,7 @@ namespace PL
             DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
 
 
-            if(drone.CurrentParcel.Id != 0)
+            if (drone.CurrentParcel.Id != 0)
             {
                 DroneParcel_Data.DataContext = drone.CurrentParcel;
             }
@@ -217,17 +223,17 @@ namespace PL
 
         private void DisCharge_Click(object sender, RoutedEventArgs e)
         {
-            
+
             int DroneId = int.Parse(DroneId_TextBox.Text);
             if (TimeInCharge_TextBox.Text == "")
             {
-                MessageBox.Show("Please enter the time drone " + DroneId +" was in charge", "Empty Time in charge", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please enter the time drone " + DroneId + " was in charge", "Empty Time in charge", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             float time = float.Parse(TimeInCharge_TextBox.Text);
             try
             {
-                DroneBattery_Data.Text = myBL.DisChargeDrone(DroneId,time).ToString("N2");
+                DroneBattery_Data.Text = myBL.DisChargeDrone(DroneId, time).ToString("N2");
             }
             catch (Exception ex)
             {
@@ -296,6 +302,8 @@ namespace PL
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             disallowClosure = false;
+            SimulatorWorker.CancelAsync();
+            simulatorIsActive = false;
             this.Close();
         }
         protected override void OnClosing(CancelEventArgs e)
@@ -310,6 +318,51 @@ namespace PL
             SPW.Show();
             disallowClosure = false;
             this.Close();
+        }
+
+        private void ActivateSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            if (!simulatorIsActive)
+            {
+                resetSimulatorWoker();
+                int Id = int.Parse(DroneId_TextBox.Text);
+                
+                SimulatorWorker.RunWorkerAsync();
+                simulatorIsActive = true;
+            }
+            else
+            {
+                
+                    simulatorIsActive = false;
+                
+                
+            }
+
+        }
+
+        private void resetSimulatorWoker()
+        {
+            SimulatorWorker.WorkerReportsProgress = true;
+            SimulatorWorker.WorkerSupportsCancellation = true;
+            Invoke += InvokeMainThread;
+            SimulatorWorker.ProgressChanged += refresh;
+            SimulatorWorker.DoWork += (s, e) =>
+            {
+                myBL.ActivateSimulator(thisDroneId, Invoke, ToCancel);
+            };
+        }
+
+        private void InvokeMainThread()
+        {
+            SimulatorWorker.ReportProgress(1);
+        }
+        private void refresh(object sender, ProgressChangedEventArgs e)
+        {
+            this.DataContext = myBL.GetDrone(thisDroneId);
+        }
+        private bool ToCancel()
+        {
+            return !simulatorIsActive;
         }
     }
 }

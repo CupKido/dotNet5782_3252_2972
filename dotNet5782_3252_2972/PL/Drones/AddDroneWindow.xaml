@@ -224,7 +224,7 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            
+
             <Button x:Name="ShowCarriedParcel_Button" Content="Show Parcel" HorizontalAlignment="Left" 
                     Margin="330,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="ShowCarriedParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
@@ -251,6 +251,9 @@
                 </TextBox.Background>
             </TextBox>
             <CheckBox x:Name="AdditionChBox" Content="Addition" Visibility="Collapsed" HorizontalAlignment="Left" Margin="271,13,0,0" VerticalAlignment="Top"/>
+            <Button x:Name="ActivateSimulator" Content="Sim" Click="ActivateSimulator_Click" HorizontalAlignment="Left" Margin="365,16,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+            <Label x:Name="Status" Content="{Binding Status}" HorizontalAlignment="Left" Margin="9,171,0,0" VerticalAlignment="Top" Grid.RowSpan="2"
+                   Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         </Grid>
     </Border>

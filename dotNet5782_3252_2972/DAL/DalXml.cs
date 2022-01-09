@@ -188,8 +188,6 @@ namespace DalXml
 
         }
 
-       
-
         private void CreateAllFiles()
         {
             XMLTools.CreateFile(baseStationsPath, "BaseStations");

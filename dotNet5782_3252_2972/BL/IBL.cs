@@ -10,6 +10,8 @@ namespace BlApi
     public interface IBL
     {
 
+        public void ActivateSimulator(int DroneId, Action UpdatePL, Func<Boolean> ToCancel);
+
         #region Customers
 
         /// <summary>
