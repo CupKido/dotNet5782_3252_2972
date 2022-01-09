@@ -551,13 +551,17 @@ namespace BLobject
 
         private IEnumerable<DroneInCharge> GetDronesInBaseStation(int BSId)
         {
-            return from DO.DroneCharge DC in dal.GetAllDroneCharges()
-                   where DC.BaseStationId == BSId
-                   select new DroneInCharge()
-                   {
-                       Battery = GetDrone(DC.DroneId).Battery,
-                       Id = DC.DroneId
-                   };
+            
+                return from DO.DroneCharge DC in dal.GetAllDroneCharges()
+                       where DC.BaseStationId == BSId
+                       select new DroneInCharge()
+                       {
+                           Battery = GetDrone(DC.DroneId).Battery,
+                           Id = DC.DroneId
+                       };
+            
+            
+            
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -804,6 +808,7 @@ namespace BLobject
 
             if (droneToCharge.Battery < distanceToBS / AvailbleElec)
             {
+                dal.RemoveDrone(Id);
                 throw new NotEnoughDroneBatteryException(Id);
             }
 
@@ -871,6 +876,43 @@ namespace BLobject
             drone.Status = DroneStatuses.Availible;
             BLDrones.Add(drone);
             dal.RemoveDroneCharge(Id);
+        }
+
+        internal Location GoTowards(int DroneId, Location Destination, double speedInKm, double Elec)
+        {
+            DroneToList drone = BLDrones.First(d => d.Id == DroneId);
+            double speedInCoords = speedInKm / 111;
+            if(drone.CurrentLocation == Destination)
+            {
+                return Destination;
+            }
+            double distanceInKM = getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, Destination.Latitude, Destination.Longitude);
+            Location Vector = new Location() { Latitude = Destination.Latitude - drone.CurrentLocation.Latitude, Longitude = Destination.Longitude - drone.CurrentLocation.Longitude };
+            double vectorLengthInCoords = getDistanceFromLatLonIncoords(0, 0, Vector.Latitude, Vector.Longitude);
+            Vector = new Location() { Latitude = Vector.Latitude / vectorLengthInCoords, Longitude = Vector.Longitude / vectorLengthInCoords };
+            BLDrones.Remove(drone);
+            
+            if (vectorLengthInCoords <= speedInCoords)
+            {
+                drone.Battery -= getDistanceFromLatLonInKm(0, 0, Vector.Latitude, Vector.Longitude) / Elec;
+                drone.CurrentLocation = Destination;
+                BLDrones.Add(drone);
+                return Destination;
+            }
+
+            drone.Battery -= speedInKm / Elec;
+            drone.CurrentLocation = new Location()
+            { 
+                Longitude = drone.CurrentLocation.Longitude + (Vector.Longitude * speedInCoords),
+                Latitude = drone.CurrentLocation.Latitude + (Vector.Latitude * speedInCoords)
+            };
+            BLDrones.Add(drone);
+            return drone.CurrentLocation;
+        }
+
+        internal double getElecForWeight(WeightCategories weight)
+        {
+            return dal.AskForElectricity()[(int)weight + 1];
         }
 
         #endregion
@@ -1555,6 +1597,30 @@ namespace BLobject
 
         }
 
+        internal void pickUpParcelByDrone(int Id)
+        {
+            try
+            {
+                Drone drone = GetDrone(Id);
+                if (drone.Status != DroneStatuses.InDelivery)
+                {
+                    throw new StatusIsntInDelivery(Id);
+                }
+                int parcelId = (int)drone.CurrentParcel.Id;
+                DO.Parcel parcel = dal.GetParcel(parcelId);
+                if (parcel.PickedUp != null)
+                {
+                    throw new ParcelAlreadyPickedUp(parcelId);
+                }
+
+                parcel.PickedUp = DateTime.Now;
+                dal.SetParcel(parcel);
+            }
+            catch { throw; }
+
+
+        }
+
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SupplyParcel(int Id)
         {
@@ -1585,6 +1651,35 @@ namespace BLobject
                 BLDrones.Remove(BLdrone);
                 BLdrone.Battery -= distance / ELecInDelivery;
                 BLdrone.CurrentLocation = c.Address;
+                BLdrone.Status = DroneStatuses.Availible;
+                BLdrone.CarriedParcelId = null;
+                BLDrones.Add(BLdrone);
+
+                parcel.Delivered = DateTime.Now;
+                dal.SetParcel(parcel);
+            }
+            catch { throw; }
+
+        }
+
+        internal void supplyParcel(int Id)
+        {
+            try
+            {
+                Drone drone = GetDrone(Id);
+                if (drone.Status != DroneStatuses.InDelivery)
+                {
+                    throw new StatusIsntInDelivery(Id);
+                }
+                int parcelId = (int)drone.CurrentParcel.Id;
+                DO.Parcel parcel = dal.GetParcel(parcelId);
+                if (parcel.Delivered != null)
+                {
+                    throw new ParcelAlreadySupply(parcelId);
+                }
+
+                DroneToList BLdrone = BLDrones.FirstOrDefault(d => d.Id == Id);
+                BLDrones.Remove(BLdrone);
                 BLdrone.Status = DroneStatuses.Availible;
                 BLdrone.CarriedParcelId = null;
                 BLDrones.Add(BLdrone);

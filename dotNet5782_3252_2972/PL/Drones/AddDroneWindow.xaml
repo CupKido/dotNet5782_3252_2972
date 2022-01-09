@@ -19,7 +19,7 @@
     </Window.Resources>
 
     <Border Background="#FF6B2350"  CornerRadius="10">
-        <Grid x:Name="MainGrid" Margin="10,0,0,0" HorizontalAlignment="Left" Width="500" RenderTransformOrigin="0.5,0.5">
+        <Grid x:Name="MainGrid" Margin="-2,1,0,-1" HorizontalAlignment="Left" Width="500" RenderTransformOrigin="0.5,0.5">
             <Grid.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -251,7 +251,7 @@
                 </TextBox.Background>
             </TextBox>
             <CheckBox x:Name="AdditionChBox" Content="Addition" Visibility="Collapsed" HorizontalAlignment="Left" Margin="271,13,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="ActivateSimulator" Content="Sim" Click="ActivateSimulator_Click" HorizontalAlignment="Left" Margin="365,16,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+            <Button x:Name="ActivateSimulator" Content="Simulator" Click="ActivateSimulator_Click" HorizontalAlignment="Left" Margin="276,27,0,0" Grid.Row="1" VerticalAlignment="Top" Width="64" Grid.RowSpan="2" Height="25"/>
             <Label x:Name="Status" Content="{Binding Status}" HorizontalAlignment="Left" Margin="9,171,0,0" VerticalAlignment="Top" Grid.RowSpan="2"
                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 

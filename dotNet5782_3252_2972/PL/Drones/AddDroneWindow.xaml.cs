@@ -44,7 +44,8 @@ namespace PL
 
             prepareForShow(myBL.GetDrone(DroneId));
             thisDroneId = DroneId;
-            
+            SimulatorWorker.WorkerReportsProgress = true;
+            SimulatorWorker.WorkerSupportsCancellation = true;
         }
 
         private void AddDrone_click(object sender, RoutedEventArgs e)
@@ -329,11 +330,12 @@ namespace PL
                 
                 SimulatorWorker.RunWorkerAsync();
                 simulatorIsActive = true;
+                ActivateSimulator.Content = "Manual";
             }
             else
             {
-                
-                    simulatorIsActive = false;
+                ActivateSimulator.Content = "Simulator";
+                simulatorIsActive = false;
                 
                 
             }
@@ -342,8 +344,6 @@ namespace PL
 
         private void resetSimulatorWoker()
         {
-            SimulatorWorker.WorkerReportsProgress = true;
-            SimulatorWorker.WorkerSupportsCancellation = true;
             Invoke += InvokeMainThread;
             SimulatorWorker.ProgressChanged += refresh;
             SimulatorWorker.DoWork += (s, e) =>
