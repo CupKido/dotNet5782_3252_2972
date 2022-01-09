@@ -156,15 +156,7 @@ namespace PL
             DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
 
 
-            if (drone.CurrentParcel.Id != 0)
-            {
-                DroneParcel_Data.DataContext = drone.CurrentParcel;
-            }
-            else
-            {
-                DroneParcel_Data.Text = "none";
-                ShowCarriedParcel_Button.IsEnabled = false;
-            }
+            
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)

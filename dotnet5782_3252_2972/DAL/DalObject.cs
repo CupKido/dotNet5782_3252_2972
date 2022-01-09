@@ -245,7 +245,7 @@ namespace DalObject
             return parcel.Id;
         }
 
-        public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created, DateTime? scheduled, DateTime? pickedUp, DateTime? delivered)
+        public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created, DateTime? scheduled, DateTime? pickedUp, DateTime? delivered, int droneId)
         {
 
             if (SenderId == TargetId)

@@ -103,7 +103,7 @@
             <TextBlock x:Name="DroneParcel_Data" HorizontalAlignment="Left" Margin="376,154,0,0"  TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="33" Height="16" RenderTransformOrigin="0.897,0.567" FontFamily="Bauhaus 93"
                        Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                       Text="{Binding Id}"
+                       Text="{Binding CurrentParcel.Id}"
                        />
 
             <Button x:Name="AddDrone_Button" Content="Add Drone" HorizontalAlignment="Left" 
