@@ -58,15 +58,27 @@ namespace PL.Parcel
         {
             if (ParcelList.SelectedItem == null) return;
             ShowParcelWindow SPW = new ShowParcelWindow((ParcelList.SelectedItem as BO.ParcelToList).Id);
-            SPW.CloseWindow_Button.Click += (s, e) =>
+
+            RoutedEventHandler updateParcel = (s, e) =>
             {
-                resetParcelsList();
+                int Id = int.Parse(SPW.ParcelId_TextBox.Text);
+                updateSpecificParcel(Id);
             };
+            SPW.CloseWindow_Button.Click += updateParcel;
+            SPW.UpdateParcel_Button.Click += updateParcel;
             SPW.DeleteParcel_Button.Click += (s, e) =>
             {
-                ParcelsCollection.Remove((ParcelList.SelectedItem as BO.ParcelToList));
+                int Id = int.Parse(SPW.ParcelId_TextBox.Text);
+                ParcelsCollection.Remove(ParcelsCollection.First(p => p.Id == Id));
             };
             SPW.Show();
+        }
+
+        private void updateSpecificParcel(int Id)
+        {
+            ParcelsCollection.Remove(ParcelsCollection.First(d => d.Id == Id));
+            ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(Id)));
+            ParcelList.DataContext = ParcelsCollection.OrderBy(d => d.Id);
         }
 
         private void ParcelsListReset_Click(object sender, RoutedEventArgs e)

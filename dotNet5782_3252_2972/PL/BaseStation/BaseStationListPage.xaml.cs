@@ -63,11 +63,22 @@ namespace PL.BaseStation
         {
             if (BaseStationList.SelectedItem == null) return;
             ShowBaseStationWindow SBSW = new ShowBaseStationWindow((BaseStationList.SelectedItem as BO.BaseStationToList).Id);
-            SBSW.Closed += (s, e) =>
+            RoutedEventHandler updateBS = (s, e) =>
             {
-                resetBaseStationList();
+                int Id = int.Parse(SBSW.BaseStationId_TextBox.Text);
+                updateSpecificBaseStation(Id);
             };
+            SBSW.Update_Button.Click += updateBS;
+            SBSW.CloseWindow_Button.Click += updateBS;
+            
             SBSW.Show();
+        }
+        
+        private void updateSpecificBaseStation(int Id)
+        {
+            BaseStationCollection.Remove(BaseStationCollection.First(d => d.Id == Id));
+            BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(Id)));
+            BaseStationList.DataContext = BaseStationCollection.OrderBy(d => d.Id);
         }
 
         private void DeleteBaseStation_Click(object sender, RoutedEventArgs e)

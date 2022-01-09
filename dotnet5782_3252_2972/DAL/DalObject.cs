@@ -245,6 +245,40 @@ namespace DalObject
             return parcel.Id;
         }
 
+        public int AddParcel(int SenderId, int TargetId, DO.WeightCategories PackageWight, DO.Priorities priority, DateTime created, DateTime? scheduled, DateTime? pickedUp, DateTime? delivered)
+        {
+
+            if (SenderId == TargetId)
+                throw new IllegalActionException("Can't send a Package to yourself!");
+
+            try
+            {
+                GetCustomer(SenderId);
+            }
+            catch
+            {
+                throw new IllegalActionException("The Sender is not signed in the system");
+            }
+            try
+            {
+                GetCustomer(TargetId);
+            }
+            catch
+            {
+                throw new IllegalActionException("Target customer is not signed in the system");
+            }
+            Parcel parcel = new Parcel();
+            parcel.Id = DataSource.Config.runningNumForParcels;
+            DataSource.Config.runningNumForParcels++;
+            parcel.SenderId = SenderId;
+            parcel.TargetId = TargetId;
+            parcel.Weight = PackageWight;
+            parcel.Priority = priority;
+            parcel.Requested = created;
+            DataSource.Parcels.Add(parcel);
+            return parcel.Id;
+        }
+
         [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Parcel> GetAllParcels()
         {
