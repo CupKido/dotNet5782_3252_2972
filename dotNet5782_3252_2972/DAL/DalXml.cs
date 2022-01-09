@@ -128,16 +128,14 @@ namespace DalXml
             {
                 DO.Parcel parcel = new DO.Parcel();
                 parcel.Id = GetAllParcels().Count() + 1;
-                bool flag = true;
-                while (flag)
+               
+                parcel.SenderId = r.Next(1, 11);
+                parcel.TargetId = r.Next(1, 11);
+                while (parcel.SenderId == parcel.TargetId)
                 {
-                    parcel.SenderId = r.Next(1, 11);
-                    parcel.TargetId = r.Next(1, 11);
-                    if (parcel.SenderId != parcel.TargetId)
-                    {
-                        flag = false;
-                    }
+                   parcel.TargetId = r.Next(1, 11);
                 }
+                
                 parcel.Priority = (DO.Priorities)r.Next(0, 3);
                 parcel.Weight = (DO.WeightCategories)r.Next(0, 3);
                 parcel.Requested = start.AddDays(r.Next(range));
