@@ -72,21 +72,27 @@ namespace BLobject
                         currentParcel = myBL.GetParcel((int)drone.CurrentParcel.Id);
                         if (currentParcel.PickedUp is not null)
                         {
-                            DO.Customer target = myBL.dal.GetCustomer(currentParcel.Target.Id);
-                            Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
-                            if (myBL.GoTowards(DroneId, targetL, DroneSpeed, myBL.getElecForWeight((BO.WeightCategories)(currentParcel.Weight))) == targetL)
+                            lock (myBL.dal)
                             {
-                                myBL.SupplyParcel(DroneId);
+                                DO.Customer target = myBL.dal.GetCustomer(currentParcel.Target.Id);
+                                Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
+                                if (myBL.GoTowards(DroneId, targetL, DroneSpeed, myBL.getElecForWeight((BO.WeightCategories)(currentParcel.Weight))) == targetL)
+                                {
+                                    myBL.SupplyParcel(DroneId);
+                                }
                             }
 
                         }
                         else if (currentParcel.scheduled is not null)
                         {
-                            DO.Customer sender = myBL.dal.GetCustomer(currentParcel.Sender.Id);
-                            Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
-                            if (myBL.GoTowards(DroneId, senderL, DroneSpeed, myBL.AvailbleElec) == senderL)
+                            lock (myBL.dal)
                             {
-                                myBL.PickUpParcelByDrone(DroneId);
+                                DO.Customer sender = myBL.dal.GetCustomer(currentParcel.Sender.Id);
+                                Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
+                                if (myBL.GoTowards(DroneId, senderL, DroneSpeed, myBL.AvailbleElec) == senderL)
+                                {
+                                    myBL.PickUpParcelByDrone(DroneId);
+                                }
                             }
                         }
                     }
