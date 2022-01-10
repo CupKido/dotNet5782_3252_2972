@@ -73,7 +73,7 @@ namespace BO
         }
         public override string ToString()
         {
-            return "ERROR: Input cannot be negetive\nNegetive Number inserted: " + Number + "\n" + Message;
+            return "ERROR: Input can not be negetive\n Number inserted: " + Number + "\n" + Message;
         }
     }
 

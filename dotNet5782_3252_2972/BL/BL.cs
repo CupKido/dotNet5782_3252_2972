@@ -531,7 +531,7 @@ namespace BLobject
 
             if (ChargeSlots < 1)
             {
-                throw new NegetiveNumberException((int)ChargeSlots, "Charge Slots number cannot be negetive!");
+                throw new NegetiveNumberException((int)ChargeSlots, "Charge Slots number can not be zero or negetive !");
             }
 
             if (GetDronesInBaseStation(lastBS.Id).Count() > ChargeSlots)
