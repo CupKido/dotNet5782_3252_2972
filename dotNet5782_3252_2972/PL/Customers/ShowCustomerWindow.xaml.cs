@@ -107,7 +107,7 @@ namespace PL.Customers
 
             if (!long.TryParse(CustomerPhone_TextBox.Text, out phone))
             {
-                MessageBox.Show("Phone must be a Number!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone Number must contain 10 digits only !", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
            
