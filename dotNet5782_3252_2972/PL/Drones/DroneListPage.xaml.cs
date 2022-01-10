@@ -146,11 +146,23 @@ namespace PL
 
         private void DroneList_Selected(object sender, RoutedEventArgs e)
         {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            int Id = (DroneList.SelectedItem as BO.DroneToList).Id;
+            foreach (AddDroneWindow adw in windows)
+            {
+                if(adw.DroneId_TextBox.Text == Id.ToString())
+                {
+                    MessageBox.Show($"Window for drone number {Id} is alreay open","Window is already open", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+            }
             if(DroneList.SelectedItem is null)
             {
                 return;
             }
-            AddDroneWindow ADW = new AddDroneWindow((DroneList.SelectedItem as BO.DroneToList).Id);
+            AddDroneWindow ADW = new AddDroneWindow(Id);
             ADW.Update_Button.Click += (s, e) =>
             {
                 int Id = int.Parse(ADW.DroneId_TextBox.Text);

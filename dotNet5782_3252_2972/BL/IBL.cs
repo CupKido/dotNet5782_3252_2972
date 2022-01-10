@@ -135,6 +135,10 @@ namespace BlApi
 
         public DroneToList TurnDroneToList(Drone drone);
 
+        public double GetDroneDistance(Drone drone);
+
+        public string GetDroneDestination(Drone drone);
+
         #endregion
 
         #region Parcels

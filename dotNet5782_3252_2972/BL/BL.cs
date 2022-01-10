@@ -734,7 +734,7 @@ namespace BLobject
                 CurrentParcel = new ParcelInDelivery()
                 {
                     Id = p.Id,
-                    ParcelStatus = ((p.PickedUp != null) ? true : false),
+                    ParcelStatus = ((p.PickedUp is not null) ? true : false),
                     PickUp = sender.Address,
                     Drop = target.Address,
                     DeliveryDistance = getDistanceFromLatLonInKm(sender.Address.Latitude, sender.Address.Longitude, target.Address.Latitude, target.Address.Longitude),
@@ -937,6 +937,53 @@ namespace BLobject
             return dal.AskForElectricity()[(int)weight + 1];
         }
 
+        public double GetDroneDistance(Drone drone)
+        {
+            
+            if(drone.Status == DroneStatuses.Availible)
+            {
+                BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude);
+            }
+            else if(drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
+            {
+                if(drone.CurrentParcel.ParcelStatus) //alreay picked up
+                {
+                    DO.Customer target = dal.GetCustomer(drone.CurrentParcel.Target.Id);
+                    return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, target.Latitude, target.Longitude);
+                }
+                else
+                {
+                    DO.Customer sender = dal.GetCustomer(drone.CurrentParcel.Sender.Id);
+                    return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, sender.Latitude, sender.Longitude);
+                }
+            }
+            return 0;
+        }
+
+        public string GetDroneDestination(Drone drone)
+        {
+
+            if (drone.Status == DroneStatuses.Availible && drone.Battery < 95)
+            {
+                BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                return $"To {bs.Name} BaseStation";
+            }
+            else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
+            {
+                if (drone.CurrentParcel.ParcelStatus) //alreay picked up
+                {
+                    DO.Customer target = dal.GetCustomer(drone.CurrentParcel.Target.Id);
+                    return $"To deliver, ID: {target.Id}";
+                }
+                else
+                {
+                    DO.Customer sender = dal.GetCustomer(drone.CurrentParcel.Sender.Id);
+                    return $"To Pick up, ID: {sender.Id}";
+                }
+            }
+            return "To nowhere";
+        }
         #endregion
 
         #region Customers

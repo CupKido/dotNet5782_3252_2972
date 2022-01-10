@@ -25,7 +25,7 @@ namespace PL
         bool disallowClosure = true;
         bool simulatorIsActive = false;
         public BackgroundWorker SimulatorWorker = new BackgroundWorker();
-
+        
         public Action Invoke;
         int thisDroneId;
         public AddDroneWindow()
@@ -35,6 +35,8 @@ namespace PL
 
 
             prepareForAddition();
+            SimulatorWorker.WorkerReportsProgress = true;
+            SimulatorWorker.WorkerSupportsCancellation = true;
         }
 
 
@@ -103,14 +105,14 @@ namespace PL
         private void prepareForShow(BO.Drone drone)
         {
             AdditionChBox.IsChecked = true;
-            Width = 420;
+            Width = 500;
             AddDrone_Button.Visibility = Visibility.Collapsed;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
             this.DataContext = drone;
             BO.DroneStatuses status = drone.Status;
-
+            
             if ((int)status == 0)
             {
                 PickUp_Button.Visibility = Visibility.Collapsed;
@@ -133,7 +135,7 @@ namespace PL
                 DisCharge_Button.Visibility = Visibility.Collapsed;
                 Attribution_Button.Visibility = Visibility.Collapsed;
                 Charge_Button.Visibility = Visibility.Collapsed;
-                if (p.PickedUp == null || p.PickedUp == DateTime.MinValue)
+                if (p.PickedUp == null || p.PickedUp is null)
                 {
                     Supply_Button.Visibility = Visibility.Collapsed;
                 }
@@ -141,15 +143,15 @@ namespace PL
                 {
                     PickUp_Button.Visibility = Visibility.Collapsed;
                 }
-
+                
             }
-
+            DroneDistance_PB.Maximum = myBL.GetDroneDistance(drone);
+            DroneDistance_PB.Value = DroneDistance_PB.Maximum;
+            DroneDestination_Data.DataContext = myBL.GetDroneDestination(drone);
             DroneId_TextBox.Text = drone.Id.ToString();
             DroneId_TextBox.IsEnabled = false;
-
-            DroneModel_TextBox.Text = drone.Model;
-            DroneModel_TextBox.IsEnabled = true;
-
+            SimulatorIsActive.IsChecked = false;
+            
             MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
             MaxWeightCB.IsEnabled = false;
 
@@ -301,7 +303,7 @@ namespace PL
         {
             disallowClosure = false;
             SimulatorWorker.CancelAsync();
-            simulatorIsActive = false;
+            SimulatorIsActive.IsChecked = false;
             this.Close();
         }
         protected override void OnClosing(CancelEventArgs e)
@@ -320,19 +322,52 @@ namespace PL
 
         private void ActivateSimulator_Click(object sender, RoutedEventArgs e)
         {
-            if (!simulatorIsActive)
+            if (!((bool)SimulatorIsActive.IsChecked))
             {
                 resetSimulatorWoker();
-                int Id = int.Parse(DroneId_TextBox.Text);
                 
                 SimulatorWorker.RunWorkerAsync();
                 simulatorIsActive = true;
                 ActivateSimulator.Content = "Manual";
+                #region Hide All
+
+                PickUp_Button.Visibility = Visibility.Collapsed;
+                Supply_Button.Visibility = Visibility.Collapsed;
+                Attribution_Button.Visibility = Visibility.Collapsed;
+                Charge_Button.Visibility = Visibility.Collapsed;
+                DisCharge_Button.Visibility = Visibility.Collapsed;
+                TimeInCharge_TextBox.Visibility = Visibility.Collapsed;
+
+                #endregion
             }
             else
             {
                 ActivateSimulator.Content = "Simulator";
                 simulatorIsActive = false;
+                BO.Drone d = myBL.GetDrone(thisDroneId);
+                string Dest = myBL.GetDroneDestination(d);
+
+                
+
+                if (d.Status == BO.DroneStatuses.InDelivery)
+                {
+                    if (Dest.ToLower().Contains("pick up"))
+                    {
+                        PickUp_Button.Visibility = Visibility.Visible;
+                    }
+                    else if (Dest.ToLower().Contains("deliver"))
+                    {
+                        Supply_Button.Visibility = Visibility.Visible;
+                    }
+                }else if(d.Status == BO.DroneStatuses.Maintenance)
+                {
+                    DisCharge_Button.Visibility = Visibility.Visible;
+                    TimeInCharge_TextBox.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Charge_Button.Visibility = Visibility.Visible;
+                }
                 
                 
             }
@@ -355,9 +390,18 @@ namespace PL
         }
         private void refresh(object sender, ProgressChangedEventArgs e)
         {
+            SimulatorIsActive.IsChecked = simulatorIsActive;
             try
             {
-                this.DataContext = myBL.GetDrone(thisDroneId);
+                BO.Drone drone = myBL.GetDrone(thisDroneId);
+                this.DataContext = drone;
+                double distance = myBL.GetDroneDistance(drone);
+                if (DroneDistance_PB.Value < distance)
+                {
+                    DroneDistance_PB.Maximum = distance;
+                    DroneDestination_Data.DataContext = myBL.GetDroneDestination(drone);
+                }
+                DroneDistance_PB.Value = distance;
             }catch (BO.ItemNotFoundException ex)
             {
                 MessageBox.Show("Drone has crashed due to low battery");
