@@ -12,7 +12,7 @@ namespace BLobject
 {
     internal class Simulator
     {
-        const double DroneSpeed = 100;
+        const double DroneSpeed = 50;
         const int TimerCheck = 500;
         Drone drone;
         Parcel currentParcel;
@@ -39,7 +39,7 @@ namespace BLobject
                 if (drone.Status == DroneStatuses.Availible)
                 {
 
-                    if (drone.Battery > 95)
+                    if (myBL.canSupplySomthing(drone) || drone.Battery >= 95)
                     {
                         try
                         {
@@ -50,6 +50,7 @@ namespace BLobject
                         {
                             myBL.subtructStandingBattery(DroneId);
                             UpdatePL();
+                            Thread.Sleep(3000);
                             continue;
                         }
                     }

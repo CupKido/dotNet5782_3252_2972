@@ -286,8 +286,8 @@ namespace BLobject
                     Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
                     DO.Customer target = dal.GetCustomer(p.SenderId);
                     Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
-                    BaseStation senderBS = closestBaseStation(sender.Longitude, sender.Latitude);
-                    BaseStation targetBS = closestBaseStation(target.Longitude, target.Latitude);
+                    BaseStation senderBS = closestAvailibleBaseStation(sender.Longitude, sender.Latitude);
+                    BaseStation targetBS = closestAvailibleBaseStation(target.Longitude, target.Latitude);
                     newD.Battery = getDistanceInBattery(senderL, targetL, p.Weight);
                     newD.Battery += getDistanceInBattery(targetL, targetBS.StationLocation);
                     if (p.PickedUp is not null)
@@ -864,6 +864,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal double chargeDrone(int Id, int timeInMil)
         {
             DroneToList drone = BLDrones.First(d => d.Id == Id);
@@ -878,6 +879,7 @@ namespace BLobject
             return drone.Battery;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal void disChargeDrone(int Id)
         {
             DroneToList drone = BLDrones.First(d => d.Id == Id);
@@ -887,6 +889,7 @@ namespace BLobject
             dal.RemoveDroneCharge(Id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal void subtructStandingBattery(int Id)
         {
             DroneToList drone = BLDrones.First(d => d.Id == Id);
@@ -895,6 +898,7 @@ namespace BLobject
             BLDrones.Add(drone);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal Location GoTowards(int DroneId, Location Destination, double speedInKm, double Elec)
         {
             DroneToList drone = BLDrones.First(d => d.Id == DroneId);
@@ -932,11 +936,13 @@ namespace BLobject
             return drone.CurrentLocation;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal double getElecForWeight(WeightCategories weight)
         {
             return dal.AskForElectricity()[(int)weight + 1];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetDroneDistance(Drone drone)
         {
             
@@ -961,6 +967,7 @@ namespace BLobject
             return 0;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public string GetDroneDestination(Drone drone)
         {
 
@@ -984,6 +991,7 @@ namespace BLobject
             }
             return "To nowhere";
         }
+
         #endregion
 
         #region Customers
@@ -1595,6 +1603,18 @@ namespace BLobject
             }
 
         }
+        internal bool canSupplySomthing(Drone drone)
+        {
+            foreach(DO.Parcel p in dal.GetAllParcelsBy(parcel => parcel.DroneId == 0))
+            {
+                if(canSupply(drone, p))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         private bool canSupply(Drone drone, DO.Parcel parcel)
         {
             if ((int)drone.MaxWeight < (int)parcel.Weight)

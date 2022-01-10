@@ -304,6 +304,7 @@ namespace PL
             disallowClosure = false;
             SimulatorWorker.CancelAsync();
             SimulatorIsActive.IsChecked = false;
+            simulatorIsActive = false;
             this.Close();
         }
         protected override void OnClosing(CancelEventArgs e)
@@ -394,6 +395,7 @@ namespace PL
             try
             {
                 BO.Drone drone = myBL.GetDrone(thisDroneId);
+                this.Title = drone.Status.ToString();
                 this.DataContext = drone;
                 double distance = myBL.GetDroneDistance(drone);
                 if (DroneDistance_PB.Value < distance)
