@@ -145,19 +145,36 @@ namespace PL
                 }
                 
             }
-            DroneDistance_PB.Maximum = myBL.GetDroneDistance(drone);
-            DroneDistance_PB.Value = DroneDistance_PB.Maximum;
-            DroneDestination_Data.DataContext = myBL.GetDroneDestination(drone);
-            DroneId_TextBox.Text = drone.Id.ToString();
-            DroneId_TextBox.IsEnabled = false;
-            SimulatorIsActive.IsChecked = false;
-            MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
-            MaxWeightCB.IsEnabled = false;
+            try
+            {
+                DroneId_TextBox.IsEnabled = false;
+                SimulatorIsActive.IsChecked = false;
+                MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
+                MaxWeightCB.IsEnabled = false;
+                DroneId_TextBox.Text = drone.Id.ToString();
 
-            DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
+                DroneDistance_PB.Maximum = myBL.GetDroneDistance(drone);
+                DroneDistance_PB.Value = DroneDistance_PB.Maximum;
+                DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
+                DroneDestination_Data.DataContext = myBL.GetDroneDestination(drone);
+               // DroneId_TextBox.Text = drone.Id.ToString();
+                //DroneId_TextBox.IsEnabled = false;
+                //SimulatorIsActive.IsChecked = false;
+                //MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
+                //MaxWeightCB.IsEnabled = false;
+
+               // DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
+            }
+            catch (BO.NoAvailableBaseStation ex)
+            {
+
+                MessageBox.Show(ex.ToString(), "No Available Base Station found !", MessageBoxButton.OK, MessageBoxImage.Error);
+                //closeWindow(); nothung to close-> not opened yet
+
+            }
 
 
-            
+
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -406,6 +423,11 @@ namespace PL
             }catch (BO.ItemNotFoundException ex)
             {
                 MessageBox.Show("Drone has crashed due to low battery");
+                closeWindow();
+            }
+            catch (BO.NoAvailableBaseStation ex)
+            {
+                MessageBox.Show("No Available Base Station found !!");
                 closeWindow();
             }
         }

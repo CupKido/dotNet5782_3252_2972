@@ -139,6 +139,23 @@ namespace BO
         }
     }
 
+
+
+    public class NoAvailableBaseStation : Exception
+    {
+        public NoAvailableBaseStation() : base("") { }
+
+        public NoAvailableBaseStation(String message) : base(message) { }
+
+        public NoAvailableBaseStation(String message, Exception inner) : base(message, inner) { }
+
+        public override string ToString()
+        {
+            return "ERROR: Available Base Station not found \n" + Message + "\n";
+        }
+    }
+
+
     public class DroneIsntAvailibleException : Exception
     {
         public int DroneId;

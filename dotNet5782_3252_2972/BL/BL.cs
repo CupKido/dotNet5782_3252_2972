@@ -394,14 +394,22 @@ namespace BLobject
         internal BaseStation closestAvailibleBaseStation(double longitude, double latitude)
         {
             //need to throw exception if there are no BaseStation
-            BaseStationToList closest = (from BaseStationToList bs in GetAllBaseStations()
-                                      where bs.ChargeSlotsAvailible > 0
-                                      let DOclosest = dal.GetBaseStation(bs.Id)
-                                      orderby (getDistanceFromLatLonInKm(DOclosest.Latitude, DOclosest.Longitude, latitude, longitude))
-                                      select bs).First();
+            try
+            {
+                BaseStationToList closest = (from BaseStationToList bs in GetAllBaseStations()
+                                             where bs.ChargeSlotsAvailible > 0
+                                             let DOclosest = dal.GetBaseStation(bs.Id)
+                                             orderby (getDistanceFromLatLonInKm(DOclosest.Latitude, DOclosest.Longitude, latitude, longitude))
+                                             select bs).First();
 
 
-            return GetBaseStation(closest.Id);
+                return GetBaseStation(closest.Id);
+            }
+            catch
+            {
+                throw new NoAvailableBaseStation("Available Base Station not found");
+                
+            }
         }
 
         private double getDistanceFromLatLonIncoords(double lat1, double lon1, double lat2, double lon2)
@@ -808,23 +816,29 @@ namespace BLobject
             {
                 throw new DroneIsntAvailibleException(Id);
             }
-
-            BaseStation BS = closestAvailibleBaseStation(droneToCharge.CurrentLocation.Longitude, droneToCharge.CurrentLocation.Latitude);
-
-            double distanceToBS = getDistanceFromLatLonInKm(droneToCharge.CurrentLocation.Latitude, droneToCharge.CurrentLocation.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
-
-            if (droneToCharge.Battery < distanceToBS / AvailbleElec)
+            try
             {
-                dal.RemoveDrone(Id);
-                BLDrones.RemoveAll(d => d.Id == Id);
-                throw new NotEnoughDroneBatteryException(Id);
+                BaseStation BS = closestAvailibleBaseStation(droneToCharge.CurrentLocation.Longitude, droneToCharge.CurrentLocation.Latitude);
+
+                double distanceToBS = getDistanceFromLatLonInKm(droneToCharge.CurrentLocation.Latitude, droneToCharge.CurrentLocation.Longitude, BS.StationLocation.Latitude, BS.StationLocation.Longitude);
+
+                if (droneToCharge.Battery < distanceToBS / AvailbleElec)
+                {
+                    dal.RemoveDrone(Id);
+                    BLDrones.RemoveAll(d => d.Id == Id);
+                    throw new NotEnoughDroneBatteryException(Id);
+                }
+
+                DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
+                BLDrones.Remove(dToUpdate);
+                dToUpdate.Status = DroneStatuses.Maintenance;
+                BLDrones.Add(dToUpdate);
+                dal.AddDroneCharge(Id, BS.Id, DateTime.Now);
             }
-            
-            DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
-            BLDrones.Remove(dToUpdate);
-            dToUpdate.Status = DroneStatuses.Maintenance;
-            BLDrones.Add(dToUpdate);
-            dal.AddDroneCharge(Id, BS.Id, DateTime.Now);
+            catch
+            {
+                throw;
+            }
 
         }
 
@@ -937,8 +951,13 @@ namespace BLobject
             
             if(drone.Status == DroneStatuses.Availible)
             {
-                BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
-                return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude);
+                try
+                {
+                    BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                    return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude);
+                }
+                catch
+                { throw; }
             }
             else if(drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
             {
@@ -962,8 +981,12 @@ namespace BLobject
 
             if (drone.Status == DroneStatuses.Availible && drone.Battery < 95)
             {
-                BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
-                return $"To {bs.Name} BaseStation";
+                try
+                {
+                    BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                    return $"To {bs.Name} BaseStation";
+                }
+                catch { throw; }
             }
             else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
             {
@@ -1614,18 +1637,25 @@ namespace BLobject
             {
                 return false;
             }
-            DO.Customer sender = dal.GetCustomer(parcel.SenderId);
-            Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
-            DO.Customer target = dal.GetCustomer(parcel.TargetId);
-            Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
-            BaseStation bs = closestAvailibleBaseStation(target.Longitude, targetL.Latitude);
-            double batteryNeeded = getDistanceInBattery(drone.CurrentLocation, senderL) + getDistanceInBattery(senderL, targetL, parcel.Weight) + getDistanceInBattery(targetL, bs.StationLocation);
-
-            if (drone.Battery >= batteryNeeded)
+            try
             {
-                return true;
+                DO.Customer sender = dal.GetCustomer(parcel.SenderId);
+                Location senderL = new Location() { Latitude = sender.Latitude, Longitude = sender.Longitude };
+                DO.Customer target = dal.GetCustomer(parcel.TargetId);
+                Location targetL = new Location() { Latitude = target.Latitude, Longitude = target.Longitude };
+                BaseStation bs = closestAvailibleBaseStation(target.Longitude, targetL.Latitude);
+                double batteryNeeded = getDistanceInBattery(drone.CurrentLocation, senderL) + getDistanceInBattery(senderL, targetL, parcel.Weight) + getDistanceInBattery(targetL, bs.StationLocation);
+
+                if (drone.Battery >= batteryNeeded)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                throw;
+            }
         }
 
         private double getDistanceInBattery(Location from, Location to)
