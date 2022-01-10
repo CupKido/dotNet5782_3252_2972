@@ -90,7 +90,8 @@ namespace PL.Customers
 
         private void AddCustomer_Button_Click(object sender, RoutedEventArgs e)
         {
-            int CustomerId , phone ;
+            int CustomerId;
+            long phone ;
             double latitude,longitude;
             if (!int.TryParse(CustomerId_TextBox.Text, out CustomerId))
             {
@@ -104,7 +105,7 @@ namespace PL.Customers
                 return;
             }
 
-            if (!int.TryParse(CustomerPhone_TextBox.Text, out phone))
+            if (!long.TryParse(CustomerPhone_TextBox.Text, out phone))
             {
                 MessageBox.Show("Phone must be a Number!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
