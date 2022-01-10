@@ -25,7 +25,6 @@ namespace PL
         public MainManagerWindow()
         {
             InitializeComponent();
-            //if(App.Current.)
             DroneListPage DLP = new DroneListPage();
             Main.Content = DLP;
             this.Show();
@@ -33,6 +32,7 @@ namespace PL
         }
         public void showDroneList_click(object sender, RoutedEventArgs e)
         {
+            
             Main.Content = null;
             Main.Content = new DroneListPage();
         }

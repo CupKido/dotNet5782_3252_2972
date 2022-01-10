@@ -326,8 +326,8 @@ namespace PL
             {
                 resetSimulatorWoker();
                 
-                SimulatorWorker.RunWorkerAsync();
                 simulatorIsActive = true;
+                SimulatorWorker.RunWorkerAsync();
                 ActivateSimulator.Content = "Manual";
                 #region Hide All
 
