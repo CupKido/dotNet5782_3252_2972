@@ -25,7 +25,9 @@ namespace PL
         public MainManagerWindow()
         {
             InitializeComponent();
-            Main.Content = new DroneListPage();
+            //if(App.Current.)
+            DroneListPage DLP = new DroneListPage();
+            Main.Content = DLP;
             this.Show();
 
         }

@@ -430,7 +430,6 @@ namespace BLobject
             return deg * (Math.PI / 180);
         }
 
-
         #region Base Stations
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -830,7 +829,7 @@ namespace BLobject
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public double DisChargeDrone(int Id, float time)
+        public double DisChargeDrone(int Id, double time)
         {
             Drone droneDisCharge;
             try
@@ -846,26 +845,16 @@ namespace BLobject
             {
                 throw new StatusIsntMaintance(Id);
             }
-            double[] a = dal.AskForElectricity();
 
+            double battery = chargeDrone(Id, time * 500);
+            disChargeDrone(Id);
+            return battery;
 
-            DroneToList dToUpdate = BLDrones.FirstOrDefault(d => d.Id == Id);
-            BLDrones.Remove(dToUpdate);
-            dToUpdate.Status = DroneStatuses.Availible;
-            dToUpdate.Battery += a[4] * (time / 60);   // change to time base 60 minutes
-            if (dToUpdate.Battery > 100)
-            {
-                dToUpdate.Battery = 100;
-            }
-            BLDrones.Add(dToUpdate);
-            dal.RemoveDroneCharge(Id);
-
-            return dToUpdate.Battery;
 
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        internal double chargeDrone(int Id, int timeInMil)
+        internal double chargeDrone(int Id, double timeInMil)
         {
             DroneToList drone = BLDrones.First(d => d.Id == Id);
             
@@ -1557,6 +1546,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AttributionParcelToDrone(int Id)
         {
             Drone d = GetDrone(Id);
@@ -1583,6 +1573,7 @@ namespace BLobject
             }
 
         }
+        
         private void updateAttribution(int DroneId, int ParcelId)
         {
             try
@@ -1603,6 +1594,8 @@ namespace BLobject
             }
 
         }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal bool canSupplySomthing(Drone drone)
         {
             foreach(DO.Parcel p in dal.GetAllParcelsBy(parcel => parcel.DroneId == 0))
@@ -1756,6 +1749,7 @@ namespace BLobject
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal void supplyParcel(int Id)
         {
             try
@@ -1807,11 +1801,13 @@ namespace BLobject
 
         }
 
+
+
+        #endregion
+
         public void ActivateSimulator(int DroneId, Action UpdatePL, Func<bool> ToCancel)
         {
             Simulator a = new Simulator(this, DroneId, UpdatePL, ToCancel);
         }
-
-        #endregion
     }
 }

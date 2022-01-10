@@ -151,7 +151,6 @@ namespace PL
             DroneId_TextBox.Text = drone.Id.ToString();
             DroneId_TextBox.IsEnabled = false;
             SimulatorIsActive.IsChecked = false;
-            
             MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
             MaxWeightCB.IsEnabled = false;
 

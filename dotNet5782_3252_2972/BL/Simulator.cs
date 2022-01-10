@@ -19,9 +19,6 @@ namespace BLobject
         BaseStation toChargeIn;
         public Simulator(BL myBL, int DroneId, Action UpdatePL, Func<Boolean> ToCancel)
         {
-
-
-
             while (!ToCancel())
             {
                 Thread.Sleep(TimerCheck);
@@ -39,7 +36,7 @@ namespace BLobject
                 if (drone.Status == DroneStatuses.Availible)
                 {
 
-                    if (myBL.canSupplySomthing(drone) || drone.Battery >= 95)
+                    if (myBL.canSupplySomthing(drone) || drone.Battery > 95)
                     {
                         try
                         {
@@ -94,7 +91,7 @@ namespace BLobject
                         }
                     }
                 }
-                else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id != null)
+                else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
                 {
                     lock (myBL)
                     {
@@ -127,7 +124,6 @@ namespace BLobject
                     }
                 }
                 UpdatePL();
-
             }
         }
 
