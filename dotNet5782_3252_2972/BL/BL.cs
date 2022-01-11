@@ -1118,7 +1118,7 @@ namespace BLobject
             int sum = 0;
             foreach (DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.TargetId == c.Id && p.Delivered != null && p.PickedUp != null)
+                if (p.TargetId == c.Id && p.Delivered is not null)
                 {
                     sum++;
                 }
@@ -1131,7 +1131,7 @@ namespace BLobject
             int sum = 0;
             foreach (DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.TargetId == c.Id && p.Delivered == null && p.PickedUp != null)
+                if (p.TargetId == c.Id && p.Delivered is null && p.Scheduled is not null)
                 {
                     sum++;
                 }
@@ -1144,7 +1144,7 @@ namespace BLobject
             int sum = 0;
             foreach (DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.SenderId == c.Id && p.Delivered == null && p.PickedUp != null)
+                if (p.SenderId == c.Id && p.Delivered is null && p.Scheduled is not null)
                 {
                     sum++;
                 }
@@ -1157,7 +1157,7 @@ namespace BLobject
             int sum = 0;
             foreach (DO.Parcel p in dal.GetAllParcels())
             {
-                if (p.SenderId == c.Id && p.Delivered != null && p.PickedUp != null)
+                if (p.SenderId == c.Id && p.Delivered is not null)
                 {
                     sum++;
                 }

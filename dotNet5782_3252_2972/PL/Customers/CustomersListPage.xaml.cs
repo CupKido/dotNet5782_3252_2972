@@ -43,6 +43,7 @@ namespace PL
             resetCustomersList();
             CustomerList.DataContext = _customersCollection;
             this.DataContext = this;
+            syncWithSimulator();
         }
 
         private void resetCustomersList()
@@ -52,6 +53,7 @@ namespace PL
                 CustomersCollection.Clear();
             }
             myBL.GetAllCustomers().Distinct().ToList().ForEach(i => CustomersCollection.Add(i));
+            CustomerList.DataContext = CustomersCollection.OrderBy(c => c.Id);
         }
 
         private void deleteSelected_click(object sender, RoutedEventArgs e)
@@ -127,7 +129,40 @@ namespace PL
 
         }
 
-        
+        private void syncWithSimulator()
+        {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            foreach(AddDroneWindow ADW in windows)
+            {
+                if(ADW.thisDroneId != 0)
+                {
+                    ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+                    {
+                        try
+                        {  
+                            BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
+                            if (d.CurrentParcel.Id is not null && d.Status == BO.DroneStatuses.InDelivery)
+                            {
+                                BO.Parcel p = myBL.GetParcel((int)d.CurrentParcel.Id);
+                                CustomersCollection.Remove(CustomersCollection.First(c => c.Id == p.Target.Id));
+                                CustomersCollection.Remove(CustomersCollection.First(c => c.Id == p.Sender.Id));
+                                CustomersCollection.Add(myBL.TurnCustomerToList(myBL.GetCustomer(p.Sender.Id)));
+                                CustomersCollection.Add(myBL.TurnCustomerToList(myBL.GetCustomer(p.Target.Id)));
+                                CustomerList.DataContext = CustomersCollection.OrderBy(c => c.Id);
+                            }
+                            else if(d.Status == BO.DroneStatuses.Availible) { resetCustomersList(); }
+                        }
+                        catch
+                        {
+                            resetCustomersList();
+                        }
+                    };
+                }
+                
+            }
+        }
 
     }
 }

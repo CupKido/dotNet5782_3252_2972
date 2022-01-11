@@ -27,7 +27,7 @@ namespace PL
         public BackgroundWorker SimulatorWorker = new BackgroundWorker();
         
         public Action Invoke;
-        int thisDroneId;
+        public int thisDroneId = 0;
         public AddDroneWindow()
         {
 
