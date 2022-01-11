@@ -893,11 +893,11 @@ namespace BLobject
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        internal void subtructStandingBattery(int Id)
+        internal void subtructStandingBattery(int Id, int TimeInMil)
         {
             DroneToList drone = BLDrones.First(d => d.Id == Id);
             BLDrones.Remove(drone);
-            drone.Battery -= 0.5;
+            drone.Battery -= 1 * TimeInMil / 1000 ;
             BLDrones.Add(drone);
         }
 
@@ -907,7 +907,7 @@ namespace BLobject
             DroneToList drone = BLDrones.First(d => d.Id == DroneId);
             if(drone.CurrentLocation.Latitude == Destination.Latitude && drone.CurrentLocation.Longitude == Destination.Longitude)
             {
-                subtructStandingBattery(DroneId);
+                subtructStandingBattery(DroneId, 500);
                 return Destination;
             }
             double speedInCoords = speedInKm / 111;

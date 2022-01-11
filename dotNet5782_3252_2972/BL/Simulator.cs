@@ -36,7 +36,7 @@ namespace BLobject
                 if (drone.Status == DroneStatuses.Availible)
                 {
 
-                    if (myBL.canSupplySomthing(drone) || drone.Battery > 95)
+                    if (myBL.canSupplySomthing(drone) || drone.Battery > 90)
                     {
                         try
                         {
@@ -45,9 +45,9 @@ namespace BLobject
                         }
                         catch (BO.NoParcelForThisDrone ex)
                         {
-                            myBL.subtructStandingBattery(DroneId);
-                            UpdatePL();
                             Thread.Sleep(3000);
+                            myBL.subtructStandingBattery(DroneId, 3000);
+                            UpdatePL();
                             continue;
                         }
                     }
@@ -80,7 +80,7 @@ namespace BLobject
                     {
                         lock (myBL)
                         {
-                            drone.Battery = myBL.chargeDrone(DroneId, TimerCheck);
+                            myBL.chargeDrone(DroneId, TimerCheck);
                         }
                     }
                     else
