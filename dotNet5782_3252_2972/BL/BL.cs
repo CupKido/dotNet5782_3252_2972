@@ -920,16 +920,20 @@ namespace BLobject
             double vectorLengthInCoords = getDistanceFromLatLonIncoords(0, 0, Vector.Latitude, Vector.Longitude);
             Vector = new Location() { Latitude = Vector.Latitude / vectorLengthInCoords, Longitude = Vector.Longitude / vectorLengthInCoords };
             BLDrones.Remove(drone);
-            
+
+            double battery = drone.Battery;
             if (vectorLengthInCoords <= speedInCoords)
             {
-                drone.Battery -= getDistanceFromLatLonInKm(0, 0, Vector.Latitude, Vector.Longitude) / Elec;
+                battery -= getDistanceFromLatLonInKm(0, 0, Vector.Latitude, Vector.Longitude) / Elec;
+                drone.Battery = (battery <= 0) ? 0 : battery; 
                 drone.CurrentLocation = Destination;
+                
                 BLDrones.Add(drone);
                 return Destination;
             }
 
-            drone.Battery -= speedInKm / Elec;
+            battery -= speedInKm / Elec;
+            drone.Battery = (battery <= 0) ? 0 : battery;
             drone.CurrentLocation = new Location()
             { 
                 Longitude = drone.CurrentLocation.Longitude + (Vector.Longitude * speedInCoords),
@@ -1179,6 +1183,11 @@ namespace BLobject
             if (name != "")
             {
                 lastCustomer.Name = name;
+            }
+
+            if (phone.Length != 10)
+            {
+                throw new InvalidNumberLengthException(phone.Length);
             }
 
             if (phone != "")

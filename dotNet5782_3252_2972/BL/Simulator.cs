@@ -93,6 +93,12 @@ namespace BLobject
                 }
                 else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
                 {
+                    if(drone.Battery <= 0)
+                    {
+                        myBL.DeleteDrone(DroneId);
+                        UpdatePL();
+                        return;
+                    }
                     lock (myBL)
                     {
                         currentParcel = myBL.GetParcel((int)drone.CurrentParcel.Id);

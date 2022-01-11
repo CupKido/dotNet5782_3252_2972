@@ -42,12 +42,19 @@ namespace PL
                 MessageBox.Show("ID must be a Number!", "Wrong ID type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            int Phone;
-            if (!int.TryParse(CustomerPhone.Text, out Phone))
+            long Phone;
+            try
+            {
+                long.TryParse(CustomerPhone.Text, out Phone);
+                
+            }
+            catch
             {
                 MessageBox.Show("Phone must be a Number!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
+
             }
+            
             try
             {
                 BO.Customer customer = myBL.GetCustomer(Id);

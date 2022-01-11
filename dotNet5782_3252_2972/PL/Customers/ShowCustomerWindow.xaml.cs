@@ -110,7 +110,13 @@ namespace PL.Customers
                 MessageBox.Show("Phone Number must contain 10 digits only !", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-           
+            
+            if( phone < 0)
+            {
+                MessageBox.Show("Phone Number must contain 10 digits only!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (!double.TryParse(CustomerLongitude_TextBox.Text, out longitude))
             {
                 MessageBox.Show("Longitude must be a Number!", "Wrong Longitude type", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -118,14 +124,19 @@ namespace PL.Customers
             }
             if (!double.TryParse(CustomerLatitude_TextBox.Text, out latitude))
             {
-                MessageBox.Show("LAtitude must be a Number!", "Wrong LAtitude type", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Latitude must be a Number!", "Wrong Latitude type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             try
             {
                 myBL.AddCustomer(CustomerId, CustomerName_TextBox.Text, CustomerPhone_TextBox.Text, longitude, latitude);
-              
+
+            }
+            catch (BO.InvalidNumberLengthException ex)
+            {
+                MessageBox.Show($"Phone number length must be 10! \nLength of inserted number: {ex.Number}", "Invalid Phone number length", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             catch (Exception ex)
             {
@@ -141,28 +152,35 @@ namespace PL.Customers
             
             string customerName = CustomerName_TextBox.Text;
             string customerPhone = CustomerPhone_TextBox.Text;
-            int PhoneTemp;
+            long PhoneTemp;
 
             if (CustomerName_TextBox.Text == "")
             {
                 MessageBox.Show("Please enter the customer's name", "Empty name value", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            bool check = int.TryParse(CustomerPhone_TextBox.Text, out PhoneTemp);
-            if (!check)
+            
+            if (!long.TryParse(CustomerPhone_TextBox.Text, out PhoneTemp))
             {
                 MessageBox.Show(" Phone number has to be a number", "Wrong type Phone number", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (customerPhone.Length != 10)
+
+            if (PhoneTemp < 0)
             {
-                MessageBox.Show(" Phone number should contain 10 digits", "Wrong type Phone number", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Phone Number must contain 10 digits only!", "Wrong Phone type", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             try
             {
                 myBL.UpdateCustomer(customerId , CustomerName_TextBox.Text , CustomerPhone_TextBox.Text );
                 MessageBox.Show("Customer has been updated", "update confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (BO.InvalidNumberLengthException ex)
+            {
+                MessageBox.Show($"Phone number length must be 10! \nLength of inserted number: {ex.Number}", "Invalid Phone number length", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             catch (Exception ex)
             {
