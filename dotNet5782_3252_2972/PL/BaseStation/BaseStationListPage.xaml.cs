@@ -43,6 +43,7 @@ namespace PL.BaseStation
             resetBaseStationList();
             BaseStationList.DataContext = BaseStationCollection;
             this.DataContext = this;
+            syncWithSimulator();
         }
 
         private void resetBaseStationList()
@@ -103,5 +104,48 @@ namespace PL.BaseStation
             };
             SBSW.Show();
         }
+
+        private void syncWithSimulator()
+        {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            foreach (AddDroneWindow ADW in windows)
+            {
+                if (ADW.thisDroneId != 0)
+                {
+                    ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+                    {
+                        try
+                        {
+                            BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
+                            int BSId = 0;
+                            if (d.Status == BO.DroneStatuses.Maintenance)
+                            {
+                                BSId = myBL.GetChrgingInBaseStationId(d);
+                                
+                            }
+                            else if (d.Status == BO.DroneStatuses.Availible && d.Battery > 90) 
+                            {
+                                BSId = myBL.closestBaseStation(d.CurrentLocation.Longitude, d.CurrentLocation.Latitude).Id;
+                            }
+                            else
+                            {
+                                return;
+                            }
+                            BaseStationCollection.Remove(BaseStationCollection.First(bs => bs.Id == BSId));
+                            BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(BSId)));
+                            BaseStationList.DataContext = BaseStationCollection.OrderBy(bs => bs.Id);
+                        }
+                        catch
+                        {
+                            resetBaseStationList();
+                        }
+                    };
+                }
+
+            }
+        }
+
     }
 }

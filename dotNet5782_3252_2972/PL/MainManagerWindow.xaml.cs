@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BlApi;
 using PL.BaseStation;
+using PL.Customers;
 using PL.Parcel;
 
 namespace PL
@@ -51,6 +52,34 @@ namespace PL
 
         private void close_Click(object sender, RoutedEventArgs e)
         {
+            List<AddDroneWindow> Dronewindows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            List<ShowParcelWindow> Parcelwindows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(ShowParcelWindow)
+                                            select (ShowParcelWindow)w).ToList();
+            List<ShowBaseStationWindow> BSwindows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(ShowBaseStationWindow)
+                                            select (ShowBaseStationWindow)w).ToList();
+            List<ShowCustomerWindow> Customerwindows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(ShowCustomerWindow)
+                                            select (ShowCustomerWindow)w).ToList();
+            foreach(AddDroneWindow adw in Dronewindows)
+            {
+                adw.closeWindow();
+            }
+            foreach(ShowParcelWindow spw in Parcelwindows)
+            {
+                spw.CloseWindow();
+            }
+            foreach(ShowBaseStationWindow sbsw in BSwindows)
+            {
+                sbsw.CloseWindow();
+            }
+            foreach(ShowCustomerWindow scw in Customerwindows)
+            {
+                scw.CloseWindow();
+            }
             this.Close();
         }
 

@@ -244,7 +244,8 @@ namespace PL
             float time = float.Parse(TimeInCharge_TextBox.Text);
             try
             {
-                DroneBattery_Data.Text = myBL.DisChargeDrone(DroneId, time).ToString("N2");
+                myBL.DisChargeDrone(DroneId, time);
+                this.DataContext = myBL.GetDrone(DroneId);
             }
             catch (Exception ex)
             {
@@ -315,7 +316,7 @@ namespace PL
             closeWindow();
         }
 
-        private void closeWindow()
+        public void closeWindow()
         {
             disallowClosure = false;
             SimulatorWorker.CancelAsync();

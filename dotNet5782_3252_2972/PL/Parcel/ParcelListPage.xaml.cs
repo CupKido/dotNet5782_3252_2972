@@ -43,6 +43,7 @@ namespace PL.Parcel
             resetParcelsList();
             ParcelList.DataContext = ParcelsCollection;
             this.DataContext = this;
+            syncWithSimulator();
         }
 
         private void resetParcelsList()
@@ -51,7 +52,8 @@ namespace PL.Parcel
             {
                 ParcelsCollection.Clear();
             }
-            myBL.GetAllParcels().Distinct().ToList().ForEach(i => ParcelsCollection.Add(i));
+            myBL.GetAllParcels().OrderBy(p => p.Id).Distinct().ToList().ForEach(i => ParcelsCollection.Add(i));
+            ParcelList.DataContext = ParcelsCollection;
         }
 
         private void ParcelList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -124,6 +126,41 @@ namespace PL.Parcel
             SPW.Show();
         }
 
-        
+        private void syncWithSimulator()
+        {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            foreach (AddDroneWindow ADW in windows)
+            {
+                if (ADW.thisDroneId != 0)
+                {
+                    ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+                    {
+                        try
+                        {
+                            BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
+                            if (d.CurrentParcel.Id is not null && d.Status == BO.DroneStatuses.InDelivery)
+                            {
+                                BO.Parcel p = myBL.GetParcel((int)d.CurrentParcel.Id);
+                                
+                                ParcelsCollection.Remove(ParcelsCollection.First(parcel => parcel.Id == p.Id));
+                                ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(p.Id)));
+                                ParcelList.DataContext = ParcelsCollection.OrderBy(parcel => parcel.Id);
+                            }
+                            else if (d.Status == BO.DroneStatuses.Availible) { resetParcelsList(); }
+                        }
+                        catch
+                        {
+                            resetParcelsList();
+                        }
+                    };
+                }
+
+            }
+        }
+
+
+
     }
 }

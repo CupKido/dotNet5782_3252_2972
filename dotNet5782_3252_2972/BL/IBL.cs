@@ -139,6 +139,8 @@ namespace BlApi
 
         public string GetDroneDestination(Drone drone);
 
+        public int GetChrgingInBaseStationId(Drone drone);
+
         #endregion
 
         #region Parcels
@@ -243,6 +245,7 @@ namespace BlApi
 
         public BaseStationToList TurnBaseStationToList(BaseStation Bs);
 
+        public BaseStation closestBaseStation(double longitude, double latitude);
         //public IDAL.DO.BaseStation GetBaseStation(int Id);
 
         #endregion

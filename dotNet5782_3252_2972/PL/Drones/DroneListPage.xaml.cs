@@ -50,7 +50,7 @@ namespace PL
             {
                 DronesCollection.OrderByDescending(d => d.Id);
             };
-
+            syncWithSimulator();
             
         }
 
@@ -128,7 +128,7 @@ namespace PL
                 DronesCollection.Clear();
             }
             myBL.GetAllDrones().Distinct().ToList().ForEach(i => DronesCollection.Add(i));
-            DroneList.DataContext = DronesCollection;
+            DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
             //foreach (BO.DroneToList DTL in myBL.GetAllDrones())
             //{
             //    DronesCollection.Add(DTL);
@@ -261,6 +261,38 @@ namespace PL
         {
             DronesCollection.Clear();
             enu.Distinct().ToList().ForEach(i => DronesCollection.Add(i));
+        }
+
+        private void syncWithSimulator()
+        {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            foreach (AddDroneWindow ADW in windows)
+            {
+                if (ADW.thisDroneId != 0)
+                {
+                    ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+                    {
+                        try
+                        {
+                            updateSpecificDrone(ADW.thisDroneId);
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                DronesCollection.Remove(DronesCollection.First(d => d.Id == ADW.thisDroneId));
+                            }
+                            catch
+                            {
+                                resetDronesList();
+                            }
+                        }
+                    };
+                }
+
+            }
         }
 
     }

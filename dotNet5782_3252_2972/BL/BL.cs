@@ -328,10 +328,24 @@ namespace BLobject
                 catch
                 {
                     //case of no attributed Parcel
-                    newD.Status = DroneStatuses.Maintenance;
-                    DO.BaseStation baseStation = dal.GetBaseStation(sendToMaitenance(newD));
-                    newD.CurrentLocation = new Location() { Longitude = baseStation.Longitude, Latitude = baseStation.Latitude };
-                    newD.Battery = r.Next(20);
+                    newD.CurrentLocation = new() { Latitude = r.Next(10) + r.NextDouble(), Longitude = r.Next(10) + r.NextDouble() };
+                    
+                    BO.BaseStation baseStation = closestBaseStation(newD.CurrentLocation.Longitude, newD.CurrentLocation.Latitude);
+                    if(baseStation.DroneInChargesList.Count == baseStation.ChargeSlots)
+                    {
+                        newD.Status = DroneStatuses.Availible;
+                        newD.Battery = r.Next((int)getDistanceInBattery(newD.CurrentLocation, baseStation.StationLocation) + 1, 101);
+
+                    }
+                    else
+                    {
+                        newD.Status = DroneStatuses.Maintenance;
+                        newD.CurrentLocation = new Location() { Longitude = baseStation.StationLocation.Longitude, Latitude = baseStation.StationLocation.Latitude };
+                        newD.Battery = r.Next(20);
+                    }
+                    
+                    
+                    
                     BLDrones.Add(newD);
                     continue;
                 }
@@ -343,19 +357,26 @@ namespace BLobject
        
         private int sendToMaitenance(DroneToList newD)
         {
+            try
+            {
+                IEnumerable<BaseStation> availibleStation = from DO.BaseStation baseStation in dal.GetAllBaseStations()
+                                                            let BObs = GetBaseStation(baseStation.Id)
+                                                            where BObs.DroneInChargesList.Count < BObs.ChargeSlots
+                                                            select new BaseStation()
+                                                            {
+                                                                Id = baseStation.Id
+                                                            };
 
-            IEnumerable<BaseStation> availibleStation = from DO.BaseStation baseStation in dal.GetAllBaseStations()
-                                                        let BObs = GetBaseStation(baseStation.Id)
-                                                        where BObs.DroneInChargesList.Count < BObs.ChargeSlots
-                                                        select new BaseStation()
-                                                        {
-                                                            Id = baseStation.Id
-                                                        };
-
-            Random r = new Random();
-            BaseStation bs = GetBaseStation(availibleStation.ToArray()[r.Next(availibleStation.Count())].Id);
-            dal.AddDroneCharge(newD.Id, bs.Id, DateTime.Now);
-            return bs.Id;
+                Random r = new Random();
+                BaseStation bs = GetBaseStation(availibleStation.ToArray()[r.Next(availibleStation.Count())].Id);
+                dal.AddDroneCharge(newD.Id, bs.Id, DateTime.Now);
+                return bs.Id;
+            }
+            catch(System.IndexOutOfRangeException ex)
+            {
+                return closestBaseStation(newD.CurrentLocation.Longitude, newD.CurrentLocation.Latitude).Id;
+            }
+            
         }
 
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)
@@ -380,7 +401,8 @@ namespace BLobject
             return ACS;
         } //returns amount of availible slots in station
 
-        private BaseStation closestBaseStation(double longitude, double latitude)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public BaseStation closestBaseStation(double longitude, double latitude)
         {
             //need to throw exception if there are no BaseStation
             DO.BaseStation closest = (from DO.BaseStation bs in dal.GetAllBaseStations()
@@ -407,7 +429,7 @@ namespace BLobject
             }
             catch
             {
-                throw new NoAvailableBaseStation("Available Base Station not found");
+                throw new NoAvailableBaseStation("Available Base Station was not found");
                 
             }
         }
@@ -961,7 +983,7 @@ namespace BLobject
                     return getDistanceFromLatLonInKm(drone.CurrentLocation.Latitude, drone.CurrentLocation.Longitude, bs.StationLocation.Latitude, bs.StationLocation.Longitude);
                 }
                 catch
-                { throw; }
+                {  }
             }
             else if(drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
             {
@@ -990,7 +1012,10 @@ namespace BLobject
                     BaseStation bs = closestAvailibleBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
                     return $"To {bs.Name} BaseStation";
                 }
-                catch { throw; }
+                catch 
+                { 
+                    
+                }
             }
             else if (drone.Status == DroneStatuses.InDelivery && drone.CurrentParcel.Id is not null)
             {
@@ -1006,6 +1031,16 @@ namespace BLobject
                 }
             }
             return "To nowhere";
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public int GetChrgingInBaseStationId(Drone drone)
+        {
+            if(drone.Status != DroneStatuses.Maintenance)
+            {
+                throw new Exception(); //TODO
+            }
+            return dal.GetDroneCharge(drone.Id).BaseStationId;
         }
 
         #endregion

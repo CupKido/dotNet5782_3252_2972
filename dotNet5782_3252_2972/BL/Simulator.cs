@@ -71,6 +71,15 @@ namespace BLobject
                         {
                             UpdatePL();
                             return;
+                        }catch(BO.NoAvailableBaseStation ex)
+                        {
+                            toChargeIn = myBL.closestBaseStation(drone.CurrentLocation.Longitude, drone.CurrentLocation.Latitude);
+                            if (myBL.GoTowards(DroneId, toChargeIn.StationLocation, DroneSpeed, myBL.AvailbleElec) == toChargeIn.StationLocation)
+                            {
+                                myBL.subtructStandingBattery(DroneId, 500);
+                            }
+                            UpdatePL();
+                            continue;
                         }
                     }
                 }
