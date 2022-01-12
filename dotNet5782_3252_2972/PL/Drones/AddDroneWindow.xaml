@@ -129,7 +129,7 @@
                     Margin="150,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant" ToolTip="first change model in the box"
                     FontWeight="Bold" FontSize="11" Click="Update_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Background="{StaticResource myLinearGradientBrush}">
+                    Background="{StaticResource ButtonLinearGradientBrush}">
             </Button>
 
 
