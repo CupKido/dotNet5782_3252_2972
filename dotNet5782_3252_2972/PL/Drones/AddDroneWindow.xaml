@@ -203,7 +203,7 @@
                      Background="{StaticResource ButtonLinearGradientBrush}" >
             </Button>
 
-            <Button x:Name="ShowCarriedParcel_Button" Content="Show Parcel" HorizontalAlignment="Left" 
+            <Button x:Name="ShowCarriedParcel_Button" Content="Show  &#xa; Parcel" HorizontalAlignment="Left" 
                     Margin="330,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="33" Width="56" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="ShowCarriedParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     IsEnabled="{Binding ElementName=DroneParcel_Data, Path=Text, Mode=OneWay, Converter={StaticResource EmptyToFalseConverter}}"
@@ -222,7 +222,8 @@
             <CheckBox x:Name="AdditionChBox" Content="Addition" Visibility="Collapsed" HorizontalAlignment="Left" Margin="271,13,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Name="SimulatorIsActive" Content="Simulator is Active" Visibility="Collapsed" HorizontalAlignment="Left" Margin="271,13,0,0" VerticalAlignment="Top"/>
             <Button x:Name="ActivateSimulator" Content="Simulator" Click="ActivateSimulator_Click" HorizontalAlignment="Left" Margin="389,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="64" Height="36"
-                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Background="{StaticResource ButtonLinearGradientBrush}" FontFamily="Elephant"/>
 
             <Label x:Name="Status" Content="{Binding Status}" HorizontalAlignment="Left" Margin="9,15,0,0" VerticalAlignment="Top"
                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
