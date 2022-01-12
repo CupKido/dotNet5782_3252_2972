@@ -911,7 +911,14 @@ namespace BLobject
             BLDrones.Remove(drone);
             drone.Status = DroneStatuses.Availible;
             BLDrones.Add(drone);
+            try
+            {
             dal.RemoveDroneCharge(Id);
+            }
+            catch
+            {
+
+            }
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -946,7 +953,7 @@ namespace BLobject
             double battery = drone.Battery;
             if (vectorLengthInCoords <= speedInCoords)
             {
-                battery -= getDistanceFromLatLonInKm(0, 0, Vector.Latitude, Vector.Longitude) / Elec;
+                battery -= getDistanceInBattery(new Location() { Latitude = 0, Longitude = 0 },Vector, Elec);
                 drone.Battery = (battery <= 0) ? 0 : battery; 
                 drone.CurrentLocation = Destination;
                 
@@ -1690,7 +1697,7 @@ namespace BLobject
                 BaseStation bs = closestAvailibleBaseStation(target.Longitude, targetL.Latitude);
                 double batteryNeeded = getDistanceInBattery(drone.CurrentLocation, senderL) + getDistanceInBattery(senderL, targetL, parcel.Weight) + getDistanceInBattery(targetL, bs.StationLocation);
 
-                if (drone.Battery >= batteryNeeded)
+                if (drone.Battery > batteryNeeded + 1)
                 {
                     return true;
                 }
@@ -1708,7 +1715,12 @@ namespace BLobject
             return disinkm / AvailbleElec;
 
         }
+        private double getDistanceInBattery(Location from, Location to, double Elec)
+        {
+            double disinkm = getDistanceFromLatLonInKm(from.Latitude, from.Longitude, to.Latitude, to.Longitude);
+            return disinkm / Elec;
 
+        }
         private double getDistanceInBattery(double fLatitude, double fLongitude, double tLatitude, double tLongitude, DO.WeightCategories weight)
         {
             double disinkm = getDistanceFromLatLonInKm(fLatitude, fLongitude, tLatitude, tLongitude);

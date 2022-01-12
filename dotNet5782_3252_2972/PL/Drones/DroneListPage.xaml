@@ -14,7 +14,7 @@
         <local:ColorByPercentageConverter x:Key="PercentageToColorConverter" />
     </Page.Resources>
     
-    <Border Background="#2265">
+    <Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>

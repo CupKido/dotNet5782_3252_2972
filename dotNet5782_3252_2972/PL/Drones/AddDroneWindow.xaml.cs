@@ -43,7 +43,7 @@ namespace PL
         public AddDroneWindow(int DroneId)
         {
             InitializeComponent();
-
+            
             prepareForShow(myBL.GetDrone(DroneId));
             thisDroneId = DroneId;
             SimulatorWorker.WorkerReportsProgress = true;
@@ -95,10 +95,10 @@ namespace PL
         {
             AdditionChBox.IsChecked = false;
             Width = 300;
-            AddDrone_Button.Visibility = Visibility.Visible;
 
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
             StartingBSCB.ItemsSource = from BO.BaseStationToList BS in myBL.GetAllBaseStations()
+                                       where BS.ChargeSlotsAvailible > 0
                                        select BS.Id;
         }
 
@@ -106,8 +106,7 @@ namespace PL
         {
             AdditionChBox.IsChecked = true;
             Width = 500;
-            AddDrone_Button.Visibility = Visibility.Collapsed;
-
+            SimulatorIsActive.IsChecked = simulatorIsActive;
             MaxWeightCB.ItemsSource = Enum.GetValues(typeof(BO.WeightCategories));
 
             this.DataContext = drone;
@@ -147,15 +146,11 @@ namespace PL
             }
             try
             {
-                DroneId_TextBox.IsEnabled = false;
-                SimulatorIsActive.IsChecked = false;
-                MaxWeightCB.SelectedIndex = (int)drone.MaxWeight;
-                MaxWeightCB.IsEnabled = false;
-                DroneId_TextBox.Text = drone.Id.ToString();
+                
+                
 
                 DroneDistance_PB.Maximum = myBL.GetDroneDistance(drone);
                 DroneDistance_PB.Value = DroneDistance_PB.Maximum;
-                DroneLocation_TextBox.Text = drone.CurrentLocation.ToString();
                 DroneDestination_Data.DataContext = myBL.GetDroneDestination(drone);
                // DroneId_TextBox.Text = drone.Id.ToString();
                 //DroneId_TextBox.IsEnabled = false;

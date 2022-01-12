@@ -26,11 +26,32 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
+            this.Left = (System.Windows.SystemParameters.PrimaryScreenWidth / 2) - (this.Width);
+            this.Top = (System.Windows.SystemParameters.PrimaryScreenHeight / 2) - (this.Height);
+            this.Show();
         }
 
         private void LogInAsManager_Click(object sender, RoutedEventArgs e)
         {
-            (new MainManagerWindow()).Show();
+            MainManagerWindow MMW = new MainManagerWindow();
+            if(this.Left > System.Windows.SystemParameters.PrimaryScreenWidth - MMW.Width)
+            {
+                MMW.Left = System.Windows.SystemParameters.PrimaryScreenWidth - MMW.Width;
+            }
+            else
+            {
+                MMW.Left = this.Left;
+            }
+            if (this.Top > System.Windows.SystemParameters.PrimaryScreenHeight - MMW.Height)
+            {
+                MMW.Top = System.Windows.SystemParameters.PrimaryScreenHeight - MMW.Height;
+            }
+            else
+            {
+                MMW.Top = this.Top;
+            }
+
+            MMW.Show();
             this.Close();
         }
 

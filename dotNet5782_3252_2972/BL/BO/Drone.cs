@@ -18,7 +18,19 @@ namespace BO
 
         public double Battery { get; set; }
 
-        public Location CurrentLocation = new Location();
+        private Location currentLocation = new Location();
+
+        public Location CurrentLocation
+        {
+            get
+            {
+                return currentLocation;
+            }
+            set
+            {
+                currentLocation = value;
+            }
+        }
 
         private ParcelInDelivery currentParcel = new ParcelInDelivery();
 

@@ -28,8 +28,23 @@ namespace PL
             InitializeComponent();
             DroneListPage DLP = new DroneListPage();
             Main.Content = DLP;
+            Window a = new Window();
+            a.Width = 200;
+            a.Height = 40;
+            
+            a.LocationChanged += (s, e) =>
+            {
+                this.Left = a.Left;
+                this.Top = a.Top + 40;
+            };
+            a.Closed += (s, e) =>
+            {
+                this.Close();
+            };
+            a.Top = this.Top - 40;
+            a.Left = this.Left;
             this.Show();
-
+            a.Show();
         }
         public void showDroneList_click(object sender, RoutedEventArgs e)
         {
@@ -79,6 +94,10 @@ namespace PL
             foreach(ShowCustomerWindow scw in Customerwindows)
             {
                 scw.CloseWindow();
+            }
+            foreach(Window w in App.Current.Windows)
+            {
+                w.Close();
             }
             this.Close();
         }

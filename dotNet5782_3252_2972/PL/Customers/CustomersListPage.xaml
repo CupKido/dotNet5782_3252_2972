@@ -12,8 +12,8 @@
         <local:AllowDeleteConverter x:Key="AllowToDeleteConverter" />
     </Page.Resources>
     
-    <Border Background="#2265">
-        <Grid>
+    <Border>
+        <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
