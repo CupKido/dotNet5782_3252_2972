@@ -13,7 +13,7 @@
         <local:AllowDeleteConverter x:Key="AllowToDeleteConverter" />
         <local:ColorByPercentageConverter x:Key="PercentageToColorConverter" />
     </Page.Resources>
-    
+
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
             </ListView>
 
             <ComboBox x:Name="MaxWeightBox" SelectionChanged="setMaxWeight_select" IsEditable="True" Text="Select Weight"
-                   Grid.Column="2" HorizontalAlignment="Left" Margin="62,68,0,0" VerticalAlignment="Top" Width="120" FontFamily="Bodoni MT" FontWeight="Bold" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Foreground="#FFEE4D4D">
+                   Grid.Column="1" HorizontalAlignment="Left" Margin="50,73,0,0" VerticalAlignment="Top" Width="120" FontFamily="Bodoni MT" FontWeight="Bold" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Foreground="#FFEE4D4D">
                 <ComboBox.OpacityMask>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black"/>
@@ -77,11 +77,11 @@
                 </ComboBox.BorderBrush>
             </ComboBox>
 
-            <ComboBox x:Name="DroneStatusBox" SelectionChanged="setDroneStatus_select" IsEditable="True" Text="Select Status" HorizontalAlignment="Left" Margin="62,115,0,0"
-                       Grid.Column="2" VerticalAlignment="Top" Width="120" BorderBrush="#FFDA7B7B" FontFamily="Bodoni MT" FontWeight="Bold" Foreground="#FFEE4D4D" Background="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
+            <ComboBox x:Name="DroneStatusBox" SelectionChanged="setDroneStatus_select" IsEditable="True" Text="Select Status" HorizontalAlignment="Left" Margin="50,130,0,0"
+                       Grid.Column="1" VerticalAlignment="Top" Width="120" BorderBrush="#FFDA7B7B" FontFamily="Bodoni MT" FontWeight="Bold" Foreground="#FFEE4D4D" Background="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
 
             <Button x:Name="DronesListReset"  Content="Reset" HorizontalAlignment="Left" 
-                     Grid.Column="2" Margin="100,370,0,0" VerticalAlignment="Top" Height="33" Width="62" FontFamily="Bodoni MT"
+                     Grid.Column="1" Margin="15,262,0,0" VerticalAlignment="Top" Height="33" Width="70" FontFamily="Bodoni MT"
                     FontWeight="Bold" FontSize="11" Click="resetDronesList_click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -92,7 +92,7 @@
             </Button>
 
             <Button x:Name="DeleteDrone"  Content="Delete" HorizontalAlignment="Left" 
-                     Grid.Column="1" Margin="181,370,0,0" VerticalAlignment="Top" Height="33" Width="62" FontFamily="Bodoni MT"
+                     Grid.Column="1" Margin="15,316,0,0" VerticalAlignment="Top" Height="33" Width="70" FontFamily="Bodoni MT"
                     FontWeight="Bold" FontSize="11" Click="deleteSelected_click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     IsEnabled="{Binding ElementName=DroneList, Path=SelectedIndex, Mode=OneWay, Converter={StaticResource AllowToDeleteConverter}}">
                 <Button.Background>

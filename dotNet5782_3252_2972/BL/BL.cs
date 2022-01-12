@@ -341,6 +341,7 @@ namespace BLobject
                     {
                         newD.Status = DroneStatuses.Maintenance;
                         newD.CurrentLocation = new Location() { Longitude = baseStation.StationLocation.Longitude, Latitude = baseStation.StationLocation.Latitude };
+                        chargeDroneAtBS(newD.Id, baseStation.Id);
                         newD.Battery = r.Next(20);
                     }
                     
@@ -377,6 +378,16 @@ namespace BLobject
                 return closestBaseStation(newD.CurrentLocation.Longitude, newD.CurrentLocation.Latitude).Id;
             }
             
+        }
+
+        private void chargeDroneAtBS(int DroneId, int BaseStationId)
+        {
+            BaseStation bs = GetBaseStation(BaseStationId);
+            if(bs.DroneInChargesList.Count == bs.ChargeSlots)
+            {
+                return;
+            }
+            dal.AddDroneCharge(DroneId, BaseStationId, DateTime.Now);
         }
 
         private int getAvailibleSlotsForBaseStation(BaseStation baseStation)

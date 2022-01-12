@@ -20,7 +20,8 @@
         <local:InvertBoolConverter x:Key="BoolToNotConverter"/>
         <local:IntByEnumConverter x:Key="EnumToIntConverter"/>
         <local:LocationAsStringConverter x:Key="LocationToStringConverter"/>
-
+        <local:ColorByPercentageConverter x:Key="PercentageToColorConverter" />
+        
         <LinearGradientBrush x:Key="myLinearGradientBrush"    EndPoint="1,1" StartPoint="0,0">
             <GradientStop Color="#ECF39E"/>
             <GradientStop Color="#132A13" Offset="1"/>
@@ -103,10 +104,19 @@
                        Height="16" Width="72" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
                        Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                        />
-            <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Left" Margin="339,118,0,0" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Width="66" Height="16" FontFamily="Bauhaus 93"
-                       Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                       Text="{Binding Battery, StringFormat=N2}"/>
+            <Grid Margin="310,96,29,22">
+                <ProgressBar x:Name="Battery_PB" Height="16" Width="80" Minimum="0" Maximum="100" Value="{Binding Battery}"
+                             Foreground="{Binding Path=Battery, Mode=OneWay, Converter={StaticResource PercentageToColorConverter}}"
+                             Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <TextBlock x:Name="DroneBattery_Data" HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           FontFamily="Bauhaus 93"
+                           Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding Battery, StringFormat=N2}"/>
+                       
+                       
+            </Grid>
+            
             <TextBlock x:Name="DroneParcel_TextBlock" HorizontalAlignment="Left" Margin="266,154,0,0" 
                    Text="Current Parcel:" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="100" FontFamily="Ink Free" FontWeight="Bold" FontSize="14"
                        Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -218,7 +228,7 @@
                    Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
             <Grid Margin="338,6,24,22" Grid.Row="1">
-                <ProgressBar x:Name="DroneDistance_PB"  Height="10"  Width="100" Grid.RowSpan="1" Minimum="0"
+                <ProgressBar x:Name="DroneDistance_PB"  Height="15"  Width="100" Grid.RowSpan="1" Minimum="0"
                          Visibility="{Binding ElementName=AdditionChBox, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                          />
 

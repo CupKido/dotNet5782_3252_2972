@@ -43,6 +43,8 @@ namespace PL.BaseStation
             resetBaseStationList();
             BaseStationList.DataContext = BaseStationCollection;
             this.DataContext = this;
+            BSStatusBox.ItemsSource = Enum.GetValues(typeof(PO.BaseStationStatus));
+            BaseStationCollection.CollectionChanged += (s, e) => { BaseStationList.DataContext = BaseStationCollection.OrderBy(bs => bs.Id); };
             syncWithSimulator();
         }
 
@@ -58,6 +60,7 @@ namespace PL.BaseStation
         private void BaseStationListReset_Click(object sender, RoutedEventArgs e)
         {
             resetBaseStationList();
+            resetComboBoxes();
         }
 
         private void BaseStationList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -78,13 +81,35 @@ namespace PL.BaseStation
         private void updateSpecificBaseStation(int Id)
         {
             BaseStationCollection.Remove(BaseStationCollection.First(d => d.Id == Id));
-            BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(Id)));
-            BaseStationList.DataContext = BaseStationCollection.OrderBy(d => d.Id);
+            BO.BaseStationToList baseStation = myBL.TurnBaseStationToList(myBL.GetBaseStation(Id));
+            if (filterSingleBS(baseStation))
+            {
+                BaseStationCollection.Add(baseStation);
+            }
+
         }
 
-        private void DeleteBaseStation_Click(object sender, RoutedEventArgs e)
+        private bool filterSingleBS(BO.BaseStationToList baseStation)
         {
-            
+            if(BSStatusBox.SelectedIndex >= 0)
+            {
+                if (BSStatusBox.SelectedIndex != (baseStation.ChargeSlotsAvailible > 0 ? 0 : 1))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void filterBSList()
+        {
+            List<BO.BaseStationToList> bsToLists = myBL.GetAllBaseStations().ToList();
+            if (BSStatusBox.SelectedIndex >= 0)
+            {
+                bsToLists = bsToLists.Where(btl => BSStatusBox.SelectedIndex != (btl.ChargeSlotsAvailible > 0 ? 0 : 1)).ToList();
+            }
+            BaseStationCollection.Clear();
+            bsToLists.OrderBy(bs => bs.Id).Distinct().ToList().ForEach(i => BaseStationCollection.Add(i));
         }
 
         private void AddBaseStation_Click(object sender, RoutedEventArgs e)
@@ -99,7 +124,11 @@ namespace PL.BaseStation
                 }
                 if (BaseStationCollection.FirstOrDefault(p => p.Id == Id) == null)
                 {
-                    BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(Id)));
+                    BO.BaseStationToList baseStation = myBL.TurnBaseStationToList(myBL.GetBaseStation(Id));
+                    if (filterSingleBS(baseStation))
+                    {
+                        BaseStationCollection.Add(baseStation);
+                    }
                 }
             };
             SBSW.Show();
@@ -133,13 +162,11 @@ namespace PL.BaseStation
                             {
                                 return;
                             }
-                            BaseStationCollection.Remove(BaseStationCollection.First(bs => bs.Id == BSId));
-                            BaseStationCollection.Add(myBL.TurnBaseStationToList(myBL.GetBaseStation(BSId)));
-                            BaseStationList.DataContext = BaseStationCollection.OrderBy(bs => bs.Id);
+                            updateSpecificBaseStation(BSId);
                         }
                         catch
                         {
-                            resetBaseStationList();
+                            filterBSList();
                         }
                     };
                 }
@@ -147,5 +174,15 @@ namespace PL.BaseStation
             }
         }
 
+        private void BSStatusBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            filterBSList();
+        }
+
+        private void resetComboBoxes()
+        {
+            BSStatusBox.SelectedIndex = -1;
+            BSStatusBox.Text = "Select status";
+        }
     }
 }

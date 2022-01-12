@@ -43,6 +43,11 @@ namespace PL.Parcel
             resetParcelsList();
             ParcelList.DataContext = ParcelsCollection;
             this.DataContext = this;
+            ParcelPriorityBox.ItemsSource = Enum.GetValues(typeof(BO.Priorities));
+            ParcelsCollection.CollectionChanged += (s, e) =>
+            {
+                ParcelList.DataContext = ParcelsCollection.OrderBy(d => d.Id);
+            };
             syncWithSimulator();
         }
 
@@ -53,7 +58,6 @@ namespace PL.Parcel
                 ParcelsCollection.Clear();
             }
             myBL.GetAllParcels().OrderBy(p => p.Id).Distinct().ToList().ForEach(i => ParcelsCollection.Add(i));
-            ParcelList.DataContext = ParcelsCollection;
         }
 
         private void ParcelList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -79,13 +83,39 @@ namespace PL.Parcel
         private void updateSpecificParcel(int Id)
         {
             ParcelsCollection.Remove(ParcelsCollection.First(d => d.Id == Id));
-            ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(Id)));
-            ParcelList.DataContext = ParcelsCollection.OrderBy(d => d.Id);
+            BO.ParcelToList parcelToList = myBL.TurnParcelToList(myBL.GetParcel(Id));
+            if (filterSingleParcel(parcelToList))
+            {
+                ParcelsCollection.Add(parcelToList);
+            }
+        }
+
+        private bool filterSingleParcel(BO.ParcelToList parcel)
+        {
+            if(ParcelPriorityBox.SelectedIndex >= 0)
+            {
+                BO.Priorities priority = (BO.Priorities)ParcelPriorityBox.SelectedIndex;
+                if (parcel.Priority != priority) return false;
+            }
+            return true;
+        }
+
+        private void filterParcelsList()
+        {
+            List<BO.ParcelToList> parcelToLists = myBL.GetAllParcels().ToList();
+            if (ParcelPriorityBox.SelectedIndex >= 0)
+            {
+                BO.Priorities priority = (BO.Priorities)ParcelPriorityBox.SelectedIndex;
+                parcelToLists = parcelToLists.Where(ptl => ptl.Priority == priority).ToList();
+            }
+            ParcelsCollection.Clear();
+            parcelToLists.OrderBy(p => p.Id).Distinct().ToList().ForEach(i => ParcelsCollection.Add(i));
         }
 
         private void ParcelsListReset_Click(object sender, RoutedEventArgs e)
         {
             resetParcelsList();
+            resetComboBoxes();
         }
 
         private void DeleteParcel_Click(object sender, RoutedEventArgs e)
@@ -118,9 +148,13 @@ namespace PL.Parcel
                 {
                     return;
                 }
-                if(ParcelsCollection.FirstOrDefault(p=> p.Id==Id) == null)
+                if(ParcelsCollection.FirstOrDefault(p=> p.Id == Id) == null)
                 {
-                    ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(Id)));
+                    BO.ParcelToList parcelToList = myBL.TurnParcelToList(myBL.GetParcel(Id));
+                    if (filterSingleParcel(parcelToList))
+                    {
+                        ParcelsCollection.Add(parcelToList);
+                    }
                 }
             };
             SPW.Show();
@@ -141,18 +175,14 @@ namespace PL.Parcel
                         {
                             BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
                             if (d.CurrentParcel.Id is not null && d.Status == BO.DroneStatuses.InDelivery)
-                            {
-                                BO.Parcel p = myBL.GetParcel((int)d.CurrentParcel.Id);
-                                
-                                ParcelsCollection.Remove(ParcelsCollection.First(parcel => parcel.Id == p.Id));
-                                ParcelsCollection.Add(myBL.TurnParcelToList(myBL.GetParcel(p.Id)));
-                                ParcelList.DataContext = ParcelsCollection.OrderBy(parcel => parcel.Id);
+                            { 
+                                updateSpecificParcel((int)d.CurrentParcel.Id);
                             }
-                            else if (d.Status == BO.DroneStatuses.Availible) { resetParcelsList(); }
+                            else if (d.Status == BO.DroneStatuses.Availible) { filterParcelsList(); }
                         }
                         catch
                         {
-                            resetParcelsList();
+                            filterParcelsList();
                         }
                     };
                 }
@@ -160,7 +190,15 @@ namespace PL.Parcel
             }
         }
 
+        private void resetComboBoxes()
+        {
+            ParcelPriorityBox.SelectedIndex = -1;
+            ParcelPriorityBox.Text = "Select priority";
+        }
 
-
+        private void ParcelPriorityBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            filterParcelsList();
+        }
     }
 }

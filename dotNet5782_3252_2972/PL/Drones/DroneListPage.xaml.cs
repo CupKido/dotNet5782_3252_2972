@@ -48,7 +48,7 @@ namespace PL
             this.DataContext = this;
             DronesCollection.CollectionChanged += (s, e) =>
             {
-                DronesCollection.OrderByDescending(d => d.Id);
+                DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
             };
             syncWithSimulator();
             
@@ -128,12 +128,15 @@ namespace PL
                 DronesCollection.Clear();
             }
             myBL.GetAllDrones().Distinct().ToList().ForEach(i => DronesCollection.Add(i));
-            DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
-            //foreach (BO.DroneToList DTL in myBL.GetAllDrones())
-            //{
-            //    DronesCollection.Add(DTL);
-            //}
-            //DronesCollection = new ObservableCollection<BO.DroneToList>(myBL.GetAllDrones());
+        }
+
+        private void restartDronesList()
+        {
+            if (DronesCollection != null)
+            {
+                DronesCollection.Clear();
+            }
+            myBL.GetAllDrones().Distinct().ToList().ForEach(i => DronesCollection.Add(i));
         }
 
         private void resetComboBoxes()
@@ -231,25 +234,48 @@ namespace PL
 
         private void updateSpecificDrone(int Id)
         {
+            
             DronesCollection.Remove(DronesCollection.First(d => d.Id == Id));
-            DronesCollection.Add(myBL.TurnDroneToList(myBL.GetDrone(Id)));
-            DroneList.DataContext = DronesCollection.OrderBy(d => d.Id);
+            BO.DroneToList droneToList = myBL.TurnDroneToList(myBL.GetDrone(Id));
+            if (filterSingleDrone(droneToList))
+            {
+                DronesCollection.Add(myBL.TurnDroneToList(myBL.GetDrone(Id)));
+            }
+            
+            
+            //filterDroneList();
+        }
+
+        private bool filterSingleDrone(BO.DroneToList drone)
+        {
+            if (DroneStatusBox.SelectedIndex >= 0)
+            {
+                BO.DroneStatuses selectedStatus = (BO.DroneStatuses)DroneStatusBox.SelectedItem;
+                if (selectedStatus != drone.Status) return false;
+            }
+            if (MaxWeightBox.SelectedIndex >= 0)
+            {
+                BO.WeightCategories selectedWeight = (BO.WeightCategories)MaxWeightBox.SelectedItem;
+                if (selectedWeight != drone.MaxWeight) return false;
+            }
+            return true;
         }
 
         private void filterDroneList()
         {
-            resetDronesList();
+            List<BO.DroneToList> filterList = myBL.GetAllDrones().ToList();
             if (DroneStatusBox.SelectedIndex >= 0)
             {
                 BO.DroneStatuses selectedStatus = (BO.DroneStatuses)DroneStatusBox.SelectedItem;
-                insertToDroneCollection((new ObservableCollection<BO.DroneToList>(DronesCollection.Where(d => d.Status == selectedStatus))));
+                filterList = filterList.Where(d => d.Status == selectedStatus).ToList();
             }
 
             if (MaxWeightBox.SelectedIndex >= 0)
             {
                 BO.WeightCategories selectedWeight = (BO.WeightCategories)MaxWeightBox.SelectedItem;
-                insertToDroneCollection(new ObservableCollection<BO.DroneToList>(DronesCollection.Where(d => d.MaxWeight == selectedWeight)));
+                filterList = filterList.Where(d => d.MaxWeight == selectedWeight).ToList();
             }
+            insertToDroneCollection(filterList);
         }
 
         //protected override void OnClosing(CancelEventArgs e)
@@ -286,7 +312,7 @@ namespace PL
                             }
                             catch
                             {
-                                resetDronesList();
+                                
                             }
                         }
                     };

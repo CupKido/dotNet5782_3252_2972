@@ -681,6 +681,7 @@ namespace DalXml
                 Id = num,
                 SenderId = SenderId,
                 TargetId = TargetId,
+                Priority = priority,
                 Weight = PackageWight,
                 Requested = created,
                 Scheduled = scheduled,
@@ -704,6 +705,7 @@ namespace DalXml
                 Id = num,
                 SenderId = SenderId,
                 TargetId = TargetId,
+                Priority = priority,
                 Weight = PackageWight,
                 Requested = created,
                 
