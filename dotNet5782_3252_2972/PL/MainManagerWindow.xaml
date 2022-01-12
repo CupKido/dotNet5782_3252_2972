@@ -32,13 +32,20 @@
             <Setter Property="Foreground"
                     Value="#FF6C1414"/>
         </Style>
+       
     </Window.Resources>
 
     <Border  CornerRadius="70">
         <Border.Background>
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                <GradientStop Color="#FF326181" Offset="0"/>
-                <GradientStop Color="#FF6C12C5" Offset="1"/>
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF326181" Offset="0.1"/>
+                <GradientStop Color="#FF326189" Offset="0.3"/>
+                <GradientStop Color="#FF85C8D1" Offset="0"/>
+                <GradientStop Color="#FFACC2C5" Offset="0.8"/>
+                <GradientStop Color="#FF6C12C5" Offset="0.5"/>
+                <GradientStop Color="#FF6C12C9" Offset="0"/>
+                <GradientStop Color="Black" Offset="1"/>
             </LinearGradientBrush>
         </Border.Background>
 
@@ -56,40 +63,52 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions >
-                <Button x:Name="ShowDrones" Content="Drone List" Style="{StaticResource TopButton}"
+                <Button x:Name="ShowDrones" Content="Drone &#xa; List" Style="{StaticResource BTNCORNER}"
                         Click="showDroneList_click" Margin="44,21,44,-30"
-                        FontFamily="A" FontWeight="UltraBold" FontStyle="Italic" FontSize="20"
+                        FontFamily="A" FontWeight="Bold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232"
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" >
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
 
-                    
+
                 </Button>
-                <Button x:Name="ShowCustomers" Content="Customer List" Style="{StaticResource TopButton}"
-                        Click="showCustomersList_click" Margin="156,21,132,-30"
+                <Button x:Name="ShowCustomers" Content="Customer &#xa; List" Style="{StaticResource BTNCORNER}" 
+                        Click="showCustomersList_click" Margin="160,21,132,-30"
                         FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232" 
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.ColumnSpan="2" >
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
 
-                    
+
                 </Button>
 
-                <Button x:Name="ShowParcels" Content="Parcel List" Style="{StaticResource TopButton}"
-                        Click="showParcelsList_click" Margin="68,21,20,-30"
-                        FontWeight="UltraBold" FontStyle="Italic" FontSize="20"
+                <Button x:Name="ShowParcels" Content="Parcel &#xa; List" Style="{StaticResource BTNCORNER}"
+                        Click="showParcelsList_click" Margin="72,21,20,-30"
+                        FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232"
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.Column="1" >
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
 
-                    
+
                 </Button>
 
-                <Button x:Name="ShowBaseStations" Content="BaseStations List" Style="{StaticResource TopButton}"
-                        Click="ShowBaseStations_Click" Margin="180,21,108,-30" 
-                        FontWeight="UltraBold" FontStyle="Italic" FontSize="12.5"
-                        BorderBrush="#FF493232"
+                <Button x:Name="ShowBaseStations" Content="BaseStations &#xa; List" Style="{StaticResource BTNCORNER}"
+                        Click="ShowBaseStations_Click" Margin="184,21,100,-30" 
+                        FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
+                        BorderBrush="#FF493232" 
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.Column="1" Grid.ColumnSpan="2" >
-                    
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
 
-                    
+
+
                 </Button>
 
             </Grid>
