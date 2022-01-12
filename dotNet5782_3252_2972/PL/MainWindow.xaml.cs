@@ -37,10 +37,12 @@ namespace PL
             if(this.Left > System.Windows.SystemParameters.PrimaryScreenWidth - MMW.Width)
             {
                 MMW.Left = System.Windows.SystemParameters.PrimaryScreenWidth - MMW.Width;
+                MMW.a.Left = System.Windows.SystemParameters.PrimaryScreenWidth - MMW.Width;
             }
             else
             {
                 MMW.Left = this.Left;
+                MMW.a.Left = this.Left;
             }
             if (this.Top > System.Windows.SystemParameters.PrimaryScreenHeight - MMW.Height)
             {
@@ -50,7 +52,8 @@ namespace PL
             {
                 MMW.Top = this.Top;
             }
-
+            MMW.a.Top = MMW.Top - MMW.a.Height;
+            
             MMW.Show();
             this.Close();
         }

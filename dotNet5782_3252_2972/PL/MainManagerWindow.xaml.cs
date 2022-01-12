@@ -23,15 +23,15 @@ namespace PL
     /// </summary>
     public partial class MainManagerWindow : Window
     {
+        public Window a = new Window();
         public MainManagerWindow()
         {
             InitializeComponent();
             DroneListPage DLP = new DroneListPage();
             Main.Content = DLP;
-            Window a = new Window();
             a.Width = 200;
             a.Height = 40;
-            
+            a.WindowStartupLocation = WindowStartupLocation.Manual;
             a.LocationChanged += (s, e) =>
             {
                 this.Left = a.Left;
@@ -41,8 +41,7 @@ namespace PL
             {
                 this.Close();
             };
-            a.Top = this.Top - 40;
-            a.Left = this.Left;
+            
             this.Show();
             a.Show();
         }
