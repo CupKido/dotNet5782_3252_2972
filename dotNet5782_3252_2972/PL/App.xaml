@@ -18,9 +18,12 @@
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
+
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
+        
         
         <LinearGradientBrush x:Key="AppLinear"    EndPoint="1,1" StartPoint="0,0">
 
@@ -30,20 +33,26 @@
             <GradientStop Color="Violet" Offset="1"/>
 
         </LinearGradientBrush>
-    
 
-    <Style TargetType="Button" x:Key="BTNCORNER">
+      
+
+        <Style TargetType="Button" x:Key="BTNCORNER">
             <Setter Property="Background" Value="Blue" />
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="20,7,20,7" Background="{StaticResource AppLinear}"    BorderBrush="Cornsilk" BorderThickness="1,1,1,1" >
-                            <ContentPresenter x:Name="contentPresenter"   ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding  Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding  VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="contentPresenter"   ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding  Content}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding  VerticalContentAlignment}"/>
+                            
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+          
+
         </Style>
 
        
