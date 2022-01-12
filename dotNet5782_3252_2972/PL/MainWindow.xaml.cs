@@ -113,5 +113,16 @@ namespace PL
         {
             SignUp.Foreground = Brushes.Blue;
         }
+
+    
+        private void FileID_GotFocus(object sender, RoutedEventArgs e)
+        {
+            CustomerId.Text = "";
+        }
+
+        private void FilePhone_GotFocus(object sender, RoutedEventArgs e)
+        {
+            CustomerPhone.Text = "";
+        }
     }
 }

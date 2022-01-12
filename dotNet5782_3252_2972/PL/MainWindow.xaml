@@ -14,9 +14,9 @@
         <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="225,137,0,0" VerticalAlignment="Top" Height="34" Width="108"
                 Style="{StaticResource ResourceKey=RoundedButton2}"/>
         <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="36,118,0,0" Text="User ID" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
-             Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center"    />
+             Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center" GotFocus="FileID_GotFocus"   />
         <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="36,141,0,0" Text="User Phone" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
-                  Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center" />
+                  Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center" GotFocus="FilePhone_GotFocus" />
         <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="36,167,0,0" VerticalAlignment="Top"
                 Style="{StaticResource ResourceKey=RoundedButton2}"/>
         <Label x:Name="SignUp"  MouseDoubleClick="SignUp_MouseDoubleClick" MouseEnter="SignUp_MouseEnter" MouseLeave="SignUp_MouseLeave" Foreground="Blue"  HorizontalAlignment="Left" Margin="96,164,0,0" VerticalAlignment="Top">
