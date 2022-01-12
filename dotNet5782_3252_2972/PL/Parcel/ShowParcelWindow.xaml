@@ -17,6 +17,20 @@
         <local:IfNotEmptyTrueConverter x:Key="EmptyToFalseConverter"/>
         <local:IfNullFalseConverter x:Key="NullToFalseConverter"/>
         <local:If0FalseConverter x:Key="If0ToFalseConverter"/>
+        <LinearGradientBrush x:Key="myLinearGradientBrush"    EndPoint="1,1" StartPoint="0,0">
+            <GradientStop Color="#ECF39E"/>
+            <GradientStop Color="#132A13" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ButtonLinearGradientBrush"   EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#664E4C"/>
+            <GradientStop Color="#B4CDED" Offset="2"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush  x:Key="ComboLinearGradientBrush" EndPoint="0,1">
+            <GradientStop Color="#FFF0F0F0"/>
+            <GradientStop Color="#FFFF9090" Offset="1"/>
+        </LinearGradientBrush>
     </Window.Resources>
 
     <Grid x:Name="Main" Background="#90A955">
@@ -28,13 +42,7 @@
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                    IsEnabled="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
-                 Text="{Binding Id}">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 Text="{Binding Id}" Background="{StaticResource myLinearGradientBrush}">
         </TextBox>
 
         <TextBlock x:Name="SenderId_TextBlock" HorizontalAlignment="Left" Margin="10,43,0,0"
@@ -42,13 +50,8 @@
         <TextBox x:Name="SenderId_TextBox" HorizontalAlignment="Left" Margin="90,43,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
                    IsEnabled="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
-                 Text="{Binding Sender.Id}">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 Text="{Binding Sender.Id}" Background="{StaticResource myLinearGradientBrush}">
+          
         </TextBox>
 
         <TextBlock x:Name="SenderName_TextBlock" HorizontalAlignment="Left" Margin="215,43,0,0"
@@ -57,13 +60,8 @@
         <TextBox x:Name="SenderName_TextBox" HorizontalAlignment="Left" Margin="310,43,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93" IsEnabled="False"
                  Text="{Binding Sender.Name}"
-                 Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                 Background="{StaticResource myLinearGradientBrush}">
         </TextBox>
         <Button x:Name="ShowSender_Button" Content="Show" HorizontalAlignment="Left" 
                     Margin="435,43,0,0" VerticalAlignment="Top" Height="18" Width="40" FontFamily="Elephant"
@@ -77,13 +75,7 @@
         <TextBox x:Name="TargetId_TextBox" HorizontalAlignment="Left" Margin="90,66,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
                    IsEnabled="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
-                 Text="{Binding Target.Id}">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 Text="{Binding Target.Id}" Background="{StaticResource myLinearGradientBrush}">
         </TextBox>
         <Button x:Name="ShowTarget_Button" Content="Show" HorizontalAlignment="Left" 
                     Margin="435,66,0,0" VerticalAlignment="Top" Height="18" Width="40" FontFamily="Elephant"
@@ -98,13 +90,8 @@
         <TextBox x:Name="TargetName_TextBox" HorizontalAlignment="Left" Margin="310,66,0,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93" IsEnabled="False"
                  Text="{Binding Target.Name}"
-                 Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                 Background="{StaticResource myLinearGradientBrush}">
         </TextBox>
 
         <TextBlock x:Name="ParcelWeight_TextBlock" HorizontalAlignment="Left" Margin="10,89,0,0" 
@@ -113,13 +100,8 @@
                   Margin="90,89,0,0" VerticalAlignment="Top" Width="120" FontSize="11" Height="21" Foreground="#31572C" FontFamily="Bauhaus 93" 
                   IsEditable="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
                   IsEnabled="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
-                  SelectedIndex="{Binding Path=Weight, Mode=OneWay, Converter={StaticResource EnumToIntConverter}}">
-            <ComboBox.Background>
-                <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="#FFF0F0F0"/>
-                    <GradientStop Color="#FFFF9090" Offset="1"/>
-                </LinearGradientBrush>
-            </ComboBox.Background>
+                  SelectedIndex="{Binding Path=Weight, Mode=OneWay, Converter={StaticResource EnumToIntConverter}}"
+                  Background="{StaticResource ComboLinearGradientBrush}">
         </ComboBox>
 
         <TextBlock x:Name="ParcelPriority_TextBlock" HorizontalAlignment="Left" Margin="10,112,0,0" 
@@ -127,13 +109,7 @@
         <ComboBox x:Name="PriorityCB" Text="Select Priority"  HorizontalAlignment="Left" 
                   Margin="90,112,0,0" VerticalAlignment="Top" Width="120" FontSize="11" Height="21" Foreground="#31572C" FontFamily="Bauhaus 93"
                   IsEditable="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToNotConverter}}"
-                  SelectedIndex="{Binding Path=Priority, Mode=OneWay, Converter={StaticResource EnumToIntConverter}}">
-            <ComboBox.Background>
-                <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="#FFF0F0F0"/>
-                    <GradientStop Color="#FFFF9090" Offset="1"/>
-                </LinearGradientBrush>
-            </ComboBox.Background>
+                  SelectedIndex="{Binding Path=Priority, Mode=OneWay, Converter={StaticResource EnumToIntConverter}}"  Background="{StaticResource ComboLinearGradientBrush}">
         </ComboBox>
 
         <CheckBox x:Name="IfPresentation" Content="IfPresentation" Visibility="Collapsed" HorizontalAlignment="Left" Margin="295,36,0,0" VerticalAlignment="Top"/>
@@ -145,13 +121,7 @@
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="18" FontFamily="Bauhaus 93"
                  Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"                 
                  Text="{Binding Path=DroneId, Mode=OneWay, Converter={StaticResource If0ToNoneConverter}}"
-                 IsEnabled="False">
-            <TextBox.Background>
-                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                    <GradientStop Color="#ECF39E"/>
-                    <GradientStop Color="#132A13" Offset="1"/>
-                </LinearGradientBrush>
-            </TextBox.Background>
+                 IsEnabled="False"  Background="{StaticResource myLinearGradientBrush}">
         </TextBox>
         <Button x:Name="ShowDrone_Button" Content="Show Drone" HorizontalAlignment="Left" 
                     Margin="220,135,0,0" VerticalAlignment="Top" Height="18" Width="80" FontFamily="Elephant"
@@ -163,51 +133,29 @@
                     Margin="150,160,0,0" VerticalAlignment="Top" Height="33" Width="83" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="AddParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource NotBoolToVisibilityConverter}}"
-                    >
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#664E4C"/>
-                    <GradientStop Color="#B4CDED" Offset="2"/>
-                </LinearGradientBrush>
-            </Button.Background>
+                   Background="{StaticResource ButtonLinearGradientBrush}"  >
         </Button>
 
         <Button x:Name="UpdateParcel_Button" Content="Update Parcel" HorizontalAlignment="Left" 
                     Margin="150,160,0,0" VerticalAlignment="Top" Height="33" Width="83" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="UpdateParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
                     Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                    >
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#664E4C"/>
-                    <GradientStop Color="#B4CDED" Offset="2"/>
-                </LinearGradientBrush>
-            </Button.Background>
+                     Background="{StaticResource ButtonLinearGradientBrush}">
+          
         </Button>
 
         <Button x:Name="CloseWindow_Button" Content="Close" HorizontalAlignment="Left" 
                     Margin="150,198,0,0" VerticalAlignment="Top" Height="33" Width="83" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="CloseWindow_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
-                    >
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#664E4C"/>
-                    <GradientStop Color="#B4CDED" Offset="2"/>
-                </LinearGradientBrush>
-            </Button.Background>
+                  Background="{StaticResource ButtonLinearGradientBrush}"   >
+           
         </Button>
 
         <Button x:Name="DeleteParcel_Button" Content="Delete" HorizontalAlignment="Left" 
                     Margin="238,198,0,0" VerticalAlignment="Top" Height="33" Width="83" FontFamily="Elephant"
                     FontWeight="Bold" FontSize="11" Click="DeleteParcel_Button_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black"
-                    Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#664E4C"/>
-                    <GradientStop Color="#B4CDED" Offset="2"/>
-                </LinearGradientBrush>
-            </Button.Background>
+                    Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                 Background="{StaticResource ButtonLinearGradientBrush}">
         </Button>
         <CheckBox x:Name="PickedUp_CheckBox" IsEnabled="False" Content="Picked Up" HorizontalAlignment="Left" Margin="222,92,0,0" VerticalAlignment="Top"
                   Visibility="{Binding ElementName=IfPresentation, Path=IsChecked, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
