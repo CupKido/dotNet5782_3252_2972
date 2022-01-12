@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="235" Width="378">
     <Grid Margin="0,0,0,1">
+        <Grid.Background>
+            <ImageBrush ImageSource="DesignData/DronePhoto.jpeg" Stretch="UniformToFill"/>
+        </Grid.Background>
+
         <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="225,137,0,0" VerticalAlignment="Top" Height="34" Width="108"/>
         <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="36,118,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="36,141,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
