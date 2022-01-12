@@ -13,7 +13,19 @@ namespace BO
         public Location StationLocation { get; set; }
         public int ChargeSlots { get; set; }
 
-        public List<DroneInCharge> DroneInChargesList = new List<DroneInCharge>();
+        private List<DroneInCharge> droneInChargesList = new List<DroneInCharge>();
+
+        public List<DroneInCharge> DroneInChargesList
+        {
+            get
+            {
+                return droneInChargesList;
+            }
+            set
+            {
+                droneInChargesList = value;
+            }
+        }
 
         public override string ToString()
         {

@@ -246,4 +246,17 @@ namespace PL
             throw new NotImplementedException();
         }
     }
+
+    internal class ListAsAmountConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value as List<BO.DroneInCharge>).Count;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

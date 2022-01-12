@@ -32,14 +32,12 @@ namespace PL.BaseStation
         public ShowBaseStationWindow(int BaseStationId)
         {
             InitializeComponent();
-            BO.BaseStationToList Bs = myBL.TurnBaseStationToList(myBL.GetBaseStation(BaseStationId));
-            this.DataContext = Bs;
+            this.DataContext = myBL.GetBaseStation(BaseStationId);
+            
             IfPresentation.IsChecked = true;
             BaseStationId_TextBox.IsEnabled = false;
             BaseStationChargeSlotsTaken_TextBox.IsEnabled = false;
 
-            // ArrivingParcelsList.ItemsSource = c.ToThisCustomer;
-            // GoingParcelsList.ItemsSource = c.FromThisCustomer;
         }
 
         private void CloseWindow_Button_Click(object sender, RoutedEventArgs e)
@@ -137,5 +135,84 @@ namespace PL.BaseStation
             this.Close();
         }
 
+        private void syncWithSimulator()
+        {
+            List<AddDroneWindow> windows = (from Window w in App.Current.Windows
+                                            where w.GetType() == typeof(AddDroneWindow)
+                                            select (AddDroneWindow)w).ToList();
+            foreach (AddDroneWindow ADW in windows)
+            {
+                if (ADW.thisDroneId != 0)
+                {
+                    ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+                    {
+                        try
+                        {
+                            BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
+                            int BSId = 0;
+                            if (d.Status == BO.DroneStatuses.Maintenance)
+                            {
+                                BSId = myBL.GetChrgingInBaseStationId(d);
+
+                            }
+                            else if (d.Status == BO.DroneStatuses.Availible && d.Battery > 90)
+                            {
+                                BSId = myBL.closestBaseStation(d.CurrentLocation.Longitude, d.CurrentLocation.Latitude).Id;
+                            }
+                            else
+                            {
+                                return;
+                            }
+                            if(BSId == int.Parse(BaseStationId_TextBox.Text))
+                            {
+                                this.DataContext = myBL.GetBaseStation(BSId);
+                                
+                            }
+                        }
+                        catch
+                        {
+                            
+                        }
+                    };
+                }
+
+            }
+        }
+
+        private void ChargedDronesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            AddDroneWindow ADW = new AddDroneWindow(((sender as ListView).SelectedItem as BO.DroneInCharge).Id);
+            ADW.SimulatorWorker.ProgressChanged += (s, e) =>
+            {
+                try
+                {
+                    BO.Drone d = myBL.GetDrone(ADW.thisDroneId);
+                    int BSId = 0;
+                    if (d.Status == BO.DroneStatuses.Maintenance)
+                    {
+                        BSId = myBL.GetChrgingInBaseStationId(d);
+
+                    }
+                    else if (d.Status == BO.DroneStatuses.Availible && d.Battery > 90)
+                    {
+                        BSId = myBL.closestBaseStation(d.CurrentLocation.Longitude, d.CurrentLocation.Latitude).Id;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    if (BSId == int.Parse(BaseStationId_TextBox.Text))
+                    {
+                        this.DataContext = myBL.GetBaseStation(BSId);
+                        
+                    }
+                }
+                catch
+                {
+
+                }
+            };
+            ADW.Show();
+        }
     }
 }
