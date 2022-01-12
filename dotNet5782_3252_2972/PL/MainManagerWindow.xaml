@@ -21,7 +21,7 @@
         </LinearGradientBrush>
 
         <DropShadowEffect x:Key="ButtonShadow" ShadowDepth="3" BlurRadius="10"/>
-        
+
         <Style x:Key="TopButton" TargetType="Button">
             <Setter Property="Background"
                     Value="{StaticResource TopButtonGradient}"/>
@@ -33,12 +33,9 @@
                     Value="#FF6C1414"/>
         </Style>
 
-        
-        
-
     </Window.Resources>
 
-    <Border  CornerRadius="70">
+    <Border  CornerRadius="10,10,10,10" BorderThickness="1,1,1,1">
         <Border.Background>
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                 <GradientStop Color="Black" Offset="0"/>
@@ -66,12 +63,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions >
-                <Button x:Name="ShowDrones" Content="Drone &#xa; List" Style="{StaticResource BTNCORNER}"
+                <Button Style="{DynamicResource RoundedButton}" x:Name="ShowDrones" Content="Drone &#xa; List" 
                         Click="showDroneList_click" Margin="44,21,44,-30"
                         FontFamily="A" FontWeight="Bold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232"
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" >
-                   
 
 
                     <Button.Effect>
@@ -80,33 +76,15 @@
 
 
                 </Button>
-                
-                <Button x:Name="ShowCustomers" Content="Customer &#xa; List" 
+
+                <Button x:Name="ShowCustomers" Style="{DynamicResource RoundedButton}" Content="Customer &#xa; List" 
                         Click="showCustomersList_click" Margin="160,21,132,-30"
                         FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232" 
                         RenderTransformOrigin="0.5,0.5" ToolTip="click here" Grid.ColumnSpan="2" BorderThickness="1,1,1,1" >
+                  
 
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="{StaticResource AppLinear}" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource AppLinearSelect}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <Button.Effect>
+                        <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
                 
@@ -114,7 +92,7 @@
 
                 </Button>
 
-                <Button x:Name="ShowParcels" Content="Parcel &#xa; List" Style="{StaticResource BTNCORNER}"
+                <Button x:Name="ShowParcels" Style="{DynamicResource RoundedButton}" Content="Parcel &#xa; List" 
                         Click="showParcelsList_click" Margin="72,21,20,-30"
                         FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232"
@@ -122,11 +100,12 @@
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
+                  
 
 
                 </Button>
 
-                <Button x:Name="ShowBaseStations" Content="BaseStations &#xa; List" Style="{StaticResource BTNCORNER}"
+                <Button x:Name="ShowBaseStations" Style="{DynamicResource RoundedButton}" Content="BaseStations &#xa; List" 
                         Click="ShowBaseStations_Click" Margin="184,21,100,-30" 
                         FontWeight="UltraBold" FontStyle="Italic" FontSize="16"
                         BorderBrush="#FF493232" 
@@ -134,6 +113,7 @@
                     <Button.Effect>
                         <DropShadowEffect/>
                     </Button.Effect>
+                  
 
 
 

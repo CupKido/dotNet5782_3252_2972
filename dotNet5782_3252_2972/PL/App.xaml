@@ -4,25 +4,7 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="FrameworkElement" x:Key="VisibleAnimation">
-            <Setter Property="Visibility" Value="Collapsed"/>
-            <Setter Property="Opacity" Value="10"/>
-            <Setter Property="Height" Value="700"></Setter>
-            <Style.Triggers>
-                <Trigger Property="Visibility" Value="Visible">
-                    <Trigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                         From="0.0" To="1.0" Duration="0:0:0.5"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.EnterActions>
-
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
+     
         
         
         <LinearGradientBrush x:Key="AppLinear"    EndPoint="1,1" StartPoint="0,0">
@@ -42,26 +24,77 @@
 
         </LinearGradientBrush>
 
+        <LinearGradientBrush x:Key="AppLinearClicked"    EndPoint="1,1" StartPoint="0,0">
+
+            <GradientStop Color="Black"/>
+            <GradientStop Color="blue" Offset="0.2"/>
+            <GradientStop Color="Beige" Offset="0.99"/>
+            <GradientStop Color="Violet" Offset="1"/>
+
+        </LinearGradientBrush>
 
 
-        <Style TargetType="Button" x:Key="BTNCORNER">
-            <Setter Property="Background" Value="Blue" />
-            <Setter Property="TextBlock.TextAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20,7,20,7" Background="{StaticResource AppLinear}"    BorderBrush="Cornsilk" BorderThickness="1,1,1,1" >
-                            <ContentPresenter x:Name="contentPresenter"   ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding  Content}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="{TemplateBinding Padding}" 
-                                              VerticalAlignment="{TemplateBinding  VerticalContentAlignment}"/>
-
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="button" CornerRadius="5" BorderBrush="Black" BorderThickness="1" Background="{StaticResource AppLinear}">
+                                <TextBlock  Text="{TemplateBinding Button.Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF5798d8" />
+                                    <Setter TargetName="button" Property="Background"  Value="{StaticResource AppLinearSelect }"/>
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="button"  Property="Background" Value="{StaticResource AppLinearClicked }"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF282828" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="button" Property="Opacity" Value="0.7" />
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
         </Style>
 
-        
-       
+        <Style x:Key="RoundedButton2" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="button" CornerRadius="5" BorderBrush="Black" BorderThickness="1" Background="Azure">
+                                <TextBlock  Text="{TemplateBinding Button.Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF5798d8" />
+                                    <Setter TargetName="button" Property="Background"  Value="Red"/>
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="button"  Property="Background" Value="blue"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="button" Property="BorderBrush" Value="#FF282828" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="button" Property="Opacity" Value="0.7" />
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
     </Application.Resources>
 </Application>
