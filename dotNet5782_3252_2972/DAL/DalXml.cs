@@ -694,6 +694,8 @@ namespace DalXml
             XMLTools.SaveListToXMLElement(config, configPath);
             return num;
         }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddParcel(int SenderId, int TargetId, WeightCategories PackageWight, Priorities priority, DateTime created )
         {
 
