@@ -11,7 +11,7 @@
     <Page.Resources>
         <local:AllowDeleteConverter x:Key="AllowToDeleteConverter" />
     </Page.Resources>
-    
+
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -45,7 +45,7 @@
             </ListView>
 
             <Button x:Name="BaseStationListReset"  Content="Reset" HorizontalAlignment="Left" 
-                     Grid.Column="2" Margin="100,370,0,0" VerticalAlignment="Top" Height="33" Width="62" FontFamily="Bodoni MT"
+                     Grid.Column="1" Margin="15,322,0,0" VerticalAlignment="Top" Height="33" Width="70" FontFamily="Bodoni MT"
                     FontWeight="Bold" FontSize="11" Click="BaseStationListReset_Click" RenderTransformOrigin="0.34,0.576" OpacityMask="#FF993131" Foreground="Black">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
