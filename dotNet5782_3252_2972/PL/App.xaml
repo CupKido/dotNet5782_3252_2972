@@ -33,8 +33,16 @@
             <GradientStop Color="Violet" Offset="1"/>
 
         </LinearGradientBrush>
+        <LinearGradientBrush x:Key="AppLinearSelect"    EndPoint="1,1" StartPoint="0,0">
 
-      
+            <GradientStop Color="Black"/>
+            <GradientStop Color="red" Offset="0.2"/>
+            <GradientStop Color="Beige" Offset="0.99"/>
+            <GradientStop Color="Violet" Offset="1"/>
+
+        </LinearGradientBrush>
+
+
 
         <Style TargetType="Button" x:Key="BTNCORNER">
             <Setter Property="Background" Value="Blue" />
@@ -46,15 +54,14 @@
                             <ContentPresenter x:Name="contentPresenter"   ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding  Content}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  Margin="{TemplateBinding Padding}" 
                                               VerticalAlignment="{TemplateBinding  VerticalContentAlignment}"/>
-                            
+
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-          
-
         </Style>
 
+        
        
     </Application.Resources>
 </Application>

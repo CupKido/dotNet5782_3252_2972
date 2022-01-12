@@ -12,9 +12,11 @@
         </Grid.Background>
 
         <Button x:Name="LogInAsManager" Click="LogInAsManager_Click" Content="Manager Log In" HorizontalAlignment="Left" Margin="225,137,0,0" VerticalAlignment="Top" Height="34" Width="108"/>
-        <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="36,118,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="36,141,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="36,167,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="CustomerId" HorizontalAlignment="Left" Margin="36,118,0,0" Text="User ID" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
+             Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center"    />
+        <TextBox x:Name="CustomerPhone" HorizontalAlignment="Left" Margin="36,141,0,0" Text="User Phone" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"
+                  Background="#FFF6F6F6" Foreground="DarkGray" TextAlignment="Center" />
+        <Button x:Name="LogInAsCustomer" Content="Log In" Click="LogInAsCustomer_Click" HorizontalAlignment="Left" Margin="36,167,0,0" VerticalAlignment="Top"  />
         <Label x:Name="SignUp"  MouseDoubleClick="SignUp_MouseDoubleClick" MouseEnter="SignUp_MouseEnter" MouseLeave="SignUp_MouseLeave" Foreground="Blue"  HorizontalAlignment="Left" Margin="96,164,0,0" VerticalAlignment="Top">
             <TextBlock x:Name="SignUp_TextBlock" Text="Sign up" TextDecorations="Underline"/>
         </Label>
