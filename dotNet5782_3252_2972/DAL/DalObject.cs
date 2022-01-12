@@ -53,7 +53,7 @@ namespace DalObject
             {
 
             }
-            
+
             Customer newCustomer = new Customer();
 
             newCustomer.Id = Id;
@@ -141,7 +141,7 @@ namespace DalObject
 
             }
 
-            Drone newDrone = new Drone(); 
+            Drone newDrone = new Drone();
 
             newDrone.Id = Id;
             newDrone.Model = Model;
@@ -196,7 +196,7 @@ namespace DalObject
                     DataSource.Drones.Remove(drone);
                     return drone;
                 }
-                
+
             }
             throw new ItemNotFoundException(Id, "Drone Not Found!");
         }
@@ -345,7 +345,7 @@ namespace DalObject
                 GetBaseStation(Id);
                 throw new ItemAlreadyExistsException(Id, "Base Station Id already taken");
             }
-            catch(ItemAlreadyExistsException ex)
+            catch (ItemAlreadyExistsException ex)
             {
                 throw;
             }
@@ -363,7 +363,7 @@ namespace DalObject
             baseStation.ChargeSlots = ChargeSlots;
 
             DataSource.BaseStations.Add(baseStation);
-            
+
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -446,15 +446,15 @@ namespace DalObject
             droneCharge.Started = started;
 
             DataSource.DroneCharges.Add(droneCharge);
-            
+
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         public DroneCharge GetDroneCharge(int DroneId)
         {
-            foreach(DroneCharge droneCharge in DataSource.DroneCharges)
+            foreach (DroneCharge droneCharge in DataSource.DroneCharges)
             {
-                if(droneCharge.DroneId == DroneId)
+                if (droneCharge.DroneId == DroneId)
                 {
                     return droneCharge;
                 }
@@ -476,12 +476,19 @@ namespace DalObject
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public DroneCharge RemoveDroneCharge(int DroneId)
+        public bool RemoveDroneCharge(int DroneId)
         {
-            DroneCharge DC = GetDroneCharge(DroneId);
-            DataSource.DroneCharges.Remove(DC);
+            try
+            {
+                DroneCharge DC = GetDroneCharge(DroneId);
+                DataSource.DroneCharges.Remove(DC);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
-            return DC;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -492,7 +499,7 @@ namespace DalObject
                    select dc;
         }
 
-        
+
 
         #endregion
     }

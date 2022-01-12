@@ -207,8 +207,8 @@ namespace DalApi
         /// remove a specific drone from DroneCharge file in database
         /// </summary>
         /// <param name="DroneId">drone's Id</param>
-        /// <returns>removed DroneCharge</returns>
-        public DroneCharge RemoveDroneCharge(int DroneId);
+        /// <returns>if removed DroneCharge</returns>
+        public bool RemoveDroneCharge(int DroneId);
 
 
         #endregion

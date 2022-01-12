@@ -643,26 +643,40 @@ namespace DalXml
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public DroneCharge RemoveDroneCharge(int DroneId)
+        public bool RemoveDroneCharge(int DroneId)
         {
             XElement DCRootElem = XMLTools.LoadListFromXMLElement(droneChargesPath);
-            DroneCharge res;
-            foreach (XElement DCElem in DCRootElem.Elements())
+            //DroneCharge res;
+            //foreach (XElement DCElem in DCRootElem.Elements())
+            //{
+            //    if (Convert.ToInt32(DCElem.Element("DroneId").Value) == DroneId)
+            //    {
+            //        res = new DroneCharge()
+            //        {
+            //            DroneId = Convert.ToInt32(DCElem.Element("DroneId").Value),
+            //            BaseStationId = Convert.ToInt32(DCElem.Element("BaseStationId").Value),
+            //            Started = Convert.ToDateTime(DCElem.Element("Started").Value)
+            //        };
+            //        DCElem.Remove();
+            //        XMLTools.SaveListToXMLElement(DCRootElem, droneChargesPath);
+            //        return res;
+            //    }
+            //}
+            try
             {
-                if (Convert.ToInt32(DCElem.Element("DroneId").Value) == DroneId)
-                {
-                    res = new DroneCharge()
-                    {
-                        DroneId = Convert.ToInt32(DCElem.Element("DroneId").Value),
-                        BaseStationId = Convert.ToInt32(DCElem.Element("BaseStationId").Value),
-                        Started = Convert.ToDateTime(DCElem.Element("Started").Value)
-                    };
-                    DCElem.Remove();
-                    XMLTools.SaveListToXMLElement(DCRootElem, droneChargesPath);
-                    return res;
-                }
+                (from XElement DCElem in DCRootElem.Elements()
+                 where Convert.ToInt32(DCElem.Element("DroneId").Value) == DroneId
+                 select DCElem).FirstOrDefault().Remove();
+                XMLTools.SaveListToXMLElement(DCRootElem, droneChargesPath);
+                return true;
             }
-            throw new ItemNotFoundException(DroneId, "Drone is not being charged!");
+            catch
+            {
+                return false;
+            }
+            
+
+            
         }
 
         #endregion
